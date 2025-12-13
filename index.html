@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深色主题网站 | 简约设计</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #6c63ff;
+            --secondary-color: #ff6584;
+            --dark-bg: #0f0f23;
+            --darker-bg: #0a0a18;
+            --card-bg: #16162e;
+            --text-color: #f0f0f0;
+            --text-muted: #a0a0c0;
+            --border-color: #2a2a4a;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background-color: var(--darker-bg);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+            background-color: rgba(108, 99, 255, 0.1);
+        }
+        
+        /* 主要内容区域 */
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            background: radial-gradient(circle at top, #1a1a35, var(--dark-bg));
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: var(--text-muted);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+        
+        /* 卡片区域 */
+        .features {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--text-color);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border-color);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(108, 99, 255, 0.1);
+        }
+        
+        .card i {
+            font-size: 50px;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .card p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        /* 关于区域 */
+        .about {
+            padding: 100px 0;
+            background-color: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: var(--text-color);
+        }
+        
+        .about-text p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* 联系区域 */
+        .contact {
+            padding: 100px 0;
+        }
+        
+        .contact-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--darker-bg);
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--text-color);
+        }
+        
+        .footer-column p, .footer-column a {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .contact-form {
+                padding: 30px 20px;
+            }
+        }
+        
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        /* 浅色主题样式 */
+        .light-theme {
+            --dark-bg: #f8f9fa;
+            --darker-bg: #e9ecef;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-globe"></i>
+                <span>深色网站</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#features">功能</a></li>
+                    <li><a href="#about">关于</a></li>
+                    <li><a href="#contact">联系</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero" id="home">
+            <div class="container fade-in">
+                <h1>欢迎来到深色主题网站</h1>
+                <p>一个优雅、现代的深色主题设计，专为长时间浏览而优化，减少眼睛疲劳，提供沉浸式体验。</p>
+                <a href="#features" class="btn">探索功能</a>
+                <a href="#contact" class="btn">联系我们</a>
+            </div>
+        </section>
+
+        <!-- 功能区域 -->
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">核心功能</h2>
+                <div class="cards">
+                    <div class="card fade-in">
+                        <i class="fas fa-palette"></i>
+                        <h3>优雅设计</h3>
+                        <p>精心设计的深色主题界面，采用渐变色和阴影效果，提供舒适的视觉体验。专为夜间浏览优化。</p>
+                    </div>
+                    <div class="card fade-in">
+                        <i class="fas fa-bolt"></i>
+                        <h3>快速响应</h3>
+                        <p>网站经过优化，加载速度快，交互流畅。采用现代CSS技术，确保在各种设备上都有良好表现。</p>
+                    </div>
+                    <div class="card fade-in">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>完全响应式</h3>
+                        <p>自适应各种屏幕尺寸，从桌面到移动设备都能完美显示。使用灵活的网格布局和媒体查询。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于区域 -->
+        <section class="about" id="about">
+            <div class="container">
+                <h2 class="section-title">关于我们</h2>
+                <div class="about-content">
+                    <div class="about-text fade-in">
+                        <h2>我们专注于创建卓越的深色主题体验</h2>
+                        <p>深色主题不仅是一种设计趋势，更是一种提高可读性、减少眼睛疲劳并节省设备电池寿命的有效方式。</p>
+                        <p>我们的使命是创建美观、功能强大且用户友好的深色主题界面，为用户提供最佳的浏览体验。</p>
+                        <p>这个网站展示了如何通过精心选择的颜色、恰当的对比度和流畅的动画来创建一个舒适的深色主题界面。</p>
+                        <a href="#contact" class="btn">了解更多</a>
+                    </div>
+                    <div class="about-image fade-in">
+                        <!-- 使用CSS创建占位图像 -->
+                        <div style="height: 400px; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold;">
+                            深色主题设计示例
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系区域 -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <h2 class="section-title">联系我们</h2>
+                <div class="contact-form fade-in">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" placeholder="请输入您的姓名" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">电子邮箱</label>
+                            <input type="email" id="email" placeholder="请输入您的邮箱地址" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">留言</label>
+                            <textarea id="message" rows="5" placeholder="请输入您的留言内容" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>深色网站</h3>
+                    <p>致力于创建优雅、现代的深色主题设计，提供舒适的用户体验。</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <a href="#home">首页</a>
+                    <a href="#features">功能</a>
+                    <a href="#about">关于</a>
+                    <a href="#contact">联系</a>
+                </div>
+                <div class="footer-column">
+                    <h3>联系我们</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 上海市浦东新区</p>
+                    <p><i class="fas fa-phone"></i> +86 123 4567 8900</p>
+                    <p><i class="fas fa-envelope"></i> info@darktheme.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 深色主题网站. 保留所有权利. 单HTML文件示例</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                themeIcon.className = 'fas fa-moon';
+                themeToggle.title = '切换到深色主题';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+                themeToggle.title = '切换到浅色主题';
+            }
+        });
+        
+        // 表单提交处理
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // 这里应该是发送表单数据到服务器的代码
+            // 现在只是显示一个提示
+            alert(`谢谢 ${name}！\n我们已经收到您的留言，会尽快通过 ${email} 与您联系。`);
+            
+            // 重置表单
+            contactForm.reset();
+        });
+        
+        // 滚动动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        // 观察所有卡片和部分
+        document.querySelectorAll('.card, .about-text, .about-image, .contact-form').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('nav a, .btn[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

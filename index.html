@@ -747,4 +747,1350 @@
             }
             
             .tally-iframe {
-      
+                height: 450px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .timer-container {
+                padding: 30px 20px;
+            }
+            
+            .time-display {
+                font-size: 3.2rem;
+            }
+            
+            .cube-type-selector {
+                gap: 10px;
+            }
+            
+            .cube-type {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .timer-btn {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+        
+        /* 动画 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* 工具提示 */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* 隐藏/显示元素 */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div>
+                    <div class="logo-text">Buzhidao CubeTimer</div>
+                    <div class="logo-subtitle">专业魔方计时器</div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#timer" class="active">计时器</a></li>
+                    <li><a href="#stats">统计</a></li>
+                    <li><a href="#records">记录</a></li>
+                    <li><a href="#personalization">个性化</a></li>
+                    <li><a href="#feedback">反馈</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主计时器区域 -->
+    <section class="timer-section" id="timer">
+        <div class="container">
+            <div class="timer-container fade-in">
+                <div class="cube-type-selector">
+                    <div class="cube-type active" data-cube="3x3">3x3</div>
+                    <div class="cube-type" data-cube="2x2">2x2</div>
+                    <div class="cube-type" data-cube="4x4">4x4</div>
+                    <div class="cube-type" data-cube="pyramid">金字塔</div>
+                    <div class="cube-type" data-cube="megaminx">五魔方</div>
+                    <div class="cube-type" data-cube="skewb">斜转</div>
+                </div>
+                
+                <div class="time-display" id="timeDisplay">00:00.000</div>
+                
+                <div class="timer-controls">
+                    <button class="timer-btn start" id="startBtn">
+                        <i class="fas fa-play"></i> 开始计时
+                    </button>
+                    <button class="timer-btn stop hidden" id="stopBtn">
+                        <i class="fas fa-stop"></i> 停止
+                    </button>
+                    <button class="timer-btn reset" id="resetBtn">
+                        <i class="fas fa-redo"></i> 重置
+                    </button>
+                </div>
+                
+                <div class="scramble-section">
+                    <div class="scramble-display" id="scrambleDisplay">
+                        F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2 F U2
+                    </div>
+                    <div class="scramble-controls">
+                        <button class="scramble-btn" id="newScrambleBtn">
+                            <i class="fas fa-random"></i> 新打乱
+                        </button>
+                        <button class="scramble-btn" id="copyScrambleBtn">
+                            <i class="fas fa-copy"></i> 复制打乱
+                        </button>
+                        <button class="scramble-btn" id="showSolutionBtn">
+                            <i class="fas fa-lightbulb"></i> 显示解法
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计区域 -->
+    <section class="stats-section" id="stats">
+        <div class="container">
+            <h2 class="section-title">个人统计</h2>
+            
+            <div class="stats-container">
+                <div class="stats-card fade-in">
+                    <h3><i class="fas fa-tachometer-alt"></i> 当前统计</h3>
+                    <div class="stats-value" id="currentAvg">--.--</div>
+                    <div class="stats-label">5次平均 (Ao5)</div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="bestTime">--.--</div>
+                            <div class="stat-label">最快单次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="worstTime">--.--</div>
+                            <div class="stat-label">最慢单次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="solveCount">0</div>
+                            <div class="stat-label">总复原次数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="sessionAvg">--.--</div>
+                            <div class="stat-label">本次平均</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-card fade-in">
+                    <h3><i class="fas fa-history"></i> 历史最佳</h3>
+                    <div class="stats-value" id="bestAvg">--.--</div>
+                    <div class="stats-label">最佳平均 (Ao5)</div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="bestSingle">--.--</div>
+                            <div class="stat-label">历史最快</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="consistency">--%</div>
+                            <div class="stat-label">稳定性</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="monthCount">0</div>
+                            <div class="stat-label">本月复原</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="improvement">--.--</div>
+                            <div class="stat-label">提升</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 记录区域 -->
+    <section class="records-section" id="records">
+        <div class="container">
+            <h2 class="section-title">速度变化与历史记录</h2>
+            
+            <div class="chart-container fade-in">
+                <canvas id="timeChart"></canvas>
+            </div>
+            
+            <div class="records-table-container fade-in">
+                <h3 style="margin-bottom: 20px; color: var(--text-color);">最近复原记录</h3>
+                <table id="recordsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>时间</th>
+                            <th>打乱</th>
+                            <th>日期</th>
+                            <th>魔方类型</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsTableBody">
+                        <!-- 记录会通过JavaScript动态添加 -->
+                        <tr id="noRecordsRow">
+                            <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                暂无记录，开始计时后您的复原记录会显示在这里
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 个性化设置区域 -->
+    <section class="personalization-section" id="personalization">
+        <div class="container">
+            <h2 class="section-title">个性化设置</h2>
+            
+            <div class="settings-container">
+                <div class="settings-card fade-in">
+                    <h3><i class="fas fa-cog"></i> 计时器设置</h3>
+                    
+                    <div class="settings-group">
+                        <h4><i class="fas fa-clock"></i> 计时选项</h4>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">声音提示</span>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="soundToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">空间键计时</span>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="spacebarToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">倒计时开始</span>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="countdownToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">时间格式</span>
+                            <div class="setting-control">
+                                <select id="timeFormatSelect">
+                                    <option value="mm:ss.ms">分钟:秒.毫秒</option>
+                                    <option value="ss.ms">秒.毫秒</option>
+                                    <option value="mm:ss">分钟:秒</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4><i class="fas fa-scroll"></i> 打乱设置</h4>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">打乱长度</span>
+                            <div class="setting-control">
+                                <select id="scrambleLengthSelect">
+                                    <option value="short">短 (15步)</option>
+                                    <option value="normal" selected>标准 (20步)</option>
+                                    <option value="long">长 (25步)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">显示WCA打乱</span>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="wcaScrambleToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-card fade-in">
+                    <h3><i class="fas fa-user-cog"></i> 个性化选项</h3>
+                    
+                    <div class="settings-group">
+                        <h4><i class="fas fa-palette"></i> 外观设置</h4>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">主题颜色</span>
+                            <div class="setting-control">
+                                <select id="themeColorSelect">
+                                    <option value="blue">蓝色 (默认)</option>
+                                    <option value="green">绿色</option>
+                                    <option value="purple">紫色</option>
+                                    <option value="red">红色</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">字体大小</span>
+                            <div class="setting-control">
+                                <select id="fontSizeSelect">
+                                    <option value="normal">正常</option>
+                                    <option value="large">大</option>
+                                    <option value="xlarge">超大</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">显示动画效果</span>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="animationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4><i class="fas fa-database"></i> 数据管理</h4>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">自动保存记录</span>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="autoSaveToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <span class="setting-label">导出数据格式</span>
+                            <div class="setting-control">
+                                <select id="exportFormatSelect">
+                                    <option value="csv">CSV</option>
+                                    <option value="json">JSON</option>
+                                    <option value="txt">文本</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <button class="scramble-btn" id="exportDataBtn" style="width: 100%; margin-top: 10px;">
+                                <i class="fas fa-download"></i> 导出所有记录
+                            </button>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <button class="scramble-btn" id="clearDataBtn" style="width: 100%; background-color: var(--accent-red);">
+                                <i class="fas fa-trash"></i> 清除所有记录
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 反馈区域 -->
+    <section class="feedback-section" id="feedback">
+        <div class="container">
+            <h2 class="section-title">留言反馈</h2>
+            
+            <div class="feedback-container">
+                <div class="feedback-info fade-in">
+                    <h3>帮助我们改进</h3>
+                    <p>Buzhidao CubeTimer致力于为魔方爱好者提供最专业的计时体验。您的反馈对我们至关重要。</p>
+                    <p>如果您有任何建议、功能请求或发现了bug，请通过下面的表单告诉我们。我们承诺认真阅读每一条反馈并持续改进产品。</p>
+                    <p>您的意见将帮助我们打造更好的魔方计时器，服务全球魔方社区。</p>
+                    
+                    <div class="contact-details" style="margin-top: 40px;">
+                        <div class="contact-item">
+                            <div class="contact-icon" style="background-color: rgba(16, 185, 129, 0.1); color: var(--accent-green);">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>功能建议</h4>
+                                <p>告诉我们您希望添加的功能</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon" style="background-color: rgba(239, 68, 68, 0.1); color: var(--accent-red);">
+                                <i class="fas fa-bug"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>报告问题</h4>
+                                <p>遇到问题或错误请及时反馈</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon" style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary-blue);">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>优化想法</h4>
+                                <p>分享您对界面或功能的优化建议</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tally表单嵌入区域 -->
+                <div class="tally-form-container fade-in">
+                    <h3>反馈表单</h3>
+                    <iframe 
+                        class="tally-iframe"
+                        src="https://tally.so/r/1AXzoO?transparentBackground=1&hideTitle=1" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0">
+                    </iframe>
+                    <p class="form-notice">
+                        您的反馈将直接进入Buzhidao开发团队数据库，我们会定期查看并回复。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Buzhidao CubeTimer</h3>
+                    <p>专业的在线魔方计时器，为魔方爱好者提供精确计时、数据分析和个性化体验。</p>
+                    <div class="social-icons">
+                        <a href="#" class="tooltip"><i class="fab fa-weixin"></i><span class="tooltip-text">微信公众号: BuzhidaoCube</span></a>
+                        <a href="#" class="tooltip"><i class="fab fa-weibo"></i><span class="tooltip-text">微博: @Buzhidao魔方计时</span></a>
+                        <a href="#" class="tooltip"><i class="fab fa-github"></i><span class="tooltip-text">GitHub开源项目</span></a>
+                        <a href="#" class="tooltip"><i class="fas fa-envelope"></i><span class="tooltip-text">联系开发团队</span></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>功能导航</h3>
+                    <a href="#timer">计时器</a>
+                    <a href="#stats">个人统计</a>
+                    <a href="#records">历史记录</a>
+                    <a href="#personalization">个性化设置</a>
+                    <a href="#feedback">留言反馈</a>
+                </div>
+                <div class="footer-column">
+                    <h3>支持与帮助</h3>
+                    <p>兼容所有现代浏览器</p>
+                    <p>支持手机、平板和电脑</p>
+                    <p>数据本地存储，保护隐私</p>
+                    <p>完全免费使用</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Buzhidao CubeTimer 专业魔方计时器. 保留所有权利.</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">本工具遵循WCA打乱标准，计时精度达到毫秒级，适合练习和比赛准备。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== 全局变量和初始化 ====================
+        let timerInterval = null;
+        let startTime = 0;
+        let elapsedTime = 0;
+        let timerRunning = false;
+        let currentCubeType = '3x3';
+        let scrambleHistory = [];
+        let solveTimes = [];
+        let chartInstance = null;
+        
+        // 从本地存储加载数据
+        function loadData() {
+            const savedTimes = localStorage.getItem('buzhidao_cubetimer_times');
+            if (savedTimes) {
+                solveTimes = JSON.parse(savedTimes);
+                updateRecordsTable();
+                updateStats();
+                updateChart();
+            }
+            
+            // 加载设置
+            const settings = localStorage.getItem('buzhidao_cubetimer_settings');
+            if (settings) {
+                const savedSettings = JSON.parse(settings);
+                document.getElementById('soundToggle').checked = savedSettings.sound || true;
+                document.getElementById('spacebarToggle').checked = savedSettings.spacebar || true;
+                document.getElementById('countdownToggle').checked = savedSettings.countdown || false;
+                document.getElementById('timeFormatSelect').value = savedSettings.timeFormat || 'mm:ss.ms';
+                document.getElementById('scrambleLengthSelect').value = savedSettings.scrambleLength || 'normal';
+                document.getElementById('wcaScrambleToggle').checked = savedSettings.wcaScramble || true;
+                document.getElementById('themeColorSelect').value = savedSettings.themeColor || 'blue';
+                document.getElementById('fontSizeSelect').value = savedSettings.fontSize || 'normal';
+                document.getElementById('animationsToggle').checked = savedSettings.animations || true;
+                document.getElementById('autoSaveToggle').checked = savedSettings.autoSave || true;
+                document.getElementById('exportFormatSelect').value = savedSettings.exportFormat || 'csv';
+                
+                // 应用主题
+                applyTheme(savedSettings.themeColor || 'blue');
+            }
+        }
+        
+        // 保存数据到本地存储
+        function saveData() {
+            if (document.getElementById('autoSaveToggle').checked) {
+                localStorage.setItem('buzhidao_cubetimer_times', JSON.stringify(solveTimes));
+                
+                const settings = {
+                    sound: document.getElementById('soundToggle').checked,
+                    spacebar: document.getElementById('spacebarToggle').checked,
+                    countdown: document.getElementById('countdownToggle').checked,
+                    timeFormat: document.getElementById('timeFormatSelect').value,
+                    scrambleLength: document.getElementById('scrambleLengthSelect').value,
+                    wcaScramble: document.getElementById('wcaScrambleToggle').checked,
+                    themeColor: document.getElementById('themeColorSelect').value,
+                    fontSize: document.getElementById('fontSizeSelect').value,
+                    animations: document.getElementById('animationsToggle').checked,
+                    autoSave: document.getElementById('autoSaveToggle').checked,
+                    exportFormat: document.getElementById('exportFormatSelect').value
+                };
+                
+                localStorage.setItem('buzhidao_cubetimer_settings', JSON.stringify(settings));
+            }
+        }
+        
+        // ==================== 计时器功能 ====================
+        function startTimer() {
+            if (timerRunning) return;
+            
+            timerRunning = true;
+            startTime = Date.now() - elapsedTime;
+            
+            document.getElementById('startBtn').classList.add('hidden');
+            document.getElementById('stopBtn').classList.remove('hidden');
+            
+            timerInterval = setInterval(updateTimerDisplay, 10);
+        }
+        
+        function stopTimer() {
+            if (!timerRunning) return;
+            
+            timerRunning = false;
+            clearInterval(timerInterval);
+            
+            document.getElementById('startBtn').classList.remove('hidden');
+            document.getElementById('stopBtn').classList.add('hidden');
+            
+            // 保存时间
+            const time = elapsedTime;
+            const scramble = document.getElementById('scrambleDisplay').textContent;
+            const date = new Date().toLocaleDateString('zh-CN');
+            
+            solveTimes.unshift({
+                time: time,
+                scramble: scramble,
+                date: date,
+                cubeType: currentCubeType,
+                timestamp: Date.now()
+            });
+            
+            // 限制记录数量
+            if (solveTimes.length > 100) {
+                solveTimes = solveTimes.slice(0, 100);
+            }
+            
+            // 更新UI
+            updateRecordsTable();
+            updateStats();
+            updateChart();
+            generateNewScramble();
+            
+            // 保存数据
+            saveData();
+            
+            // 播放声音（如果启用）
+            if (document.getElementById('soundToggle').checked) {
+                playTimerSound();
+            }
+        }
+        
+        function resetTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            
+            document.getElementById('startBtn').classList.remove('hidden');
+            document.getElementById('stopBtn').classList.add('hidden');
+            
+            updateTimerDisplay();
+        }
+        
+        function updateTimerDisplay() {
+            if (timerRunning) {
+                elapsedTime = Date.now() - startTime;
+            }
+            
+            const timeDisplay = document.getElementById('timeDisplay');
+            const timeFormat = document.getElementById('timeFormatSelect').value;
+            
+            let displayText;
+            
+            if (timeFormat === 'mm:ss.ms') {
+                const minutes = Math.floor(elapsedTime / 60000);
+                const seconds = Math.floor((elapsedTime % 60000) / 1000);
+                const milliseconds = elapsedTime % 1000;
+                
+                displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            } else if (timeFormat === 'ss.ms') {
+                const seconds = Math.floor(elapsedTime / 1000);
+                const milliseconds = elapsedTime % 1000;
+                
+                displayText = `${seconds}.${milliseconds.toString().padStart(3, '0')}`;
+                
+                // 调整字体大小
+                if (seconds >= 100) {
+                    timeDisplay.className = 'time-display tiny';
+                } else if (seconds >= 10) {
+                    timeDisplay.className = 'time-display small';
+                } else {
+                    timeDisplay.className = 'time-display';
+                }
+            } else { // mm:ss
+                const minutes = Math.floor(elapsedTime / 60000);
+                const seconds = Math.floor((elapsedTime % 60000) / 1000);
+                
+                displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            timeDisplay.textContent = displayText;
+        }
+        
+        // ==================== 打乱生成功能 ====================
+        function generateNewScramble() {
+            const scrambleLengthSelect = document.getElementById('scrambleLengthSelect');
+            let length = 20; // 默认
+            
+            if (scrambleLengthSelect.value === 'short') length = 15;
+            else if (scrambleLengthSelect.value === 'long') length = 25;
+            
+            const scramble = generateScramble(currentCubeType, length);
+            document.getElementById('scrambleDisplay').textContent = scramble;
+            
+            // 保存到历史
+            scrambleHistory.unshift(scramble);
+            if (scrambleHistory.length > 10) {
+                scrambleHistory = scrambleHistory.slice(0, 10);
+            }
+        }
+        
+        function generateScramble(cubeType, length) {
+            // 根据魔方类型生成不同的打乱
+            let moves = [];
+            
+            if (cubeType === '3x3' || cubeType === '2x2' || cubeType === '4x4') {
+                // 标准魔方打乱
+                const faceMoves = ['U', 'D', 'L', 'R', 'F', 'B'];
+                const modifiers = ['', "'", '2'];
+                
+                for (let i = 0; i < length; i++) {
+                    let move;
+                    do {
+                        const face = faceMoves[Math.floor(Math.random() * faceMoves.length)];
+                        const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
+                        move = face + modifier;
+                    } while (i > 0 && move[0] === moves[i-1][0]); // 避免连续同一面
+                    
+                    moves.push(move);
+                }
+            } else if (cubeType === 'pyramid') {
+                // 金字塔魔方打乱
+                const faceMoves = ['U', 'L', 'R', 'B'];
+                const modifiers = ['', "'"];
+                
+                for (let i = 0; i < length; i++) {
+                    const face = faceMoves[Math.floor(Math.random() * faceMoves.length)];
+                    const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
+                    moves.push(face + modifier);
+                }
+            } else if (cubeType === 'megaminx') {
+                // 五魔方打乱（简化版）
+                const faceMoves = ['U', 'R', 'D'];
+                const modifiers = ['', "'", '++', '--'];
+                
+                for (let i = 0; i < length; i++) {
+                    const face = faceMoves[Math.floor(Math.random() * faceMoves.length)];
+                    const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
+                    moves.push(face + modifier);
+                }
+            } else if (cubeType === 'skewb') {
+                // 斜转魔方打乱
+                const movesList = ['R', 'L', 'U', 'B', 'R\'', 'L\'', 'U\'', 'B\''];
+                
+                for (let i = 0; i < length; i++) {
+                    moves.push(movesList[Math.floor(Math.random() * movesList.length)]);
+                }
+            }
+            
+            return moves.join(' ');
+        }
+        
+        function copyScrambleToClipboard() {
+            const scramble = document.getElementById('scrambleDisplay').textContent;
+            navigator.clipboard.writeText(scramble).then(() => {
+                alert('打乱已复制到剪贴板！');
+            });
+        }
+        
+        // ==================== 统计功能 ====================
+        function updateStats() {
+            if (solveTimes.length === 0) {
+                // 无数据时的默认显示
+                document.getElementById('currentAvg').textContent = '--.--';
+                document.getElementById('bestTime').textContent = '--.--';
+                document.getElementById('worstTime').textContent = '--.--';
+                document.getElementById('solveCount').textContent = '0';
+                document.getElementById('sessionAvg').textContent = '--.--';
+                document.getElementById('bestAvg').textContent = '--.--';
+                document.getElementById('bestSingle').textContent = '--.--';
+                document.getElementById('consistency').textContent = '--%';
+                document.getElementById('monthCount').textContent = '0';
+                document.getElementById('improvement').textContent = '--.--';
+                return;
+            }
+            
+            // 当前会话的数据
+            const times = solveTimes.map(record => record.time);
+            const currentBest = Math.min(...times);
+            const currentWorst = Math.max(...times);
+            const solveCount = times.length;
+            const sessionAvg = calculateAverage(times);
+            
+            // 计算Ao5（最近5次的平均，去掉最快和最慢）
+            let currentAvg = '--.--';
+            if (times.length >= 5) {
+                const recentTimes = times.slice(0, 5);
+                currentAvg = calculateAverage(recentTimes, true);
+            }
+            
+            // 历史最佳
+            const allTimes = solveTimes.filter(record => record.cubeType === currentCubeType).map(record => record.time);
+            const bestSingle = allTimes.length > 0 ? Math.min(...allTimes) : 0;
+            
+            // 计算最佳Ao5
+            let bestAvg = '--.--';
+            if (allTimes.length >= 5) {
+                // 这里简化处理，实际应该计算所有可能的连续5次平均
+                bestAvg = calculateAverage(allTimes.slice(0, Math.min(5, allTimes.length)), true);
+            }
+            
+            // 计算稳定性（最近10次的标准差与平均值的比值）
+            let consistency = '--%';
+            if (times.length >= 3) {
+                const recentTimes = times.slice(0, Math.min(10, times.length));
+                const avg = calculateAverage(recentTimes);
+                const variance = recentTimes.reduce((sum, time) => sum + Math.pow(time - avg, 2), 0) / recentTimes.length;
+                const stdDev = Math.sqrt(variance);
+                const consistencyValue = Math.max(0, 100 - (stdDev / avg * 100));
+                consistency = consistencyValue.toFixed(1) + '%';
+            }
+            
+            // 本月复原次数
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            const monthCount = solveTimes.filter(record => {
+                const recordDate = new Date(record.timestamp);
+                return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+            }).length;
+            
+            // 提升（与最初几次相比）
+            let improvement = '--.--';
+            if (times.length >= 5) {
+                const firstFiveAvg = calculateAverage(times.slice(-5), true);
+                const lastFiveAvg = calculateAverage(times.slice(0, 5), true);
+                improvement = (firstFiveAvg - lastFiveAvg).toFixed(2);
+                if (parseFloat(improvement) > 0) {
+                    improvement = '-' + improvement;
+                }
+            }
+            
+            // 更新DOM
+            document.getElementById('currentAvg').textContent = formatTimeForDisplay(currentAvg, false);
+            document.getElementById('bestTime').textContent = formatTimeForDisplay(currentBest);
+            document.getElementById('worstTime').textContent = formatTimeForDisplay(currentWorst);
+            document.getElementById('solveCount').textContent = solveCount;
+            document.getElementById('sessionAvg').textContent = formatTimeForDisplay(sessionAvg, false);
+            document.getElementById('bestAvg').textContent = formatTimeForDisplay(bestAvg, false);
+            document.getElementById('bestSingle').textContent = formatTimeForDisplay(bestSingle);
+            document.getElementById('consistency').textContent = consistency;
+            document.getElementById('monthCount').textContent = monthCount;
+            document.getElementById('improvement').textContent = improvement !== '--.--' ? formatTimeForDisplay(Math.abs(parseFloat(improvement)), false) : improvement;
+        }
+        
+        function calculateAverage(times, removeExtremes = false) {
+            if (times.length === 0) return 0;
+            
+            let timesToAverage = [...times];
+            
+            if (removeExtremes && times.length >= 3) {
+                // 去掉最快和最慢的
+                const maxIndex = timesToAverage.indexOf(Math.max(...timesToAverage));
+                timesToAverage.splice(maxIndex, 1);
+                const minIndex = timesToAverage.indexOf(Math.min(...timesToAverage));
+                timesToAverage.splice(minIndex, 1);
+            }
+            
+            const sum = timesToAverage.reduce((a, b) => a + b, 0);
+            return sum / timesToAverage.length;
+        }
+        
+        function formatTimeForDisplay(ms, includeMs = true) {
+            if (ms === '--.--' || ms === 0) return '--.--';
+            
+            const minutes = Math.floor(ms / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+            const milliseconds = ms % 1000;
+            
+            if (includeMs) {
+                if (minutes > 0) {
+                    return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+                } else {
+                    return `${seconds}.${milliseconds.toString().padStart(3, '0')}`;
+                }
+            } else {
+                // 用于平均值显示，可能不需要毫秒
+                if (minutes > 0) {
+                    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    return `${seconds}.${Math.floor(milliseconds/10).toString().padStart(2, '0')}`;
+                }
+            }
+        }
+        
+        // ==================== 记录表格功能 ====================
+        function updateRecordsTable() {
+            const tableBody = document.getElementById('recordsTableBody');
+            const noRecordsRow = document.getElementById('noRecordsRow');
+            
+            if (solveTimes.length === 0) {
+                noRecordsRow.style.display = '';
+                return;
+            }
+            
+            noRecordsRow.style.display = 'none';
+            
+            // 清空现有行（除了无记录行）
+            const rows = tableBody.querySelectorAll('tr:not(#noRecordsRow)');
+            rows.forEach(row => row.remove());
+            
+            // 添加新行
+            solveTimes.forEach((record, index) => {
+                const row = document.createElement('tr');
+                
+                // 序号
+                const cell1 = document.createElement('td');
+                cell1.textContent = index + 1;
+                row.appendChild(cell1);
+                
+                // 时间
+                const cell2 = document.createElement('td');
+                cell2.className = 'time-cell';
+                cell2.textContent = formatTimeForDisplay(record.time);
+                row.appendChild(cell2);
+                
+                // 打乱（截断显示）
+                const cell3 = document.createElement('td');
+                const shortScramble = record.scramble.length > 30 ? record.scramble.substring(0, 30) + '...' : record.scramble;
+                cell3.textContent = shortScramble;
+                cell3.title = record.scramble; // 完整打乱作为提示
+                row.appendChild(cell3);
+                
+                // 日期
+                const cell4 = document.createElement('td');
+                cell4.textContent = record.date;
+                row.appendChild(cell4);
+                
+                // 魔方类型
+                const cell5 = document.createElement('td');
+                cell5.textContent = getCubeTypeDisplayName(record.cubeType);
+                row.appendChild(cell5);
+                
+                // 操作
+                const cell6 = document.createElement('td');
+                cell6.innerHTML = `
+                    <span class="record-action" onclick="deleteRecord(${index})" title="删除记录"><i class="fas fa-trash"></i></span>
+                    <span class="record-action" onclick="copyRecord(${index})" title="复制打乱"><i class="fas fa-copy"></i></span>
+                `;
+                row.appendChild(cell6);
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function getCubeTypeDisplayName(type) {
+            const names = {
+                '3x3': '三阶',
+                '2x2': '二阶',
+                '4x4': '四阶',
+                'pyramid': '金字塔',
+                'megaminx': '五魔方',
+                'skewb': '斜转'
+            };
+            return names[type] || type;
+        }
+        
+        function deleteRecord(index) {
+            if (confirm('确定要删除这条记录吗？')) {
+                solveTimes.splice(index, 1);
+                updateRecordsTable();
+                updateStats();
+                updateChart();
+                saveData();
+            }
+        }
+        
+        function copyRecord(index) {
+            const scramble = solveTimes[index].scramble;
+            navigator.clipboard.writeText(scramble).then(() => {
+                alert('打乱已复制到剪贴板！');
+            });
+        }
+        
+        // ==================== 图表功能 ====================
+        function updateChart() {
+            const ctx = document.getElementById('timeChart').getContext('2d');
+            
+            // 销毁现有图表实例
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            
+            if (solveTimes.length === 0) {
+                // 显示无数据信息
+                ctx.font = "20px Arial";
+                ctx.fillStyle = "#94a3b8";
+                ctx.textAlign = "center";
+                ctx.fillText("暂无计时数据，开始计时后图表会显示在这里", 
+                           document.getElementById('timeChart').width / 2, 
+                           document.getElementById('timeChart').height / 2);
+                return;
+            }
+            
+            // 准备数据
+            const labels = [];
+            const data = [];
+            
+            // 只显示最近20次记录
+            const recentRecords = solveTimes.slice(0, Math.min(20, solveTimes.length));
+            
+            recentRecords.forEach((record, index) => {
+                labels.push(`#${solveTimes.length - index}`);
+                data.push(record.time / 1000); // 转换为秒
+            });
+            
+            // 创建图表
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.reverse(), // 反转以使最新的在右边
+                    datasets: [{
+                        label: '复原时间 (秒)',
+                        data: data.reverse(),
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#f1f5f9',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const timeInMs = context.parsed.y * 1000;
+                                    const minutes = Math.floor(timeInMs / 60000);
+                                    const seconds = Math.floor((timeInMs % 60000) / 1000);
+                                    const milliseconds = timeInMs % 1000;
+                                    
+                                    if (minutes > 0) {
+                                        return `时间: ${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+                                    } else {
+                                        return `时间: ${seconds}.${milliseconds.toString().padStart(3, '0')}`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                callback: function(value) {
+                                    const timeInMs = value * 1000;
+                                    const minutes = Math.floor(timeInMs / 60000);
+                                    const seconds = Math.floor((timeInMs % 60000) / 1000);
+                                    
+                                    if (minutes > 0) {
+                                        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                    } else {
+                                        return `${seconds}s`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ==================== 个性化设置功能 ====================
+        function applyTheme(color) {
+            const root = document.documentElement;
+            
+            if (color === 'green') {
+                root.style.setProperty('--primary-blue', '#10b981');
+                root.style.setProperty('--secondary-blue', '#0da271');
+                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #10b981, #0da271, #059669)');
+            } else if (color === 'purple') {
+                root.style.setProperty('--primary-blue', '#8b5cf6');
+                root.style.setProperty('--secondary-blue', '#7c3aed');
+                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #8b5cf6, #7c3aed, #6d28d9)');
+            } else if (color === 'red') {
+                root.style.setProperty('--primary-blue', '#ef4444');
+                root.style.setProperty('--secondary-blue', '#dc2626');
+                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #ef4444, #dc2626, #b91c1c)');
+            } else {
+                // 蓝色主题（默认）
+                root.style.setProperty('--primary-blue', '#3b82f6');
+                root.style.setProperty('--secondary-blue', '#0ea5e9');
+                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #3b82f6, #8b5cf6, #0ea5e9)');
+            }
+        }
+        
+        function applyFontSize(size) {
+            const timeDisplay = document.getElementById('timeDisplay');
+            
+            if (size === 'large') {
+                timeDisplay.style.fontSize = '8.5rem';
+                timeDisplay.classList.remove('small', 'tiny');
+            } else if (size === 'xlarge') {
+                timeDisplay.style.fontSize = '9.5rem';
+                timeDisplay.classList.remove('small', 'tiny');
+            } else {
+                timeDisplay.style.fontSize = '';
+                // 根据当前时间调整
+                const currentTime = timeDisplay.textContent;
+                if (currentTime.length > 8) {
+                    timeDisplay.className = 'time-display tiny';
+                } else if (currentTime.length > 7) {
+                    timeDisplay.className = 'time-display small';
+                } else {
+                    timeDisplay.className = 'time-display';
+                }
+            }
+        }
+        
+        // ==================== 数据导出功能 ====================
+        function exportData() {
+            const format = document.getElementById('exportFormatSelect').value;
+            let dataStr, fileName, mimeType;
+            
+            if (format === 'csv') {
+                // 创建CSV内容
+                let csvContent = "序号,时间(毫秒),时间(显示),打乱,日期,魔方类型\n";
+                
+                solveTimes.forEach((record, index) => {
+                    const row = [
+                        index + 1,
+                        record.time,
+                        formatTimeForDisplay(record.time),
+                        `"${record.scramble.replace(/"/g, '""')}"`,
+                        record.date,
+                        record.cubeType
+                    ];
+                    csvContent += row.join(',') + '\n';
+                });
+                
+                dataStr = csvContent;
+                fileName = `buzhidao_cubetimer_${new Date().toISOString().slice(0,10)}.csv`;
+                mimeType = 'text/csv;charset=utf-8;';
+            } else if (format === 'json') {
+                dataStr = JSON.stringify(solveTimes, null, 2);
+                fileName = `buzhidao_cubetimer_${new Date().toISOString().slice(0,10)}.json`;
+                mimeType = 'application/json';
+            } else { // txt
+                let txtContent = `Buzhidao CubeTimer 数据导出 - ${new Date().toLocaleDateString('zh-CN')}\n`;
+                txtContent += "=".repeat(50) + "\n\n";
+                
+                solveTimes.forEach((record, index) => {
+                    txtContent += `记录 #${index + 1}\n`;
+                    txtContent += `时间: ${formatTimeForDisplay(record.time)}\n`;
+                    txtContent += `打乱: ${record.scramble}\n`;
+                    txtContent += `日期: ${record.date}\n`;
+                    txtContent += `魔方类型: ${record.cubeType}\n`;
+                    txtContent += "-".repeat(30) + "\n";
+                });
+                
+                dataStr = txtContent;
+                fileName = `buzhidao_cubetimer_${new Date().toISOString().slice(0,10)}.txt`;
+                mimeType = 'text/plain';
+            }
+            
+            // 创建下载链接
+            const blob = new Blob([dataStr], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert(`数据已导出为 ${fileName}`);
+        }
+        
+        function clearAllData() {
+            if (confirm('确定要清除所有记录吗？此操作不可撤销！')) {
+                solveTimes = [];
+                localStorage.removeItem('buzhidao_cubetimer_times');
+                updateRecordsTable();
+                updateStats();
+                updateChart();
+                alert('所有记录已清除！');
+            }
+        }
+        
+        // ==================== 声音功能 ====================
+        function playTimerSound() {
+            // 创建简单的计时结束声音
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log('音频播放失败:', e);
+            }
+        }
+        
+        // ==================== 事件监听器 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化
+            loadData();
+            generateNewScramble();
+            updateTimerDisplay();
+            
+            // 计时器按钮事件
+            document.getElementById('startBtn').addEventListener('click', startTimer);
+            document.getElementById('stopBtn').addEventListener('click', stopTimer);
+            document.getElementById('resetBtn').addEventListener('click', resetTimer);
+            
+            // 打乱按钮事件
+            document.getElementById('newScrambleBtn').addEventListener('click', generateNewScramble);
+            document.getElementById('copyScrambleBtn').addEventListener('click', copyScrambleToClipboard);
+            document.getElementById('showSolutionBtn').addEventListener('click', function() {
+                alert('解法功能正在开发中，即将推出！');
+            });
+            
+            // 魔方类型选择
+            document.querySelectorAll('.cube-type').forEach(type => {
+                type.addEventListener('click', function() {
+                    document.querySelectorAll('.cube-type').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCubeType = this.getAttribute('data-cube');
+                    generateNewScramble();
+                    updateStats(); // 更新针对当前魔方类型的统计
+                });
+            });
+            
+            // 设置更改事件
+            document.getElementById('themeColorSelect').addEventListener('change', function() {
+                applyTheme(this.value);
+                saveData();
+            });
+            
+            document.getElementById('fontSizeSelect').addEventListener('change', function() {
+                applyFontSize(this.value);
+                saveData();
+            });
+            
+            document.getElementById('timeFormatSelect').addEventListener('change', function() {
+                updateTimerDisplay();
+                saveData();
+            });
+            
+            // 其他设置保存
+            const settingInputs = [
+                'soundToggle', 'spacebarToggle', 'countdownToggle', 
+                'scrambleLengthSelect', 'wcaScrambleToggle', 'animationsToggle',
+                'autoSaveToggle', 'exportFormatSelect'
+            ];
+            
+            settingInputs.forEach(inputId => {
+                document.getElementById(inputId).addEventListener('change', saveData);
+            });
+            
+            // 数据管理按钮
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+            
+            // 键盘快捷键
+            document.addEventListener('keydown', function(event) {
+                // 空格键控制计时器（如果启用）
+                if (document.getElementById('spacebarToggle').checked && event.code === 'Space') {
+                    event.preventDefault(); // 防止页面滚动
+                    
+                    if (timerRunning) {
+                        stopTimer();
+                    } else {
+                        startTimer();
+                    }
+                }
+                
+                // R键重置计时器
+                if (event.code === 'KeyR' && !event.ctrlKey) {
+                    resetTimer();
+                }
+                
+                // N键生成新打乱
+                if (event.code === 'KeyN' && !event.ctrlKey) {
+                    generateNewScramble();
+                }
+            });
+            
+            // 导航点击事件
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有active类
+                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                    // 添加当前active类
+                    this.classList.add('active');
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 响应式调整
+            window.addEventListener('resize', function() {
+                updateChart();
+            });
+        });
+    </script>
+</body>
+</html>

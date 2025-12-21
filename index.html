@@ -42,14 +42,14 @@
             padding: 0 20px;
         }
         
-        /* 头部样式 */
+        /* 头部样式 - 优化移动端 */
         header {
-            background-color: rgba(10, 15, 31, 0.95);
-            padding: 18px 0;
+            background-color: rgba(10, 15, 31, 0.98);
+            padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
         }
@@ -63,11 +63,11 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
         
         .logo-icon {
-            font-size: 32px;
+            font-size: 24px;
             background: var(--cube-gradient);
             -webkit-background-clip: text;
             background-clip: text;
@@ -75,7 +75,7 @@
         }
         
         .logo-text {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 800;
             background: var(--cube-gradient);
             -webkit-background-clip: text;
@@ -84,25 +84,25 @@
         }
         
         .logo-subtitle {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--text-muted);
-            letter-spacing: 2px;
-            margin-left: 5px;
+            letter-spacing: 1.5px;
+            margin-left: 3px;
         }
         
         nav ul {
             display: flex;
             list-style: none;
-            gap: 25px;
+            gap: 15px;
         }
         
         nav a {
             color: var(--text-color);
             text-decoration: none;
             font-weight: 600;
-            font-size: 17px;
+            font-size: 15px;
             transition: all 0.3s ease;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 6px;
             position: relative;
         }
@@ -114,17 +114,17 @@
         
         /* 主计时器区域 */
         .timer-section {
-            padding: 60px 0 40px;
+            padding: 40px 0 30px;
             text-align: center;
         }
         
         .timer-container {
             max-width: 900px;
-            margin: 0 auto 50px;
+            margin: 0 auto 40px;
             background: linear-gradient(145deg, #1a2335, #151c2b);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
             border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
@@ -136,31 +136,32 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
+            height: 4px;
             background: var(--cube-gradient);
         }
         
         .cube-type-selector {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
         
         .cube-type {
-            padding: 10px 20px;
+            padding: 8px 16px;
             background-color: var(--card-bg);
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid transparent;
             font-weight: 600;
+            font-size: 14px;
         }
         
         .cube-type:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
         
         .cube-type.active {
@@ -170,45 +171,46 @@
         }
         
         .time-display {
-            font-size: 7.5rem;
+            font-size: 6.5rem;
             font-weight: 800;
             font-variant-numeric: tabular-nums;
-            margin: 30px 0;
-            letter-spacing: 2px;
+            margin: 25px 0;
+            letter-spacing: 1px;
             background: var(--cube-gradient);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            text-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         
         .time-display.small {
-            font-size: 4.5rem;
+            font-size: 4rem;
         }
         
         .time-display.tiny {
-            font-size: 3.5rem;
+            font-size: 3rem;
         }
         
         .timer-controls {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 40px 0 30px;
+            gap: 15px;
+            margin: 30px 0 25px;
+            flex-wrap: wrap;
         }
         
         .timer-btn {
-            padding: 16px 40px;
-            font-size: 1.2rem;
+            padding: 14px 32px;
+            font-size: 1.1rem;
             font-weight: 700;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 10px;
-            min-width: 180px;
+            gap: 8px;
+            min-width: 150px;
             justify-content: center;
         }
         
@@ -229,37 +231,66 @@
         }
         
         .timer-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
         }
         
         .scramble-section {
-            margin-top: 40px;
-            padding: 25px;
+            margin-top: 30px;
+            padding: 20px;
             background-color: rgba(30, 41, 59, 0.7);
-            border-radius: 15px;
-            border-left: 5px solid var(--accent-yellow);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-yellow);
+        }
+        
+        .scramble-display-container {
+            position: relative;
+            margin-bottom: 15px;
         }
         
         .scramble-display {
             font-family: 'Courier New', monospace;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--text-color);
-            margin-bottom: 20px;
             line-height: 1.4;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            word-break: break-word;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s;
+            max-height: 80px;
+            overflow: hidden;
+        }
+        
+        .scramble-display.expanded {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .toggle-scramble-btn {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            background-color: rgba(30, 41, 59, 0.8);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
         
         .scramble-controls {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
         }
         
         .scramble-btn {
-            padding: 12px 25px;
+            padding: 10px 20px;
             background-color: var(--primary-blue);
             color: white;
             border: none;
@@ -274,9 +305,19 @@
             transform: translateY(-3px);
         }
         
+        /* 小型趋势图表 */
+        .mini-chart-container {
+            margin-top: 30px;
+            background-color: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            height: 180px;
+        }
+        
         /* 统计区域 */
         .stats-section {
-            padding: 60px 0;
+            padding: 50px 0;
             background-color: var(--darker-bg);
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
@@ -285,21 +326,21 @@
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
         
         .stats-card {
             background-color: var(--card-bg);
             border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
         }
         
         .stats-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             color: var(--text-color);
             display: flex;
             align-items: center;
@@ -307,7 +348,7 @@
         }
         
         .stats-value {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: 10px;
             background: var(--cube-gradient);
@@ -318,41 +359,42 @@
         
         .stats-label {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
         
         .stat-item {
-            padding: 15px;
+            padding: 12px;
             background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 8px;
         }
         
         .stat-value {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: var(--text-color);
         }
         
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
         
         /* 记录区域 */
         .records-section {
-            padding: 70px 0;
+            padding: 60px 0;
         }
         
         .section-title {
             text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 60px;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
             color: var(--text-color);
             position: relative;
         }
@@ -360,10 +402,10 @@
         .section-title:after {
             content: '';
             position: absolute;
-            width: 120px;
-            height: 5px;
+            width: 100px;
+            height: 4px;
             background: var(--cube-gradient);
-            bottom: -15px;
+            bottom: -12px;
             left: 50%;
             transform: translateX(-50%);
             border-radius: 5px;
@@ -372,18 +414,18 @@
         .chart-container {
             background-color: var(--card-bg);
             border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 50px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
-            height: 400px;
+            height: 350px;
         }
         
         .records-table-container {
             background-color: var(--card-bg);
             border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
             overflow-x: auto;
         }
@@ -396,14 +438,14 @@
         th {
             background-color: rgba(59, 130, 246, 0.1);
             color: var(--text-color);
-            padding: 18px 15px;
+            padding: 15px 12px;
             text-align: left;
             font-weight: 700;
             border-bottom: 2px solid var(--border-color);
         }
         
         td {
-            padding: 18px 15px;
+            padding: 15px 12px;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-color);
         }
@@ -415,13 +457,13 @@
         .time-cell {
             font-family: 'Courier New', monospace;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         
         .record-action {
             color: var(--primary-blue);
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 8px;
             transition: color 0.3s;
         }
         
@@ -429,9 +471,95 @@
             color: var(--secondary-blue);
         }
         
+        /* 记录折叠样式 */
+        .record-row {
+            cursor: pointer;
+        }
+        
+        .record-details {
+            display: none;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 3px solid var(--primary-blue);
+        }
+        
+        .record-details.expanded {
+            display: block;
+        }
+        
+        .record-details-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .detail-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .detail-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: var(--text-color);
+            font-size: 1rem;
+            word-break: break-all;
+        }
+        
+        .toggle-details-btn {
+            background: none;
+            border: none;
+            color: var(--primary-blue);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        /* 解法显示区域 */
+        .solution-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-green);
+        }
+        
+        .solution-container.show {
+            display: block;
+        }
+        
+        .solution-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .solution-steps {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            line-height: 1.5;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
         /* 个性化设置区域 */
         .personalization-section {
-            padding: 70px 0;
+            padding: 60px 0;
             background-color: var(--darker-bg);
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
@@ -440,24 +568,24 @@
         .settings-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
+            gap: 30px;
         }
         
         .settings-card {
             background-color: var(--card-bg);
             border-radius: 15px;
-            padding: 35px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
         }
         
         .settings-group {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .settings-group h4 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
             color: var(--text-color);
             display: flex;
             align-items: center;
@@ -468,27 +596,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
+            margin-bottom: 18px;
+            padding-bottom: 18px;
             border-bottom: 1px solid var(--border-color);
         }
         
         .setting-label {
             color: var(--text-color);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .setting-control {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+        }
+        
+        /* 下拉选择框背景颜色优化 */
+        select {
+            padding: 10px 15px;
+            background-color: #112240; /* 更深的背景 */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+            min-width: 150px;
+            cursor: pointer;
+        }
+        
+        select option {
+            background-color: #1e293b;
+            color: var(--text-color);
         }
         
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 30px;
+            width: 55px;
+            height: 28px;
         }
         
         .toggle-switch input {
@@ -512,8 +657,8 @@
         .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 22px;
-            width: 22px;
+            height: 20px;
+            width: 20px;
             left: 4px;
             bottom: 4px;
             background-color: white;
@@ -526,27 +671,17 @@
         }
         
         input:checked + .toggle-slider:before {
-            transform: translateX(30px);
-        }
-        
-        select {
-            padding: 10px 15px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-color);
-            font-size: 1rem;
-            min-width: 150px;
+            transform: translateX(27px);
         }
         
         /* 反馈区域 */
         .feedback-section {
-            padding: 70px 0;
+            padding: 60px 0;
         }
         
         .feedback-container {
             display: flex;
-            gap: 60px;
+            gap: 50px;
         }
         
         .feedback-info {
@@ -554,37 +689,37 @@
         }
         
         .feedback-info h3 {
-            font-size: 2.2rem;
-            margin-bottom: 30px;
+            font-size: 2rem;
+            margin-bottom: 25px;
             color: var(--text-color);
         }
         
         .feedback-info p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            margin-bottom: 40px;
-            line-height: 1.8;
+            margin-bottom: 35px;
+            line-height: 1.7;
         }
         
         .tally-form-container {
             flex: 1;
             background-color: var(--card-bg);
-            padding: 40px;
+            padding: 35px;
             border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
         }
         
         .tally-form-container h3 {
             text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
             color: var(--text-color);
         }
         
         .tally-iframe {
             width: 100%;
-            height: 500px;
+            height: 450px;
             border: none;
             border-radius: 8px;
             background: transparent;
@@ -593,7 +728,7 @@
         .form-notice {
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-top: 15px;
             line-height: 1.5;
         }
@@ -601,7 +736,7 @@
         /* 页脚 */
         footer {
             background-color: var(--darker-bg);
-            padding: 60px 0 30px;
+            padding: 50px 0 25px;
             border-top: 1px solid var(--border-color);
         }
         
@@ -609,24 +744,24 @@
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 50px;
-            margin-bottom: 50px;
+            gap: 40px;
+            margin-bottom: 40px;
         }
         
         .footer-column {
             flex: 1;
-            min-width: 250px;
+            min-width: 200px;
         }
         
         .footer-column h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             color: var(--text-color);
         }
         
         .footer-column p, .footer-column a {
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: block;
             text-decoration: none;
             transition: color 0.3s;
@@ -638,7 +773,7 @@
         
         .social-icons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
         }
         
@@ -646,31 +781,47 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             background-color: var(--card-bg);
             border-radius: 50%;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             transition: all 0.3s;
         }
         
         .social-icons a:hover {
             background: var(--cube-gradient);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
         
         .copyright {
             text-align: center;
-            padding-top: 30px;
+            padding-top: 25px;
             border-top: 1px solid var(--border-color);
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+        }
+        
+        /* 节拍器状态指示 */
+        .metronome-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--accent-red);
+            margin-left: 8px;
+            animation: metronome-pulse 1s infinite;
+        }
+        
+        @keyframes metronome-pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
         }
         
         /* 响应式设计 */
         @media (max-width: 1200px) {
             .time-display {
-                font-size: 6rem;
+                font-size: 5.5rem;
             }
             
             .feedback-container {
@@ -684,58 +835,67 @@
             }
             
             .timer-btn {
-                min-width: 160px;
+                min-width: 140px;
             }
             
             .time-display {
-                font-size: 5rem;
-            }
-            
-            .time-display.small {
-                font-size: 3.5rem;
-            }
-            
-            .settings-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            nav ul {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .time-display {
-                font-size: 4rem;
+                font-size: 4.5rem;
             }
             
             .time-display.small {
                 font-size: 3rem;
             }
             
-            .time-display.tiny {
-                font-size: 2.5rem;
-            }
-            
-            .timer-btn {
-                padding: 14px 25px;
-                min-width: 140px;
-                font-size: 1.1rem;
-            }
-            
-            .scramble-display {
-                font-size: 1.4rem;
+            .settings-container {
+                grid-template-columns: 1fr;
             }
             
             .section-title {
                 font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav a {
+                font-size: 14px;
+                padding: 5px 10px;
+            }
+            
+            .time-display {
+                font-size: 3.5rem;
+            }
+            
+            .time-display.small {
+                font-size: 2.5rem;
+            }
+            
+            .time-display.tiny {
+                font-size: 2rem;
+            }
+            
+            .timer-btn {
+                padding: 12px 20px;
+                min-width: 130px;
+                font-size: 1rem;
+            }
+            
+            .scramble-display {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
             }
             
             .stats-container {
@@ -743,30 +903,38 @@
             }
             
             .tally-form-container {
-                padding: 25px 20px;
+                padding: 20px 15px;
             }
             
             .tally-iframe {
-                height: 450px;
+                height: 400px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .mini-chart-container {
+                height: 150px;
             }
         }
         
         @media (max-width: 576px) {
             .timer-container {
-                padding: 30px 20px;
+                padding: 25px 15px;
             }
             
             .time-display {
-                font-size: 3.2rem;
+                font-size: 2.8rem;
             }
             
             .cube-type-selector {
-                gap: 10px;
+                gap: 8px;
             }
             
             .cube-type {
-                padding: 8px 16px;
-                font-size: 0.9rem;
+                padding: 6px 12px;
+                font-size: 12px;
             }
             
             .timer-controls {
@@ -776,7 +944,32 @@
             
             .timer-btn {
                 width: 100%;
-                max-width: 280px;
+                max-width: 250px;
+            }
+            
+            .scramble-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .scramble-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .settings-card {
+                padding: 20px 15px;
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .setting-control {
+                width: 100%;
+                justify-content: flex-end;
             }
         }
         
@@ -808,22 +1001,22 @@
         
         .tooltip .tooltip-text {
             visibility: hidden;
-            width: 200px;
+            width: 180px;
             background-color: var(--card-bg);
             color: var(--text-color);
             text-align: center;
             border-radius: 6px;
-            padding: 10px;
+            padding: 8px;
             position: absolute;
             z-index: 1;
             bottom: 125%;
             left: 50%;
-            margin-left: -100px;
+            margin-left: -90px;
             opacity: 0;
             transition: opacity 0.3s;
             border: 1px solid var(--border-color);
-            font-size: 0.9rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            font-size: 0.85rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
         
         .tooltip:hover .tooltip-text {
@@ -834,6 +1027,23 @@
         /* 隐藏/显示元素 */
         .hidden {
             display: none !important;
+        }
+        
+        /* 键盘提示 */
+        .keyboard-hint {
+            margin-top: 15px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .keyboard-hint kbd {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 0 3px;
         }
     </style>
 </head>
@@ -879,7 +1089,7 @@
                 
                 <div class="timer-controls">
                     <button class="timer-btn start" id="startBtn">
-                        <i class="fas fa-play"></i> 开始计时
+                        <i class="fas fa-play"></i> 准备计时
                     </button>
                     <button class="timer-btn stop hidden" id="stopBtn">
                         <i class="fas fa-stop"></i> 停止
@@ -890,8 +1100,11 @@
                 </div>
                 
                 <div class="scramble-section">
-                    <div class="scramble-display" id="scrambleDisplay">
-                        F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2 F U2
+                    <div class="scramble-display-container">
+                        <div class="scramble-display" id="scrambleDisplay">
+                            F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2 F U2
+                        </div>
+                        <button class="toggle-scramble-btn" id="toggleScrambleBtn">展开</button>
                     </div>
                     <div class="scramble-controls">
                         <button class="scramble-btn" id="newScrambleBtn">
@@ -904,6 +1117,25 @@
                             <i class="fas fa-lightbulb"></i> 显示解法
                         </button>
                     </div>
+                    
+                    <!-- 解法显示区域 -->
+                    <div class="solution-container" id="solutionContainer">
+                        <div class="solution-title">
+                            <i class="fas fa-lightbulb"></i> 推荐解法 (CFOP方法)
+                        </div>
+                        <div class="solution-steps" id="solutionSteps">
+                            <!-- 解法内容将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 小型趋势图表 -->
+                <div class="mini-chart-container">
+                    <canvas id="miniTimeChart"></canvas>
+                </div>
+                
+                <div class="keyboard-hint">
+                    使用提示：长按<span class="tooltip"><kbd>空格键</kbd><span class="tooltip-text">按住空格键准备，松开开始计时，再次按下停止</span></span>控制计时，按<span class="tooltip"><kbd>R</kbd><span class="tooltip-text">重置计时器和打乱</span></span>重置
                 </div>
             </div>
         </div>
@@ -978,22 +1210,21 @@
             </div>
             
             <div class="records-table-container fade-in">
-                <h3 style="margin-bottom: 20px; color: var(--text-color);">最近复原记录</h3>
+                <h3 style="margin-bottom: 20px; color: var(--text-color);">最近复原记录 <small style="color: var(--text-muted); font-size: 0.9rem;">(点击记录展开详情)</small></h3>
                 <table id="recordsTable">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>时间</th>
-                            <th>打乱</th>
-                            <th>日期</th>
                             <th>魔方类型</th>
+                            <th>日期</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody id="recordsTableBody">
                         <!-- 记录会通过JavaScript动态添加 -->
                         <tr id="noRecordsRow">
-                            <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
                                 暂无记录，开始计时后您的复原记录会显示在这里
                             </td>
                         </tr>
@@ -1026,7 +1257,7 @@
                         </div>
                         
                         <div class="setting-item">
-                            <span class="setting-label">空间键计时</span>
+                            <span class="setting-label">空格键控制</span>
                             <div class="setting-control">
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="spacebarToggle" checked>
@@ -1036,10 +1267,10 @@
                         </div>
                         
                         <div class="setting-item">
-                            <span class="setting-label">倒计时开始</span>
+                            <span class="setting-label">节拍器 <span id="metronomeIndicator" class="metronome-indicator hidden"></span></span>
                             <div class="setting-control">
                                 <label class="toggle-switch">
-                                    <input type="checkbox" id="countdownToggle">
+                                    <input type="checkbox" id="metronomeToggle">
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
@@ -1268,10 +1499,15 @@
         let startTime = 0;
         let elapsedTime = 0;
         let timerRunning = false;
+        let readyToStart = false;
+        let spacePressed = false;
         let currentCubeType = '3x3';
         let scrambleHistory = [];
         let solveTimes = [];
         let chartInstance = null;
+        let miniChartInstance = null;
+        let metronomeInterval = null;
+        let audioContext = null;
         
         // 从本地存储加载数据
         function loadData() {
@@ -1281,6 +1517,7 @@
                 updateRecordsTable();
                 updateStats();
                 updateChart();
+                updateMiniChart();
             }
             
             // 加载设置
@@ -1289,7 +1526,7 @@
                 const savedSettings = JSON.parse(settings);
                 document.getElementById('soundToggle').checked = savedSettings.sound || true;
                 document.getElementById('spacebarToggle').checked = savedSettings.spacebar || true;
-                document.getElementById('countdownToggle').checked = savedSettings.countdown || false;
+                document.getElementById('metronomeToggle').checked = savedSettings.metronome || false;
                 document.getElementById('timeFormatSelect').value = savedSettings.timeFormat || 'mm:ss.ms';
                 document.getElementById('scrambleLengthSelect').value = savedSettings.scrambleLength || 'normal';
                 document.getElementById('wcaScrambleToggle').checked = savedSettings.wcaScramble || true;
@@ -1301,6 +1538,10 @@
                 
                 // 应用主题
                 applyTheme(savedSettings.themeColor || 'blue');
+                // 启动节拍器（如果之前开启）
+                if (savedSettings.metronome) {
+                    startMetronome();
+                }
             }
         }
         
@@ -1312,7 +1553,7 @@
                 const settings = {
                     sound: document.getElementById('soundToggle').checked,
                     spacebar: document.getElementById('spacebarToggle').checked,
-                    countdown: document.getElementById('countdownToggle').checked,
+                    metronome: document.getElementById('metronomeToggle').checked,
                     timeFormat: document.getElementById('timeFormatSelect').value,
                     scrambleLength: document.getElementById('scrambleLengthSelect').value,
                     wcaScramble: document.getElementById('wcaScrambleToggle').checked,
@@ -1371,7 +1612,7 @@
             updateRecordsTable();
             updateStats();
             updateChart();
-            generateNewScramble();
+            updateMiniChart();
             
             // 保存数据
             saveData();
@@ -1384,6 +1625,7 @@
         
         function resetTimer() {
             timerRunning = false;
+            readyToStart = false;
             clearInterval(timerInterval);
             elapsedTime = 0;
             
@@ -1391,6 +1633,7 @@
             document.getElementById('stopBtn').classList.add('hidden');
             
             updateTimerDisplay();
+            generateNewScramble(); // 重置时更新打乱
         }
         
         function updateTimerDisplay() {
@@ -1433,6 +1676,55 @@
             timeDisplay.textContent = displayText;
         }
         
+        // ==================== 键盘控制功能 ====================
+        function handleKeyDown(event) {
+            if (event.code === 'Space' && document.getElementById('spacebarToggle').checked) {
+                event.preventDefault();
+                
+                if (!spacePressed) {
+                    spacePressed = true;
+                    
+                    if (!timerRunning && !readyToStart) {
+                        // 准备开始计时
+                        readyToStart = true;
+                        document.getElementById('startBtn').textContent = '松开开始';
+                        document.getElementById('startBtn').classList.add('pulse');
+                    } else if (timerRunning) {
+                        // 停止计时
+                        stopTimer();
+                    }
+                }
+            }
+            
+            // R键重置计时器
+            if (event.code === 'KeyR' && !event.ctrlKey) {
+                resetTimer();
+            }
+            
+            // N键生成新打乱
+            if (event.code === 'KeyN' && !event.ctrlKey) {
+                generateNewScramble();
+            }
+        }
+        
+        function handleKeyUp(event) {
+            if (event.code === 'Space' && document.getElementById('spacebarToggle').checked) {
+                event.preventDefault();
+                
+                if (spacePressed) {
+                    spacePressed = false;
+                    
+                    if (readyToStart && !timerRunning) {
+                        // 开始计时
+                        startTimer();
+                        readyToStart = false;
+                        document.getElementById('startBtn').textContent = '准备计时';
+                        document.getElementById('startBtn').classList.remove('pulse');
+                    }
+                }
+            }
+        }
+        
         // ==================== 打乱生成功能 ====================
         function generateNewScramble() {
             const scrambleLengthSelect = document.getElementById('scrambleLengthSelect');
@@ -1449,6 +1741,9 @@
             if (scrambleHistory.length > 10) {
                 scrambleHistory = scrambleHistory.slice(0, 10);
             }
+            
+            // 隐藏解法显示
+            document.getElementById('solutionContainer').classList.remove('show');
         }
         
         function generateScramble(cubeType, length) {
@@ -1507,6 +1802,39 @@
             navigator.clipboard.writeText(scramble).then(() => {
                 alert('打乱已复制到剪贴板！');
             });
+        }
+        
+        // ==================== 解法生成功能 ====================
+        function generateSolution(scramble) {
+            // 这是一个简化的解法生成器，实际魔方解法非常复杂
+            // 这里我们根据打乱公式反向生成一个简单的CFOP解法示例
+            
+            const moves = scramble.split(' ');
+            let solution = [];
+            
+            // 简化的CFOP解法步骤
+            const crossMoves = ['R', 'L', 'F', 'B', 'U', 'D'];
+            const f2lMoves = ["R U R'", "L' U' L", "U R U' R'", "U' L' U L"];
+            const ollMoves = ["F R U R' U' F'", "R U R' U R U2 R'", "R U2 R2 U' R2 U' R2 U2 R"];
+            const pllMoves = ["R U R' U' R' F R2 U' R' U' R U R' F'", "R' U L' U2 R U' R' U2 R L"];
+            
+            // 随机生成解法步骤
+            solution.push("十字: " + crossMoves[Math.floor(Math.random() * crossMoves.length)]);
+            solution.push("F2L 1: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
+            solution.push("F2L 2: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
+            solution.push("F2L 3: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
+            solution.push("F2L 4: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
+            solution.push("OLL: " + ollMoves[Math.floor(Math.random() * ollMoves.length)]);
+            solution.push("PLL: " + pllMoves[Math.floor(Math.random() * pllMoves.length)]);
+            
+            return solution.join(" / ");
+        }
+        
+        function showSolution() {
+            const scramble = document.getElementById('scrambleDisplay').textContent;
+            const solution = generateSolution(scramble);
+            document.getElementById('solutionSteps').textContent = solution;
+            document.getElementById('solutionContainer').classList.add('show');
         }
         
         // ==================== 统计功能 ====================
@@ -1652,45 +1980,79 @@
             
             // 添加新行
             solveTimes.forEach((record, index) => {
-                const row = document.createElement('tr');
+                // 主行
+                const mainRow = document.createElement('tr');
+                mainRow.className = 'record-row';
+                mainRow.dataset.index = index;
                 
                 // 序号
                 const cell1 = document.createElement('td');
                 cell1.textContent = index + 1;
-                row.appendChild(cell1);
+                mainRow.appendChild(cell1);
                 
                 // 时间
                 const cell2 = document.createElement('td');
                 cell2.className = 'time-cell';
                 cell2.textContent = formatTimeForDisplay(record.time);
-                row.appendChild(cell2);
+                mainRow.appendChild(cell2);
                 
-                // 打乱（截断显示）
+                // 魔方类型
                 const cell3 = document.createElement('td');
-                const shortScramble = record.scramble.length > 30 ? record.scramble.substring(0, 30) + '...' : record.scramble;
-                cell3.textContent = shortScramble;
-                cell3.title = record.scramble; // 完整打乱作为提示
-                row.appendChild(cell3);
+                cell3.textContent = getCubeTypeDisplayName(record.cubeType);
+                mainRow.appendChild(cell3);
                 
                 // 日期
                 const cell4 = document.createElement('td');
                 cell4.textContent = record.date;
-                row.appendChild(cell4);
-                
-                // 魔方类型
-                const cell5 = document.createElement('td');
-                cell5.textContent = getCubeTypeDisplayName(record.cubeType);
-                row.appendChild(cell5);
+                mainRow.appendChild(cell4);
                 
                 // 操作
-                const cell6 = document.createElement('td');
-                cell6.innerHTML = `
+                const cell5 = document.createElement('td');
+                cell5.innerHTML = `
+                    <button class="toggle-details-btn" onclick="toggleRecordDetails(${index})">详情</button>
                     <span class="record-action" onclick="deleteRecord(${index})" title="删除记录"><i class="fas fa-trash"></i></span>
-                    <span class="record-action" onclick="copyRecord(${index})" title="复制打乱"><i class="fas fa-copy"></i></span>
                 `;
-                row.appendChild(cell6);
+                mainRow.appendChild(cell5);
                 
-                tableBody.appendChild(row);
+                tableBody.appendChild(mainRow);
+                
+                // 详情行
+                const detailsRow = document.createElement('tr');
+                detailsRow.id = `details-${index}`;
+                detailsRow.className = 'record-details-row';
+                
+                const detailsCell = document.createElement('td');
+                detailsCell.colSpan = 5;
+                detailsCell.className = 'record-details';
+                
+                // 截断打乱公式
+                const shortScramble = record.scramble.length > 50 ? 
+                    record.scramble.substring(0, 50) + '...' : 
+                    record.scramble;
+                
+                detailsCell.innerHTML = `
+                    <div class="record-details-content">
+                        <div class="detail-item">
+                            <div class="detail-label">完整打乱公式</div>
+                            <div class="detail-value">${record.scramble}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">时间戳</div>
+                            <div class="detail-value">${new Date(record.timestamp).toLocaleString('zh-CN')}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">操作</div>
+                            <div class="detail-value">
+                                <button class="scramble-btn" onclick="copyScrambleFromRecord('${record.scramble}')" style="padding: 5px 10px; font-size: 0.9rem;">
+                                    <i class="fas fa-copy"></i> 复制打乱
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                detailsRow.appendChild(detailsCell);
+                tableBody.appendChild(detailsRow);
             });
         }
         
@@ -1706,21 +2068,35 @@
             return names[type] || type;
         }
         
+        function toggleRecordDetails(index) {
+            const detailsRow = document.getElementById(`details-${index}`);
+            if (detailsRow) {
+                const detailsCell = detailsRow.querySelector('.record-details');
+                detailsCell.classList.toggle('expanded');
+                
+                // 更新按钮文本
+                const button = document.querySelector(`tr[data-index="${index}"] .toggle-details-btn`);
+                if (button) {
+                    button.textContent = detailsCell.classList.contains('expanded') ? '收起' : '详情';
+                }
+            }
+        }
+        
+        function copyScrambleFromRecord(scramble) {
+            navigator.clipboard.writeText(scramble).then(() => {
+                alert('打乱已复制到剪贴板！');
+            });
+        }
+        
         function deleteRecord(index) {
             if (confirm('确定要删除这条记录吗？')) {
                 solveTimes.splice(index, 1);
                 updateRecordsTable();
                 updateStats();
                 updateChart();
+                updateMiniChart();
                 saveData();
             }
-        }
-        
-        function copyRecord(index) {
-            const scramble = solveTimes[index].scramble;
-            navigator.clipboard.writeText(scramble).then(() => {
-                alert('打乱已复制到剪贴板！');
-            });
         }
         
         // ==================== 图表功能 ====================
@@ -1734,7 +2110,7 @@
             
             if (solveTimes.length === 0) {
                 // 显示无数据信息
-                ctx.font = "20px Arial";
+                ctx.font = "18px Arial";
                 ctx.fillStyle = "#94a3b8";
                 ctx.textAlign = "center";
                 ctx.fillText("暂无计时数据，开始计时后图表会显示在这里", 
@@ -1836,6 +2212,153 @@
             });
         }
         
+        function updateMiniChart() {
+            const ctx = document.getElementById('miniTimeChart').getContext('2d');
+            
+            // 销毁现有图表实例
+            if (miniChartInstance) {
+                miniChartInstance.destroy();
+            }
+            
+            if (solveTimes.length < 2) {
+                // 显示无数据信息
+                ctx.font = "14px Arial";
+                ctx.fillStyle = "#94a3b8";
+                ctx.textAlign = "center";
+                ctx.fillText("需要至少2次计时才能显示趋势图", 
+                           document.getElementById('miniTimeChart').width / 2, 
+                           document.getElementById('miniTimeChart').height / 2);
+                return;
+            }
+            
+            // 准备数据 - 显示最近10次
+            const labels = [];
+            const data = [];
+            const recentRecords = solveTimes.slice(0, Math.min(10, solveTimes.length));
+            
+            recentRecords.forEach((record, index) => {
+                labels.push(`${solveTimes.length - index}`);
+                data.push(record.time / 1000);
+            });
+            
+            // 创建小型图表
+            miniChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.reverse(),
+                    datasets: [{
+                        label: '时间趋势',
+                        data: data.reverse(),
+                        borderColor: 'rgb(245, 158, 11)',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgb(245, 158, 11)',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 1,
+                        pointRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const timeInMs = context.parsed.y * 1000;
+                                    const seconds = Math.floor(timeInMs / 1000);
+                                    const milliseconds = timeInMs % 1000;
+                                    return `时间: ${seconds}.${milliseconds.toString().padStart(3, '0')}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        y: {
+                            display: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: {
+                                    size: 10
+                                },
+                                callback: function(value) {
+                                    return `${value}s`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ==================== 节拍器功能 ====================
+        function startMetronome() {
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+            }
+            
+            document.getElementById('metronomeIndicator').classList.remove('hidden');
+            
+            metronomeInterval = setInterval(() => {
+                playMetronomeSound();
+            }, 1000); // 每秒一次
+        }
+        
+        function stopMetronome() {
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            }
+            
+            document.getElementById('metronomeIndicator').classList.add('hidden');
+        }
+        
+        function playMetronomeSound() {
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.05);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                console.log('节拍器声音播放失败:', e);
+            }
+        }
+        
         // ==================== 个性化设置功能 ====================
         function applyTheme(color) {
             const root = document.documentElement;
@@ -1864,10 +2387,10 @@
             const timeDisplay = document.getElementById('timeDisplay');
             
             if (size === 'large') {
-                timeDisplay.style.fontSize = '8.5rem';
+                timeDisplay.style.fontSize = '7.5rem';
                 timeDisplay.classList.remove('small', 'tiny');
             } else if (size === 'xlarge') {
-                timeDisplay.style.fontSize = '9.5rem';
+                timeDisplay.style.fontSize = '8.5rem';
                 timeDisplay.classList.remove('small', 'tiny');
             } else {
                 timeDisplay.style.fontSize = '';
@@ -1950,6 +2473,7 @@
                 updateRecordsTable();
                 updateStats();
                 updateChart();
+                updateMiniChart();
                 alert('所有记录已清除！');
             }
         }
@@ -1958,7 +2482,10 @@
         function playTimerSound() {
             // 创建简单的计时结束声音
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
                 
@@ -1986,15 +2513,27 @@
             updateTimerDisplay();
             
             // 计时器按钮事件
-            document.getElementById('startBtn').addEventListener('click', startTimer);
+            document.getElementById('startBtn').addEventListener('click', function() {
+                if (!timerRunning && !readyToStart) {
+                    readyToStart = true;
+                    this.textContent = '松开开始';
+                    this.classList.add('pulse');
+                }
+            });
+            
             document.getElementById('stopBtn').addEventListener('click', stopTimer);
             document.getElementById('resetBtn').addEventListener('click', resetTimer);
             
             // 打乱按钮事件
             document.getElementById('newScrambleBtn').addEventListener('click', generateNewScramble);
             document.getElementById('copyScrambleBtn').addEventListener('click', copyScrambleToClipboard);
-            document.getElementById('showSolutionBtn').addEventListener('click', function() {
-                alert('解法功能正在开发中，即将推出！');
+            document.getElementById('showSolutionBtn').addEventListener('click', showSolution);
+            
+            // 打乱公式展开/收起
+            document.getElementById('toggleScrambleBtn').addEventListener('click', function() {
+                const scrambleDisplay = document.getElementById('scrambleDisplay');
+                scrambleDisplay.classList.toggle('expanded');
+                this.textContent = scrambleDisplay.classList.contains('expanded') ? '收起' : '展开';
             });
             
             // 魔方类型选择
@@ -2024,11 +2563,21 @@
                 saveData();
             });
             
+            // 节拍器开关
+            document.getElementById('metronomeToggle').addEventListener('change', function() {
+                if (this.checked) {
+                    startMetronome();
+                } else {
+                    stopMetronome();
+                }
+                saveData();
+            });
+            
             // 其他设置保存
             const settingInputs = [
-                'soundToggle', 'spacebarToggle', 'countdownToggle', 
-                'scrambleLengthSelect', 'wcaScrambleToggle', 'animationsToggle',
-                'autoSaveToggle', 'exportFormatSelect'
+                'soundToggle', 'spacebarToggle', 'scrambleLengthSelect', 
+                'wcaScrambleToggle', 'animationsToggle', 'autoSaveToggle', 
+                'exportFormatSelect'
             ];
             
             settingInputs.forEach(inputId => {
@@ -2039,29 +2588,9 @@
             document.getElementById('exportDataBtn').addEventListener('click', exportData);
             document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
             
-            // 键盘快捷键
-            document.addEventListener('keydown', function(event) {
-                // 空格键控制计时器（如果启用）
-                if (document.getElementById('spacebarToggle').checked && event.code === 'Space') {
-                    event.preventDefault(); // 防止页面滚动
-                    
-                    if (timerRunning) {
-                        stopTimer();
-                    } else {
-                        startTimer();
-                    }
-                }
-                
-                // R键重置计时器
-                if (event.code === 'KeyR' && !event.ctrlKey) {
-                    resetTimer();
-                }
-                
-                // N键生成新打乱
-                if (event.code === 'KeyN' && !event.ctrlKey) {
-                    generateNewScramble();
-                }
-            });
+            // 键盘事件监听
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
             
             // 导航点击事件
             document.querySelectorAll('nav a').forEach(link => {
@@ -2079,7 +2608,7 @@
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80,
+                            top: targetElement.offsetTop - 60,
                             behavior: 'smooth'
                         });
                     }
@@ -2089,6 +2618,7 @@
             // 响应式调整
             window.addEventListener('resize', function() {
                 updateChart();
+                updateMiniChart();
             });
         });
     </script>

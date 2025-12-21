@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buzhidao CubeTimer | 专业魔方计时器</title>
+    <title>Buzhidao CubeTimer Pro | 专业魔方计时器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -13,13 +13,14 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
-        
+
         :root {
             --primary-blue: #3b82f6;
             --secondary-blue: #0ea5e9;
             --accent-green: #10b981;
             --accent-red: #ef4444;
             --accent-yellow: #f59e0b;
+            --accent-purple: #8b5cf6;
             --dark-bg: #0f172a;
             --darker-bg: #0a0f1f;
             --card-bg: #1e293b;
@@ -28,25 +29,27 @@
             --border-color: #334155;
             --cube-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6, #0ea5e9);
         }
-        
+
         body {
             background-color: var(--dark-bg);
             color: var(--text-color);
             line-height: 1.6;
             overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+            padding-bottom: 20px;
         }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        
-        /* 头部样式 - 优化移动端 */
+
+        /* 头部样式 */
         header {
             background-color: rgba(10, 15, 31, 0.98);
-            padding: 12px 0;
+            padding: 15px 0;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -54,71 +57,63 @@
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
-        
+
         .logo-icon {
-            font-size: 24px;
+            font-size: 28px;
             background: var(--cube-gradient);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
+
         .logo-text {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             background: var(--cube-gradient);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
-        .logo-subtitle {
-            font-size: 10px;
-            color: var(--text-muted);
-            letter-spacing: 1.5px;
-            margin-left: 3px;
-        }
-        
+
         nav ul {
             display: flex;
             list-style: none;
             gap: 15px;
         }
-        
+
         nav a {
             color: var(--text-color);
             text-decoration: none;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
             transition: all 0.3s ease;
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 6px;
-            position: relative;
         }
-        
+
         nav a:hover, nav a.active {
             color: var(--primary-blue);
             background-color: rgba(59, 130, 246, 0.1);
         }
-        
+
         /* 主计时器区域 */
         .timer-section {
-            padding: 40px 0 30px;
+            padding: 40px 0;
             text-align: center;
         }
-        
+
         .timer-container {
             max-width: 900px;
             margin: 0 auto 40px;
@@ -129,19 +124,8 @@
             border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
-        
-        .timer-container.touch-ready {
-            background: linear-gradient(145deg, #1a2940, #152235);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
-        }
-        
-        .timer-container.touch-running {
-            background: linear-gradient(145deg, #2a1a35, #25152b);
-            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.3);
-        }
-        
+
         .timer-container:before {
             content: '';
             position: absolute;
@@ -151,48 +135,94 @@
             height: 4px;
             background: var(--cube-gradient);
         }
-        
+
         .cube-type-selector {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
             flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
         }
-        
+
         .cube-type {
-            padding: 8px 16px;
+            padding: 10px 20px;
             background-color: var(--card-bg);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid transparent;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
             user-select: none;
+            min-width: 80px;
         }
-        
+
         .cube-type:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         .cube-type.active {
             background: var(--cube-gradient);
             color: white;
             border-color: var(--primary-blue);
         }
-        
+
+        /* 时间显示 */
+        .time-display {
+            font-size: 7rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            margin: 30px 0;
+            letter-spacing: 1px;
+            background: var(--cube-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-display.ready {
+            animation: pulse 1.5s infinite;
+        }
+
+        .time-display.small {
+            font-size: 5rem;
+        }
+
+        .time-display.tiny {
+            font-size: 4rem;
+        }
+
+        /* 控制状态提示 */
+        .control-hint {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin: 20px 0;
+            min-height: 30px;
+            transition: all 0.3s;
+        }
+
+        .control-hint.highlight {
+            color: var(--accent-yellow);
+            font-weight: 600;
+        }
+
         /* 触摸控制区域 */
         .touch-control-area {
             position: relative;
             margin: 20px 0;
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             background-color: rgba(30, 41, 59, 0.5);
             border: 2px dashed var(--border-color);
             transition: all 0.3s ease;
-            min-height: 180px;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -201,69 +231,30 @@
             user-select: none;
             -webkit-user-select: none;
         }
-        
+
         .touch-control-area.ready {
             background-color: rgba(16, 185, 129, 0.1);
             border-color: var(--accent-green);
             border-style: solid;
         }
-        
+
         .touch-control-area.running {
             background-color: rgba(239, 68, 68, 0.1);
             border-color: var(--accent-red);
             border-style: solid;
         }
-        
-        .touch-control-instruction {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .touch-control-hint {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-top: 10px;
-            text-align: center;
-        }
-        
-        .time-display {
-            font-size: 6.5rem;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-            margin: 20px 0;
-            letter-spacing: 1px;
-            background: var(--cube-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .time-display.ready {
-            animation: pulse 1.5s infinite;
-        }
-        
-        .time-display.small {
-            font-size: 4rem;
-        }
-        
-        .time-display.tiny {
-            font-size: 3rem;
-        }
-        
+
+        /* 计时器控制按钮 */
         .timer-controls {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 20px 0 15px;
+            margin: 30px 0 20px;
             flex-wrap: wrap;
         }
-        
-        .timer-btn {
-            padding: 14px 32px;
+
+        .btn {
+            padding: 15px 30px;
             font-size: 1.1rem;
             font-weight: 700;
             border: none;
@@ -273,688 +264,458 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            min-width: 150px;
+            min-width: 160px;
             justify-content: center;
             user-select: none;
-            touch-action: manipulation; /* 优化移动端触摸 */
+            touch-action: manipulation;
         }
-        
-        .timer-btn.start {
+
+        .btn-primary {
             background: linear-gradient(135deg, var(--accent-green), #059669);
             color: white;
         }
-        
-        .timer-btn.stop {
+
+        .btn-danger {
             background: linear-gradient(135deg, var(--accent-red), #dc2626);
             color: white;
         }
-        
-        .timer-btn.reset {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            border: 2px solid var(--border-color);
-        }
-        
-        .timer-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .scramble-section {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: rgba(30, 41, 59, 0.7);
-            border-radius: 12px;
-            border-left: 4px solid var(--accent-yellow);
-        }
-        
-        .scramble-display-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        
-        .scramble-display {
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-color);
-            line-height: 1.4;
-            letter-spacing: 0.5px;
-            word-break: break-word;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            transition: all 0.3s;
-            max-height: 80px;
-            overflow: hidden;
-        }
-        
-        .scramble-display.expanded {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .toggle-scramble-btn {
-            position: absolute;
-            right: 5px;
-            bottom: 5px;
-            background-color: rgba(30, 41, 59, 0.8);
-            color: var(--primary-blue);
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            touch-action: manipulation;
-        }
-        
-        .scramble-controls {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .scramble-btn {
-            padding: 10px 20px;
-            background-color: var(--primary-blue);
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
             color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            touch-action: manipulation;
         }
-        
-        .scramble-btn:hover {
-            background-color: #2563eb;
+
+        .btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        
-        /* 移动端专用按钮 */
-        .mobile-controls {
-            display: none;
-            margin-top: 20px;
+
+        .btn:active {
+            transform: translateY(-1px);
         }
-        
-        .mobile-btn {
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 15px;
-            touch-action: manipulation;
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
-        
-        .mobile-btn.start {
-            background: linear-gradient(135deg, var(--accent-green), #059669);
-            color: white;
-        }
-        
-        .mobile-btn.stop {
-            background: linear-gradient(135deg, var(--accent-red), #dc2626);
-            color: white;
-        }
-        
-        /* 小型趋势图表 */
-        .mini-chart-container {
-            margin-top: 25px;
-            background-color: rgba(30, 41, 59, 0.5);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            height: 180px;
-        }
-        
-        /* 统计区域 */
-        .stats-section {
-            padding: 50px 0;
-            background-color: var(--darker-bg);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        .stats-card {
+
+        /* 打乱公式区域 */
+        .scramble-section {
             background-color: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
+            margin: 20px 0 30px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
         }
-        
-        .stats-card h3 {
-            font-size: 1.4rem;
+
+        .scramble-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scramble-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-yellow);
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            word-break: break-word;
+            line-height: 1.4;
+            min-height: 80px;
+        }
+
+        /* 2D魔方展开图区域 */
+        .cube-display-section {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
             margin-bottom: 20px;
             color: var(--text-color);
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
-        .stats-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            background: var(--cube-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .stats-label {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+
+        .cube-2d-container {
+            display: flex;
+            justify-content: center;
             margin-top: 20px;
         }
-        
-        .stat-item {
-            padding: 12px;
-            background-color: rgba(255, 255, 255, 0.05);
+
+        .cube-2d-grid {
+            display: grid;
+            grid-template-areas: 
+                ". up . ."
+                "left front right back"
+                ". down . .";
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 15px;
+            max-width: 800px;
+        }
+
+        .cube-face {
+            background-color: #111827;
             border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
         }
-        
-        .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-color);
-        }
-        
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-        
-        /* 记录区域 */
-        .records-section {
-            padding: 60px 0;
-        }
-        
-        .section-title {
+
+        .face-up { grid-area: up; }
+        .face-left { grid-area: left; }
+        .face-front { grid-area: front; }
+        .face-right { grid-area: right; }
+        .face-back { grid-area: back; }
+        .face-down { grid-area: down; }
+
+        .face-label {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
+            font-weight: bold;
+            margin-bottom: 10px;
             color: var(--text-color);
-            position: relative;
-        }
-        
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 4px;
-            background: var(--cube-gradient);
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 5px;
-        }
-        
-        .chart-container {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 40px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            height: 350px;
-        }
-        
-        .records-table-container {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: var(--text-color);
-            padding: 15px 12px;
-            text-align: left;
-            font-weight: 700;
-            border-bottom: 2px solid var(--border-color);
-        }
-        
-        td {
-            padding: 15px 12px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
-        }
-        
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-        }
-        
-        .time-cell {
-            font-family: 'Courier New', monospace;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .record-action {
-            color: var(--primary-blue);
-            cursor: pointer;
-            margin-left: 8px;
-            transition: color 0.3s;
-        }
-        
-        .record-action:hover {
-            color: var(--secondary-blue);
-        }
-        
-        /* 记录折叠样式 */
-        .record-row {
-            cursor: pointer;
-        }
-        
-        .record-details {
-            display: none;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-top: 10px;
-            border-left: 3px solid var(--primary-blue);
-        }
-        
-        .record-details.expanded {
-            display: block;
-        }
-        
-        .record-details-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .detail-item {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .detail-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-        
-        .detail-value {
-            color: var(--text-color);
-            font-size: 1rem;
-            word-break: break-all;
-        }
-        
-        .toggle-details-btn {
-            background: none;
-            border: none;
-            color: var(--primary-blue);
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin-left: 10px;
-        }
-        
-        /* 解法显示区域 */
-        .solution-container {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background-color: rgba(16, 185, 129, 0.1);
-            border-radius: 12px;
-            border-left: 4px solid var(--accent-green);
-        }
-        
-        .solution-container.show {
-            display: block;
-        }
-        
-        .solution-title {
             font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
-        
-        .solution-steps {
-            font-family: 'Courier New', monospace;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-color);
-            line-height: 1.5;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        
-        /* 个性化设置区域 */
-        .personalization-section {
-            padding: 60px 0;
-            background-color: var(--darker-bg);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .settings-container {
+
+        .face-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4px;
+            width: 120px;
+            height: 120px;
         }
-        
-        .settings-card {
+
+        .cube-sticker {
+            border-radius: 4px;
+            transition: all 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        /* 统计和历史区域 */
+        .stats-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 992px) {
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .cube-2d-grid {
+                grid-template-areas: 
+                    ". up ."
+                    "left front right"
+                    ". back ."
+                    ". down .";
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: auto auto auto auto;
+            }
+        }
+
+        .stats-card, .history-card {
             background-color: var(--card-bg);
             border-radius: 15px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
         }
-        
-        .settings-group {
-            margin-bottom: 25px;
-        }
-        
-        .settings-group h4 {
-            font-size: 1.2rem;
-            margin-bottom: 18px;
+
+        .stats-title, .history-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
             color: var(--text-color);
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
-        .setting-item {
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-color);
+        }
+
+        .stat-value.best {
+            color: var(--accent-green);
+        }
+
+        .stat-value.worst {
+            color: var(--accent-red);
+        }
+
+        .stat-value.avg {
+            color: var(--primary-blue);
+        }
+
+        .chart-container {
+            height: 250px;
+            width: 100%;
+        }
+
+        /* 历史记录 */
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 10px;
+        }
+
+        .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
         }
-        
-        .setting-label {
+
+        .history-item:hover {
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+
+        .history-index {
+            color: var(--text-muted);
+            font-weight: 600;
+            min-width: 30px;
+        }
+
+        .history-time {
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
             color: var(--text-color);
-            font-size: 1rem;
+            flex-grow: 1;
+            text-align: center;
         }
-        
-        .setting-control {
+
+        .history-time.best {
+            color: var(--accent-green);
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .history-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            padding: 5px;
+            border-radius: 5px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
         }
-        
-        /* 下拉选择框背景颜色优化 */
-        select {
-            padding: 10px 15px;
-            background-color: #112240; /* 更深的背景 */
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-color);
-            font-size: 1rem;
-            min-width: 150px;
-            cursor: pointer;
+
+        .history-btn:hover {
+            color: var(--primary-blue);
+            background-color: rgba(59, 130, 246, 0.1);
         }
-        
-        select option {
-            background-color: #1e293b;
-            color: var(--text-color);
-        }
-        
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 55px;
-            height: 28px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
+
+        /* 反馈表单 */
+        .feedback-modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #475569;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .toggle-slider {
-            background-color: var(--primary-blue);
-        }
-        
-        input:checked + .toggle-slider:before {
-            transform: translateX(27px);
-        }
-        
-        /* 反馈区域 */
-        .feedback-section {
-            padding: 60px 0;
-        }
-        
-        .feedback-container {
-            display: flex;
-            gap: 50px;
-        }
-        
-        .feedback-info {
-            flex: 1;
-        }
-        
-        .feedback-info h3 {
-            font-size: 2rem;
-            margin-bottom: 25px;
-            color: var(--text-color);
-        }
-        
-        .feedback-info p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 35px;
-            line-height: 1.7;
-        }
-        
-        .tally-form-container {
-            flex: 1;
-            background-color: var(--card-bg);
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-        }
-        
-        .tally-form-container h3 {
-            text-align: center;
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-        
-        .tally-iframe {
             width: 100%;
-            height: 450px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-modal.active {
+            display: flex;
+        }
+
+        .feedback-content {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .close-feedback {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
             border: none;
-            border-radius: 8px;
-            background: transparent;
-        }
-        
-        .form-notice {
-            text-align: center;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 15px;
-            line-height: 1.5;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
         }
-        
+
+        .close-feedback:hover {
+            color: var(--accent-red);
+        }
+
         /* 页脚 */
         footer {
             background-color: var(--darker-bg);
-            padding: 50px 0 25px;
+            padding: 40px 0 20px;
+            margin-top: 40px;
             border-top: 1px solid var(--border-color);
         }
-        
+
         .footer-content {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
-        
+
         .footer-column {
             flex: 1;
-            min-width: 200px;
+            min-width: 250px;
         }
-        
+
         .footer-column h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 20px;
             color: var(--text-color);
         }
-        
-        .footer-column p, .footer-column a {
+
+        .footer-column p {
             color: var(--text-muted);
-            margin-bottom: 12px;
-            display: block;
+            margin-bottom: 15px;
+        }
+
+        .keyboard-shortcuts {
+            list-style: none;
+        }
+
+        .keyboard-shortcuts li {
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .keyboard-shortcuts kbd {
+            background-color: var(--card-bg);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-right: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .feedback-link {
+            color: var(--primary-blue);
             text-decoration: none;
             transition: color 0.3s;
+            cursor: pointer;
         }
-        
-        .footer-column a:hover {
-            color: var(--primary-blue);
+
+        .feedback-link:hover {
+            color: var(--secondary-blue);
+            text-decoration: underline;
         }
-        
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-icons a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: var(--card-bg);
-            border-radius: 50%;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-        
-        .social-icons a:hover {
-            background: var(--cube-gradient);
-            transform: translateY(-4px);
-        }
-        
+
         .copyright {
             text-align: center;
-            padding-top: 25px;
+            padding-top: 20px;
             border-top: 1px solid var(--border-color);
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
-        
-        /* 节拍器状态指示 */
-        .metronome-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: var(--accent-red);
-            margin-left: 8px;
-            animation: metronome-pulse 1s infinite;
+
+        /* 动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
-        
-        @keyframes metronome-pulse {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
         /* 响应式设计 */
-        @media (max-width: 1200px) {
-            .time-display {
-                font-size: 5.5rem;
-            }
-            
-            .feedback-container {
-                flex-direction: column;
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .timer-controls {
-                flex-wrap: wrap;
-            }
-            
-            .timer-btn {
-                min-width: 140px;
-            }
-            
-            .time-display {
-                font-size: 4.5rem;
-            }
-            
-            .time-display.small {
-                font-size: 3rem;
-            }
-            
-            .settings-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .section-title {
-                font-size: 2.2rem;
-            }
-        }
-        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -962,218 +723,59 @@
             }
             
             nav ul {
-                gap: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
             }
             
-            nav a {
-                font-size: 14px;
-                padding: 5px 10px;
-            }
-            
             .time-display {
-                font-size: 3.5rem;
+                font-size: 5rem;
             }
             
-            .time-display.small {
-                font-size: 2.5rem;
-            }
-            
-            .time-display.tiny {
-                font-size: 2rem;
-            }
-            
-            .timer-btn {
-                padding: 12px 20px;
-                min-width: 130px;
-                font-size: 1rem;
-            }
-            
-            .scramble-display {
-                font-size: 1.2rem;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .tally-form-container {
-                padding: 20px 15px;
-            }
-            
-            .tally-iframe {
-                height: 400px;
-            }
-            
-            .chart-container {
-                height: 300px;
-            }
-            
-            .mini-chart-container {
-                height: 150px;
-            }
-            
-            /* 在移动端显示触摸控制区域 */
-            .touch-control-area {
-                min-height: 200px;
-                margin: 15px 0;
-            }
-            
-            .touch-control-instruction {
+            .scramble-text {
                 font-size: 1.4rem;
             }
             
-            .mobile-controls {
-                display: block;
+            .btn {
+                min-width: 140px;
+                padding: 12px 20px;
             }
             
-            .desktop-controls {
-                display: none;
+            .cube-2d-grid {
+                grid-template-areas: 
+                    "up"
+                    "left front right"
+                    "back"
+                    "down";
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: auto auto auto auto;
+            }
+            
+            .face-grid {
+                width: 80px;
+                height: 80px;
             }
         }
-        
-        @media (max-width: 576px) {
-            .timer-container {
-                padding: 20px 15px;
-            }
-            
+
+        @media (max-width: 480px) {
             .time-display {
-                font-size: 2.8rem;
+                font-size: 4rem;
             }
             
-            .cube-type-selector {
-                gap: 8px;
+            .btn {
+                min-width: 100%;
             }
             
-            .cube-type {
-                padding: 6px 12px;
-                font-size: 12px;
+            .cube-2d-grid {
+                grid-template-areas: 
+                    "up"
+                    "left"
+                    "front"
+                    "right"
+                    "back"
+                    "down";
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, auto);
             }
-            
-            .timer-controls {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .timer-btn {
-                width: 100%;
-                max-width: 250px;
-            }
-            
-            .scramble-controls {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .scramble-btn {
-                width: 100%;
-                max-width: 250px;
-            }
-            
-            .settings-card {
-                padding: 20px 15px;
-            }
-            
-            .setting-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .setting-control {
-                width: 100%;
-                justify-content: flex-end;
-            }
-            
-            .touch-control-area {
-                min-height: 180px;
-            }
-        }
-        
-        /* 动画 */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeInUp 0.8s ease-out;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 1.5s infinite;
-        }
-        
-        /* 工具提示 */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .tooltip .tooltip-text {
-            visibility: hidden;
-            width: 180px;
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -90px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            border: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        /* 隐藏/显示元素 */
-        .hidden {
-            display: none !important;
-        }
-        
-        /* 键盘提示 */
-        .keyboard-hint {
-            margin-top: 15px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-        
-        .keyboard-hint kbd {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 2px 6px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            margin: 0 3px;
-        }
-        
-        /* 触摸提示 */
-        .touch-hint {
-            margin-top: 10px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            display: none;
         }
     </style>
 </head>
@@ -1182,1788 +784,861 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <div>
-                    <div class="logo-text">Buzhidao CubeTimer</div>
-                    <div class="logo-subtitle">专业魔方计时器</div>
-                </div>
+                <i class="fas fa-cube logo-icon"></i>
+                <div class="logo-text">Buzhidao CubeTimer</div>
             </div>
             <nav>
                 <ul>
-                    <li><a href="#timer" class="active">计时器</a></li>
+                    <li><a href="#" class="active">计时器</a></li>
                     <li><a href="#stats">统计</a></li>
-                    <li><a href="#records">记录</a></li>
-                    <li><a href="#personalization">个性化</a></li>
-                    <li><a href="#feedback">反馈</a></li>
+                    <li><a href="#history">历史</a></li>
+                    <li><a href="#" class="feedback-link" id="openFeedback">反馈</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <!-- 主计时器区域 -->
-    <section class="timer-section" id="timer">
-        <div class="container">
-            <div class="timer-container fade-in" id="timerContainer">
+    <!-- 主内容区域 -->
+    <main class="container">
+        <!-- 计时器区域 -->
+        <section class="timer-section">
+            <div class="timer-container">
                 <div class="cube-type-selector">
-                    <div class="cube-type active" data-cube="3x3">3x3</div>
-                    <div class="cube-type" data-cube="2x2">2x2</div>
-                    <div class="cube-type" data-cube="4x4">4x4</div>
-                    <div class="cube-type" data-cube="pyramid">金字塔</div>
-                    <div class="cube-type" data-cube="megaminx">五魔方</div>
-                    <div class="cube-type" data-cube="skewb">斜转</div>
+                    <div class="cube-type active" data-type="3x3">3x3</div>
+                    <div class="cube-type" data-type="2x2">2x2</div>
+                    <div class="cube-type" data-type="4x4">4x4</div>
+                    <div class="cube-type" data-type="pyraminx">金字塔</div>
                 </div>
                 
-                <div class="time-display" id="timeDisplay">00:00.000</div>
+                <!-- 时间显示 -->
+                <div class="time-display" id="timeDisplay">0.000</div>
+                
+                <!-- 控制状态提示 -->
+                <div class="control-hint" id="controlHint">按下空格键开始准备计时</div>
                 
                 <!-- 触摸控制区域 -->
-                <div class="touch-control-area" id="touchControlArea">
-                    <div class="touch-control-instruction" id="touchInstruction">
-                        点击这里开始准备，松开开始计时
-                    </div>
-                    <div class="touch-control-hint">
-                        计时中再次点击停止
-                    </div>
+                <div class="touch-control-area" id="touchControl">
+                    <div class="control-hint">触摸开始/停止计时</div>
                 </div>
                 
-                <!-- 桌面端控制按钮 -->
-                <div class="timer-controls desktop-controls">
-                    <button class="timer-btn start" id="startBtn">
-                        <i class="fas fa-play"></i> 准备计时
+                <!-- 计时器控制按钮 -->
+                <div class="timer-controls">
+                    <button class="btn btn-primary" id="startBtn">
+                        <i class="fas fa-play"></i> 开始计时 (空格键)
                     </button>
-                    <button class="timer-btn stop hidden" id="stopBtn">
-                        <i class="fas fa-stop"></i> 停止
+                    <button class="btn btn-danger" id="stopBtn" disabled>
+                        <i class="fas fa-stop"></i> 停止计时 (空格键)
                     </button>
-                    <button class="timer-btn reset" id="resetBtn">
-                        <i class="fas fa-redo"></i> 重置
+                    <button class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-redo"></i> 手动重置 (R键)
                     </button>
                 </div>
-                
-                <!-- 移动端控制按钮 -->
-                <div class="mobile-controls">
-                    <button class="mobile-btn start" id="mobileStartBtn">
-                        <i class="fas fa-play"></i> 准备计时
-                    </button>
-                    <button class="mobile-btn stop hidden" id="mobileStopBtn">
-                        <i class="fas fa-stop"></i> 停止计时
-                    </button>
-                    <button class="timer-btn reset" id="mobileResetBtn">
-                        <i class="fas fa-redo"></i> 重置
-                    </button>
-                </div>
-                
-                <div class="scramble-section">
-                    <div class="scramble-display-container">
-                        <div class="scramble-display" id="scrambleDisplay">
-                            F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2 F U2
-                        </div>
-                        <button class="toggle-scramble-btn" id="toggleScrambleBtn">展开</button>
-                    </div>
-                    <div class="scramble-controls">
-                        <button class="scramble-btn" id="newScrambleBtn">
-                            <i class="fas fa-random"></i> 新打乱
-                        </button>
-                        <button class="scramble-btn" id="copyScrambleBtn">
-                            <i class="fas fa-copy"></i> 复制打乱
-                        </button>
-                        <button class="scramble-btn" id="showSolutionBtn">
-                            <i class="fas fa-lightbulb"></i> 显示解法
-                        </button>
-                    </div>
-                    
-                    <!-- 解法显示区域 -->
-                    <div class="solution-container" id="solutionContainer">
-                        <div class="solution-title">
-                            <i class="fas fa-lightbulb"></i> 推荐解法 (CFOP方法)
-                        </div>
-                        <div class="solution-steps" id="solutionSteps">
-                            <!-- 解法内容将通过JavaScript动态生成 -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 小型趋势图表 -->
-                <div class="mini-chart-container">
-                    <canvas id="miniTimeChart"></canvas>
-                </div>
-                
-                <div class="keyboard-hint desktop-controls">
-                    使用提示：长按<span class="tooltip"><kbd>空格键</kbd><span class="tooltip-text">按住空格键准备，松开开始计时，再次按下停止</span></span>控制计时，按<span class="tooltip"><kbd>R</kbd><span class="tooltip-text">重置计时器和打乱</span></span>重置
-                </div>
-                
-                <div class="touch-hint mobile-controls" id="touchHint">
-                    提示：点击上方绿色区域控制计时，再次点击停止
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 统计区域 -->
-    <section class="stats-section" id="stats">
-        <div class="container">
-            <h2 class="section-title">个人统计</h2>
-            
-            <div class="stats-container">
-                <div class="stats-card fade-in">
-                    <h3><i class="fas fa-tachometer-alt"></i> 当前统计</h3>
-                    <div class="stats-value" id="currentAvg">--.--</div>
-                    <div class="stats-label">5次平均 (Ao5)</div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="bestTime">--.--</div>
-                            <div class="stat-label">最快单次</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="worstTime">--.--</div>
-                            <div class="stat-label">最慢单次</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="solveCount">0</div>
-                            <div class="stat-label">总复原次数</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="sessionAvg">--.--</div>
-                            <div class="stat-label">本次平均</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stats-card fade-in">
-                    <h3><i class="fas fa-history"></i> 历史最佳</h3>
-                    <div class="stats-value" id="bestAvg">--.--</div>
-                    <div class="stats-label">最佳平均 (Ao5)</div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="bestSingle">--.--</div>
-                            <div class="stat-label">历史最快</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="consistency">--%</div>
-                            <div class="stat-label">稳定性</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="monthCount">0</div>
-                            <div class="stat-label">本月复原</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="improvement">--.--</div>
-                            <div class="stat-label">提升</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 记录区域 -->
-    <section class="records-section" id="records">
-        <div class="container">
-            <h2 class="section-title">速度变化与历史记录</h2>
-            
-            <div class="chart-container fade-in">
-                <canvas id="timeChart"></canvas>
             </div>
             
-            <div class="records-table-container fade-in">
-                <h3 style="margin-bottom: 20px; color: var(--text-color);">最近复原记录 <small style="color: var(--text-muted); font-size: 0.9rem;">(点击记录展开详情)</small></h3>
-                <table id="recordsTable">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>时间</th>
-                            <th>魔方类型</th>
-                            <th>日期</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recordsTableBody">
-                        <!-- 记录会通过JavaScript动态添加 -->
-                        <tr id="noRecordsRow">
-                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                                暂无记录，开始计时后您的复原记录会显示在这里
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- 打乱公式区域 -->
+            <div class="scramble-section">
+                <h3 class="scramble-title">
+                    <i class="fas fa-random"></i> 当前打乱公式
+                </h3>
+                <div class="scramble-text" id="scrambleText">
+                    R U R' U' R' F R2 U' R' U' R U R' F'
+                </div>
+                <div class="timer-controls">
+                    <button class="btn btn-secondary" id="newScrambleBtn">
+                        <i class="fas fa-sync-alt"></i> 生成新打乱 (N键)
+                    </button>
+                </div>
             </div>
-        </div>
-    </section>
-
-    <!-- 个性化设置区域 -->
-    <section class="personalization-section" id="personalization">
-        <div class="container">
-            <h2 class="section-title">个性化设置</h2>
             
-            <div class="settings-container">
-                <div class="settings-card fade-in">
-                    <h3><i class="fas fa-cog"></i> 计时器设置</h3>
-                    
-                    <div class="settings-group">
-                        <h4><i class="fas fa-clock"></i> 计时选项</h4>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">声音提示</span>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="soundToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+            <!-- 2D魔方展开图区域 -->
+            <div class="cube-display-section">
+                <h3 class="section-title">
+                    <i class="fas fa-th-large"></i> 2D六面展开图
+                </h3>
+                
+                <div class="cube-2d-container">
+                    <div class="cube-2d-grid">
+                        <!-- 上面 (U) -->
+                        <div class="cube-face face-up">
+                            <div class="face-label">U (上)</div>
+                            <div class="face-grid" id="faceU"></div>
                         </div>
                         
-                        <div class="setting-item">
-                            <span class="setting-label">振动反馈 (移动端)</span>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="vibrationToggle">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <!-- 左面 (L) -->
+                        <div class="cube-face face-left">
+                            <div class="face-label">L (左)</div>
+                            <div class="face-grid" id="faceL"></div>
                         </div>
                         
-                        <div class="setting-item">
-                            <span class="setting-label">节拍器 <span id="metronomeIndicator" class="metronome-indicator hidden"></span></span>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="metronomeToggle">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <!-- 前面 (F) -->
+                        <div class="cube-face face-front">
+                            <div class="face-label">F (前)</div>
+                            <div class="face-grid" id="faceF"></div>
                         </div>
                         
-                        <div class="setting-item">
-                            <span class="setting-label">时间格式</span>
-                            <div class="setting-control">
-                                <select id="timeFormatSelect">
-                                    <option value="mm:ss.ms">分钟:秒.毫秒</option>
-                                    <option value="ss.ms">秒.毫秒</option>
-                                    <option value="mm:ss">分钟:秒</option>
-                                </select>
-                            </div>
+                        <!-- 右面 (R) -->
+                        <div class="cube-face face-right">
+                            <div class="face-label">R (右)</div>
+                            <div class="face-grid" id="faceR"></div>
+                        </div>
+                        
+                        <!-- 后面 (B) -->
+                        <div class="cube-face face-back">
+                            <div class="face-label">B (后)</div>
+                            <div class="face-grid" id="faceB"></div>
+                        </div>
+                        
+                        <!-- 下面 (D) -->
+                        <div class="cube-face face-down">
+                            <div class="face-label">D (下)</div>
+                            <div class="face-grid" id="faceD"></div>
                         </div>
                     </div>
-                    
-                    <div class="settings-group">
-                        <h4><i class="fas fa-scroll"></i> 打乱设置</h4>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">打乱长度</span>
-                            <div class="setting-control">
-                                <select id="scrambleLengthSelect">
-                                    <option value="short">短 (15步)</option>
-                                    <option value="normal" selected>标准 (20步)</option>
-                                    <option value="long">长 (25步)</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">显示WCA打乱</span>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="wcaScrambleToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 统计和历史区域 -->
+        <section id="stats" class="stats-section">
+            <div class="stats-card">
+                <h3 class="stats-title">
+                    <i class="fas fa-chart-line"></i> 计时统计
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">最快单次</div>
+                        <div class="stat-value best" id="bestTime">0.000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">最慢单次</div>
+                        <div class="stat-value worst" id="worstTime">0.000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">当前平均</div>
+                        <div class="stat-value avg" id="currentAvg">0.000</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">去头尾平均</div>
+                        <div class="stat-value avg" id="ao5">0.000</div>
                     </div>
                 </div>
                 
-                <div class="settings-card fade-in">
-                    <h3><i class="fas fa-user-cog"></i> 个性化选项</h3>
-                    
-                    <div class="settings-group">
-                        <h4><i class="fas fa-palette"></i> 外观设置</h4>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">主题颜色</span>
-                            <div class="setting-control">
-                                <select id="themeColorSelect">
-                                    <option value="blue">蓝色 (默认)</option>
-                                    <option value="green">绿色</option>
-                                    <option value="purple">紫色</option>
-                                    <option value="red">红色</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">字体大小</span>
-                            <div class="setting-control">
-                                <select id="fontSizeSelect">
-                                    <option value="normal">正常</option>
-                                    <option value="large">大</option>
-                                    <option value="xlarge">超大</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">显示动画效果</span>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="animationsToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-group">
-                        <h4><i class="fas fa-database"></i> 数据管理</h4>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">自动保存记录</span>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="autoSaveToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <span class="setting-label">导出数据格式</span>
-                            <div class="setting-control">
-                                <select id="exportFormatSelect">
-                                    <option value="csv">CSV</option>
-                                    <option value="json">JSON</option>
-                                    <option value="txt">文本</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <button class="scramble-btn" id="exportDataBtn" style="width: 100%; margin-top: 10px;">
-                                <i class="fas fa-download"></i> 导出所有记录
-                            </button>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <button class="scramble-btn" id="clearDataBtn" style="width: 100%; background-color: var(--accent-red);">
-                                <i class="fas fa-trash"></i> 清除所有记录
-                            </button>
-                        </div>
-                    </div>
+                <!-- 统计图表 -->
+                <div class="chart-container">
+                    <canvas id="statsChart"></canvas>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- 反馈区域 -->
-    <section class="feedback-section" id="feedback">
-        <div class="container">
-            <h2 class="section-title">留言反馈</h2>
             
-            <div class="feedback-container">
-                <div class="feedback-info fade-in">
-                    <h3>帮助我们改进</h3>
-                    <p>Buzhidao CubeTimer致力于为魔方爱好者提供最专业的计时体验。您的反馈对我们至关重要。</p>
-                    <p>如果您有任何建议、功能请求或发现了bug，请通过下面的表单告诉我们。我们承诺认真阅读每一条反馈并持续改进产品。</p>
-                    <p>您的意见将帮助我们打造更好的魔方计时器，服务全球魔方社区。</p>
-                    
-                    <div class="contact-details" style="margin-top: 40px;">
-                        <div class="contact-item">
-                            <div class="contact-icon" style="background-color: rgba(16, 185, 129, 0.1); color: var(--accent-green);">
-                                <i class="fas fa-bullhorn"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>功能建议</h4>
-                                <p>告诉我们您希望添加的功能</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon" style="background-color: rgba(239, 68, 68, 0.1); color: var(--accent-red);">
-                                <i class="fas fa-bug"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>报告问题</h4>
-                                <p>遇到问题或错误请及时反馈</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon" style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary-blue);">
-                                <i class="fas fa-lightbulb"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>优化想法</h4>
-                                <p>分享您对界面或功能的优化建议</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="history-card">
+                <h3 class="history-title">
+                    <i class="fas fa-history"></i> 历史记录
+                </h3>
+                <div class="history-list" id="historyList">
+                    <!-- 历史记录将通过JS动态生成 -->
                 </div>
-                
-                <!-- Tally表单嵌入区域 -->
-                <div class="tally-form-container fade-in">
-                    <h3>反馈表单</h3>
-                    <iframe 
-                        class="tally-iframe"
-                        src="https://tally.so/r/1AXzoO?transparentBackground=1&hideTitle=1" 
-                        frameborder="0" 
-                        marginheight="0" 
-                        marginwidth="0">
-                    </iframe>
-                    <p class="form-notice">
-                        您的反馈将直接进入Buzhidao开发团队数据库，我们会定期查看并回复。
-                    </p>
+                <div style="margin-top: 15px; text-align: center;">
+                    <button class="btn btn-danger" id="clearHistoryBtn" style="padding: 12px 24px;">
+                        <i class="fas fa-trash-alt"></i> 清除所有记录
+                    </button>
                 </div>
             </div>
+        </section>
+    </main>
+    
+    <!-- 反馈模态框 -->
+    <div class="feedback-modal" id="feedbackModal">
+        <div class="feedback-content">
+            <button class="close-feedback" id="closeFeedback">&times;</button>
+            <h3 style="margin-bottom: 20px; color: var(--text-color);">
+                <i class="fas fa-comment-alt"></i> 提交反馈
+            </h3>
+            <iframe 
+                src="https://tally.so/r/1AXzoO" 
+                width="100%" 
+                height="500" 
+                frameborder="0" 
+                marginheight="0" 
+                marginwidth="0"
+                style="border-radius: 8px;"
+            >
+                正在加载反馈表单...
+            </iframe>
         </div>
-    </section>
-
+    </div>
+    
     <!-- 页脚 -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <h3>Buzhidao CubeTimer</h3>
-                    <p>专业的在线魔方计时器，为魔方爱好者提供精确计时、数据分析和个性化体验。</p>
-                    <div class="social-icons">
-                        <a href="#" class="tooltip"><i class="fab fa-weixin"></i><span class="tooltip-text">微信公众号: BuzhidaoCube</span></a>
-                        <a href="#" class="tooltip"><i class="fab fa-weibo"></i><span class="tooltip-text">微博: @Buzhidao魔方计时</span></a>
-                        <a href="#" class="tooltip"><i class="fab fa-github"></i><span class="tooltip-text">GitHub开源项目</span></a>
-                        <a href="#" class="tooltip"><i class="fas fa-envelope"></i><span class="tooltip-text">联系开发团队</span></a>
-                    </div>
+                    <h3>关于本计时器</h3>
+                    <p>这是一个专业的魔方计时器，支持2D六面展开图显示和完整的统计功能。</p>
                 </div>
                 <div class="footer-column">
-                    <h3>功能导航</h3>
-                    <a href="#timer">计时器</a>
-                    <a href="#stats">个人统计</a>
-                    <a href="#records">历史记录</a>
-                    <a href="#personalization">个性化设置</a>
-                    <a href="#feedback">留言反馈</a>
+                    <h3>键盘快捷键</h3>
+                    <ul class="keyboard-shortcuts">
+                        <li><kbd>空格键</kbd>开始/停止计时</li>
+                        <li><kbd>R</kbd>手动重置计时器</li>
+                        <li><kbd>N</kbd>生成新打乱公式</li>
+                        <li><kbd>ESC</kbd>取消当前操作</li>
+                    </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>支持与帮助</h3>
-                    <p>兼容所有现代浏览器</p>
-                    <p>支持手机、平板和电脑</p>
-                    <p>数据本地存储，保护隐私</p>
-                    <p>完全免费使用</p>
+                    <h3>使用说明</h3>
+                    <p>1. 按下空格键开始准备计时</p>
+                    <p>2. 松开空格键开始计时</p>
+                    <p>3. 再次按下空格键停止计时</p>
+                    <p>4. 计时停止后会自动重置</p>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Buzhidao CubeTimer 专业魔方计时器. 保留所有权利.</p>
-                <p style="margin-top: 10px; font-size: 0.8rem;">本工具遵循WCA打乱标准，计时精度达到毫秒级，适合练习和比赛准备。</p>
+                <p>© 2023 Buzhidao CubeTimer Pro | <a href="#" class="feedback-link" id="footerFeedbackLink">提交反馈</a></p>
             </div>
         </div>
     </footer>
 
     <script>
-        // ==================== 全局变量和初始化 ====================
-        let timerInterval = null;
+        // 全局变量
+        let timer = null;
         let startTime = 0;
-        let elapsedTime = 0;
-        let timerRunning = false;
-        let readyToStart = false;
-        let spacePressed = false;
+        let isRunning = false;
+        let isReady = false;
+        let isSecondAttempt = false;
+        let times = [];
         let currentCubeType = '3x3';
-        let scrambleHistory = [];
-        let solveTimes = [];
-        let chartInstance = null;
-        let miniChartInstance = null;
-        let metronomeInterval = null;
-        let audioContext = null;
-        let isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        let currentScramble = "R U R' U' R' F R2 U' R' U' R U R' F'";
+        let spacePressed = false;
+        let spacePressTime = 0;
         
-        // 从本地存储加载数据
-        function loadData() {
-            const savedTimes = localStorage.getItem('buzhidao_cubetimer_times');
-            if (savedTimes) {
-                solveTimes = JSON.parse(savedTimes);
-                updateRecordsTable();
-                updateStats();
-                updateChart();
-                updateMiniChart();
-            }
-            
-            // 加载设置
-            const settings = localStorage.getItem('buzhidao_cubetimer_settings');
-            if (settings) {
-                const savedSettings = JSON.parse(settings);
-                document.getElementById('soundToggle').checked = savedSettings.sound || true;
-                document.getElementById('vibrationToggle').checked = savedSettings.vibration || false;
-                document.getElementById('metronomeToggle').checked = savedSettings.metronome || false;
-                document.getElementById('timeFormatSelect').value = savedSettings.timeFormat || 'mm:ss.ms';
-                document.getElementById('scrambleLengthSelect').value = savedSettings.scrambleLength || 'normal';
-                document.getElementById('wcaScrambleToggle').checked = savedSettings.wcaScramble || true;
-                document.getElementById('themeColorSelect').value = savedSettings.themeColor || 'blue';
-                document.getElementById('fontSizeSelect').value = savedSettings.fontSize || 'normal';
-                document.getElementById('animationsToggle').checked = savedSettings.animations || true;
-                document.getElementById('autoSaveToggle').checked = savedSettings.autoSave || true;
-                document.getElementById('exportFormatSelect').value = savedSettings.exportFormat || 'csv';
-                
-                // 应用主题
-                applyTheme(savedSettings.themeColor || 'blue');
-                // 启动节拍器（如果之前开启）
-                if (savedSettings.metronome) {
-                    startMetronome();
-                }
-                
-                // 显示移动端提示
-                if (isMobileDevice) {
-                    document.getElementById('touchHint').style.display = 'block';
-                }
-            }
+        // 魔方状态表示
+        let cubeState = {
+            U: Array(9).fill('W'), // 白色
+            D: Array(9).fill('Y'), // 黄色
+            F: Array(9).fill('G'), // 绿色
+            B: Array(9).fill('B'), // 蓝色
+            L: Array(9).fill('O'), // 橙色
+            R: Array(9).fill('R')  // 红色
+        };
+        
+        // 颜色映射
+        const colorMap = {
+            'W': '#FFFFFF', // 白色
+            'Y': '#FFFF00', // 黄色
+            'G': '#00FF00', // 绿色
+            'B': '#0000FF', // 蓝色
+            'O': '#FF8800', // 橙色
+            'R': '#FF0000'  // 红色
+        };
+        
+        // 面顺序
+        const faces = ['U', 'L', 'F', 'R', 'B', 'D'];
+        
+        // 初始化函数
+        function init() {
+            initEventListeners();
+            generateNewScramble();
+            initStatsChart();
+            loadHistory();
+            updateStats();
+            updateUI();
         }
         
-        // 保存数据到本地存储
-        function saveData() {
-            if (document.getElementById('autoSaveToggle').checked) {
-                localStorage.setItem('buzhidao_cubetimer_times', JSON.stringify(solveTimes));
-                
-                const settings = {
-                    sound: document.getElementById('soundToggle').checked,
-                    vibration: document.getElementById('vibrationToggle').checked,
-                    metronome: document.getElementById('metronomeToggle').checked,
-                    timeFormat: document.getElementById('timeFormatSelect').value,
-                    scrambleLength: document.getElementById('scrambleLengthSelect').value,
-                    wcaScramble: document.getElementById('wcaScrambleToggle').checked,
-                    themeColor: document.getElementById('themeColorSelect').value,
-                    fontSize: document.getElementById('fontSizeSelect').value,
-                    animations: document.getElementById('animationsToggle').checked,
-                    autoSave: document.getElementById('autoSaveToggle').checked,
-                    exportFormat: document.getElementById('exportFormatSelect').value
-                };
-                
-                localStorage.setItem('buzhidao_cubetimer_settings', JSON.stringify(settings));
-            }
-        }
-        
-        // ==================== 计时器功能 ====================
-        function startTimer() {
-            if (timerRunning) return;
+        // 初始化事件监听器
+        function initEventListeners() {
+            // 按钮事件
+            document.getElementById('newScrambleBtn').addEventListener('click', generateNewScramble);
+            document.getElementById('resetBtn').addEventListener('click', resetTimer);
+            document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
+            document.getElementById('startBtn').addEventListener('click', startTimer);
+            document.getElementById('stopBtn').addEventListener('click', stopTimer);
             
-            timerRunning = true;
-            startTime = Date.now() - elapsedTime;
+            // 触摸控制
+            document.getElementById('touchControl').addEventListener('mousedown', handleTouchStart);
+            document.getElementById('touchControl').addEventListener('mouseup', handleTouchEnd);
+            document.getElementById('touchControl').addEventListener('touchstart', handleTouchStart);
+            document.getElementById('touchControl').addEventListener('touchend', handleTouchEnd);
             
-            // 更新UI状态
-            document.getElementById('startBtn').classList.add('hidden');
-            document.getElementById('stopBtn').classList.remove('hidden');
-            document.getElementById('mobileStartBtn').classList.add('hidden');
-            document.getElementById('mobileStopBtn').classList.remove('hidden');
-            
-            // 更新触摸控制区域状态
-            const touchControl = document.getElementById('touchControlArea');
-            const touchInstruction = document.getElementById('touchInstruction');
-            touchControl.classList.remove('ready');
-            touchControl.classList.add('running');
-            touchInstruction.textContent = '计时中... 点击停止';
-            
-            // 更新计时器容器状态
-            document.getElementById('timerContainer').classList.remove('touch-ready');
-            document.getElementById('timerContainer').classList.add('touch-running');
-            
-            // 开始计时
-            timerInterval = setInterval(updateTimerDisplay, 10);
-            
-            // 移动端振动反馈
-            if (isMobileDevice && document.getElementById('vibrationToggle').checked) {
-                navigator.vibrate(50);
-            }
-        }
-        
-        function stopTimer() {
-            if (!timerRunning) return;
-            
-            timerRunning = false;
-            clearInterval(timerInterval);
-            
-            // 更新UI状态
-            document.getElementById('startBtn').classList.remove('hidden');
-            document.getElementById('stopBtn').classList.add('hidden');
-            document.getElementById('mobileStartBtn').classList.remove('hidden');
-            document.getElementById('mobileStopBtn').classList.add('hidden');
-            
-            // 更新触摸控制区域状态
-            const touchControl = document.getElementById('touchControlArea');
-            const touchInstruction = document.getElementById('touchInstruction');
-            touchControl.classList.remove('ready', 'running');
-            touchInstruction.textContent = '点击这里开始准备，松开开始计时';
-            
-            // 更新计时器容器状态
-            document.getElementById('timerContainer').classList.remove('touch-ready', 'touch-running');
-            
-            // 保存时间
-            const time = elapsedTime;
-            const scramble = document.getElementById('scrambleDisplay').textContent;
-            const date = new Date().toLocaleDateString('zh-CN');
-            
-            solveTimes.unshift({
-                time: time,
-                scramble: scramble,
-                date: date,
-                cubeType: currentCubeType,
-                timestamp: Date.now()
+            // 魔方类型切换
+            document.querySelectorAll('.cube-type').forEach(type => {
+                type.addEventListener('click', () => {
+                    document.querySelectorAll('.cube-type').forEach(t => t.classList.remove('active'));
+                    type.classList.add('active');
+                    currentCubeType = type.dataset.type;
+                    generateNewScramble();
+                });
             });
             
-            // 限制记录数量
-            if (solveTimes.length > 100) {
-                solveTimes = solveTimes.slice(0, 100);
-            }
+            // 键盘事件
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
             
-            // 更新UI
-            updateRecordsTable();
+            // 反馈功能
+            document.getElementById('openFeedback').addEventListener('click', openFeedback);
+            document.getElementById('footerFeedbackLink').addEventListener('click', openFeedback);
+            document.getElementById('closeFeedback').addEventListener('click', closeFeedback);
+            document.getElementById('feedbackModal').addEventListener('click', function(e) {
+                if (e.target === this) closeFeedback();
+            });
+            
+            // 防止空格键滚动页面
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' && e.target === document.body) {
+                    e.preventDefault();
+                }
+            });
+        }
+        
+        // 处理按键按下
+        function handleKeyDown(e) {
+            switch (e.code) {
+                case 'Space':
+                    e.preventDefault();
+                    if (!spacePressed) {
+                        spacePressed = true;
+                        spacePressTime = Date.now();
+                        
+                        if (isSecondAttempt) {
+                            // 第二次尝试：重置并准备
+                            resetTimer();
+                            generateNewScramble();
+                            prepareTimer();
+                            isSecondAttempt = false;
+                        } else if (!isRunning && !isReady) {
+                            // 第一次尝试：准备计时
+                            prepareTimer();
+                        } else if (isRunning) {
+                            // 正在计时：停止计时
+                            stopTimer();
+                            isSecondAttempt = true;
+                        }
+                    }
+                    break;
+                    
+                case 'KeyR':
+                    if (!isRunning) {
+                        resetTimer();
+                        showHint("已手动重置计时器");
+                    }
+                    break;
+                    
+                case 'KeyN':
+                    generateNewScramble();
+                    showHint("已生成新打乱公式");
+                    break;
+                    
+                case 'Escape':
+                    if (isReady) {
+                        resetTimer();
+                    }
+                    break;
+            }
+        }
+        
+        // 处理按键释放
+        function handleKeyUp(e) {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                spacePressed = false;
+                
+                if (isReady && !isRunning) {
+                    startTimer();
+                }
+            }
+        }
+        
+        // 显示提示
+        function showHint(message) {
+            const hint = document.getElementById('controlHint');
+            hint.textContent = message;
+            hint.classList.add('highlight');
+            setTimeout(() => {
+                hint.classList.remove('highlight');
+                updateControlHint();
+            }, 1500);
+        }
+        
+        // 处理触摸开始
+        function handleTouchStart(e) {
+            e.preventDefault();
+            
+            if (isSecondAttempt) {
+                resetTimer();
+                generateNewScramble();
+                prepareTimer();
+                isSecondAttempt = false;
+            } else if (!isRunning && !isReady) {
+                prepareTimer();
+            } else if (isRunning) {
+                stopTimer();
+                isSecondAttempt = true;
+            }
+        }
+        
+        // 处理触摸结束
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            
+            if (isReady && !isRunning) {
+                startTimer();
+            }
+        }
+        
+        // 打开反馈模态框
+        function openFeedback(e) {
+            e.preventDefault();
+            document.getElementById('feedbackModal').classList.add('active');
+        }
+        
+        // 关闭反馈模态框
+        function closeFeedback() {
+            document.getElementById('feedbackModal').classList.remove('active');
+        }
+        
+        // 准备计时
+        function prepareTimer() {
+            if (isRunning) return;
+            
+            isReady = true;
+            document.getElementById('touchControl').classList.add('ready');
+            document.getElementById('timeDisplay').classList.add('ready');
+            updateControlHint();
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
+        
+        // 开始计时
+        function startTimer() {
+            if (!isReady || isRunning) return;
+            
+            isReady = false;
+            isRunning = true;
+            startTime = Date.now();
+            
+            document.getElementById('touchControl').classList.remove('ready');
+            document.getElementById('touchControl').classList.add('running');
+            document.getElementById('timeDisplay').classList.remove('ready');
+            updateControlHint();
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            
+            timer = setInterval(updateTimer, 10);
+        }
+        
+        // 更新计时器显示
+        function updateTimer() {
+            const currentTime = Date.now();
+            const elapsed = (currentTime - startTime) / 1000;
+            document.getElementById('timeDisplay').textContent = elapsed.toFixed(3);
+            
+            const timeDisplay = document.getElementById('timeDisplay');
+            if (elapsed >= 100) {
+                timeDisplay.classList.add('tiny');
+                timeDisplay.classList.remove('small');
+            } else if (elapsed >= 60) {
+                timeDisplay.classList.add('small');
+                timeDisplay.classList.remove('tiny');
+            } else {
+                timeDisplay.classList.remove('small', 'tiny');
+            }
+        }
+        
+        // 停止计时
+        function stopTimer() {
+            if (!isRunning) return;
+            
+            isRunning = false;
+            clearInterval(timer);
+            
+            const endTime = Date.now();
+            const elapsed = (endTime - startTime) / 1000;
+            const finalTime = elapsed.toFixed(3);
+            
+            document.getElementById('timeDisplay').textContent = finalTime;
+            recordTime(parseFloat(finalTime));
+            
+            document.getElementById('touchControl').classList.remove('running', 'ready');
+            document.getElementById('timeDisplay').classList.remove('ready');
+            updateControlHint();
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
+        
+        // 重置计时器
+        function resetTimer() {
+            isReady = false;
+            isRunning = false;
+            clearInterval(timer);
+            
+            document.getElementById('timeDisplay').textContent = "0.000";
+            document.getElementById('touchControl').classList.remove('running', 'ready');
+            document.getElementById('timeDisplay').classList.remove('ready', 'small', 'tiny');
+            updateControlHint();
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
+        
+        // 更新控制提示
+        function updateControlHint() {
+            const hint = document.getElementById('controlHint');
+            
+            if (isRunning) {
+                hint.textContent = "计时中...按下空格键停止计时";
+            } else if (isReady) {
+                hint.textContent = "准备就绪，松开空格键开始计时";
+            } else if (isSecondAttempt) {
+                hint.textContent = "计时完成！下一次按下空格键将重置";
+            } else {
+                hint.textContent = "按下空格键开始准备计时";
+            }
+        }
+        
+        // 记录时间到历史
+        function recordTime(time) {
+            times.push(time);
+            saveHistory();
+            updateHistoryList();
             updateStats();
             updateChart();
-            updateMiniChart();
-            
-            // 保存数据
-            saveData();
-            
-            // 播放声音（如果启用）
-            if (document.getElementById('soundToggle').checked) {
-                playTimerSound();
-            }
-            
-            // 移动端振动反馈
-            if (isMobileDevice && document.getElementById('vibrationToggle').checked) {
-                navigator.vibrate([50, 50, 100]);
-            }
         }
         
-        function resetTimer() {
-            timerRunning = false;
-            readyToStart = false;
-            clearInterval(timerInterval);
-            elapsedTime = 0;
+        // 更新历史列表
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
             
-            // 更新UI状态
-            document.getElementById('startBtn').classList.remove('hidden');
-            document.getElementById('stopBtn').classList.add('hidden');
-            document.getElementById('mobileStartBtn').classList.remove('hidden');
-            document.getElementById('mobileStopBtn').classList.add('hidden');
+            const recentTimes = times.slice(-30);
+            const bestTime = times.length > 0 ? Math.min(...times.filter(t => typeof t === 'number')) : 0;
             
-            // 更新触摸控制区域状态
-            const touchControl = document.getElementById('touchControlArea');
-            const touchInstruction = document.getElementById('touchInstruction');
-            touchControl.classList.remove('ready', 'running');
-            touchInstruction.textContent = '点击这里开始准备，松开开始计时';
-            
-            // 更新计时器容器状态
-            document.getElementById('timerContainer').classList.remove('touch-ready', 'touch-running');
-            document.getElementById('timeDisplay').classList.remove('ready');
-            
-            updateTimerDisplay();
-            generateNewScramble(); // 重置时更新打乱
-            
-            // 移动端振动反馈
-            if (isMobileDevice && document.getElementById('vibrationToggle').checked) {
-                navigator.vibrate(30);
-            }
-        }
-        
-        function updateTimerDisplay() {
-            if (timerRunning) {
-                elapsedTime = Date.now() - startTime;
-            }
-            
-            const timeDisplay = document.getElementById('timeDisplay');
-            const timeFormat = document.getElementById('timeFormatSelect').value;
-            
-            let displayText;
-            
-            if (timeFormat === 'mm:ss.ms') {
-                const minutes = Math.floor(elapsedTime / 60000);
-                const seconds = Math.floor((elapsedTime % 60000) / 1000);
-                const milliseconds = elapsedTime % 1000;
+            recentTimes.forEach((time, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item fade-in';
                 
-                displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
-            } else if (timeFormat === 'ss.ms') {
-                const seconds = Math.floor(elapsedTime / 1000);
-                const milliseconds = elapsedTime % 1000;
+                const globalIndex = times.length - recentTimes.length + index + 1;
+                const isBest = typeof time === 'number' && Math.abs(time - bestTime) < 0.001;
                 
-                displayText = `${seconds}.${milliseconds.toString().padStart(3, '0')}`;
-                
-                // 调整字体大小
-                if (seconds >= 100) {
-                    timeDisplay.className = 'time-display tiny';
-                } else if (seconds >= 10) {
-                    timeDisplay.className = 'time-display small';
-                } else {
-                    timeDisplay.className = 'time-display';
-                }
-            } else { // mm:ss
-                const minutes = Math.floor(elapsedTime / 60000);
-                const seconds = Math.floor((elapsedTime % 60000) / 1000);
-                
-                displayText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-            
-            timeDisplay.textContent = displayText;
-        }
-        
-        // ==================== 触摸控制功能 ====================
-        function setupTouchControls() {
-            const touchControl = document.getElementById('touchControlArea');
-            const timeDisplay = document.getElementById('timeDisplay');
-            
-            // 触摸开始事件
-            touchControl.addEventListener('touchstart', function(e) {
-                e.preventDefault(); // 防止滚动
-                
-                if (timerRunning) {
-                    // 如果已经在计时中，触摸就停止
-                    stopTimer();
-                } else if (!readyToStart) {
-                    // 准备开始计时
-                    readyToStart = true;
-                    
-                    // 更新UI状态
-                    touchControl.classList.add('ready');
-                    document.getElementById('touchInstruction').textContent = '松开开始计时';
-                    timeDisplay.classList.add('ready');
-                    document.getElementById('timerContainer').classList.add('touch-ready');
-                    
-                    // 移动端振动反馈
-                    if (isMobileDevice && document.getElementById('vibrationToggle').checked) {
-                        navigator.vibrate(30);
-                    }
-                }
-            }, { passive: false });
-            
-            // 触摸结束事件
-            touchControl.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                
-                if (readyToStart && !timerRunning) {
-                    // 开始计时
-                    startTimer();
-                    readyToStart = false;
-                    timeDisplay.classList.remove('ready');
-                }
-            }, { passive: false });
-            
-            // 点击事件（兼容鼠标）
-            touchControl.addEventListener('mousedown', function(e) {
-                if (timerRunning) {
-                    // 如果已经在计时中，点击就停止
-                    stopTimer();
-                } else if (!readyToStart) {
-                    // 准备开始计时
-                    readyToStart = true;
-                    
-                    // 更新UI状态
-                    touchControl.classList.add('ready');
-                    document.getElementById('touchInstruction').textContent = '松开开始计时';
-                    timeDisplay.classList.add('ready');
-                    document.getElementById('timerContainer').classList.add('touch-ready');
-                }
-            });
-            
-            touchControl.addEventListener('mouseup', function(e) {
-                if (readyToStart && !timerRunning) {
-                    // 开始计时
-                    startTimer();
-                    readyToStart = false;
-                    timeDisplay.classList.remove('ready');
-                }
-            });
-            
-            // 防止鼠标拖动时意外触发
-            touchControl.addEventListener('dragstart', function(e) {
-                e.preventDefault();
-            });
-        }
-        
-        // ==================== 键盘控制功能 ====================
-        function handleKeyDown(event) {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                
-                if (!spacePressed) {
-                    spacePressed = true;
-                    
-                    if (!timerRunning && !readyToStart) {
-                        // 准备开始计时
-                        readyToStart = true;
-                        document.getElementById('startBtn').textContent = '松开开始';
-                        document.getElementById('startBtn').classList.add('pulse');
-                        document.getElementById('touchInstruction').textContent = '松开开始计时';
-                        document.getElementById('touchControlArea').classList.add('ready');
-                        document.getElementById('timeDisplay').classList.add('ready');
-                        document.getElementById('timerContainer').classList.add('touch-ready');
-                    } else if (timerRunning) {
-                        // 停止计时
-                        stopTimer();
-                    }
-                }
-            }
-            
-            // R键重置计时器
-            if (event.code === 'KeyR' && !event.ctrlKey) {
-                resetTimer();
-            }
-            
-            // N键生成新打乱
-            if (event.code === 'KeyN' && !event.ctrlKey) {
-                generateNewScramble();
-            }
-        }
-        
-        function handleKeyUp(event) {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                
-                if (spacePressed) {
-                    spacePressed = false;
-                    
-                    if (readyToStart && !timerRunning) {
-                        // 开始计时
-                        startTimer();
-                        readyToStart = false;
-                        document.getElementById('startBtn').textContent = '准备计时';
-                        document.getElementById('startBtn').classList.remove('pulse');
-                        document.getElementById('timeDisplay').classList.remove('ready');
-                    }
-                }
-            }
-        }
-        
-        // ==================== 移动端按钮控制 ====================
-        function setupMobileButtons() {
-            // 移动端开始按钮
-            document.getElementById('mobileStartBtn').addEventListener('click', function() {
-                if (!timerRunning && !readyToStart) {
-                    readyToStart = true;
-                    this.textContent = '松开开始';
-                    this.classList.add('pulse');
-                    document.getElementById('touchInstruction').textContent = '松开开始计时';
-                    document.getElementById('touchControlArea').classList.add('ready');
-                    document.getElementById('timeDisplay').classList.add('ready');
-                    document.getElementById('timerContainer').classList.add('touch-ready');
-                    
-                    // 振动反馈
-                    if (document.getElementById('vibrationToggle').checked) {
-                        navigator.vibrate(30);
-                    }
-                }
-            });
-            
-            // 移动端停止按钮
-            document.getElementById('mobileStopBtn').addEventListener('click', function() {
-                if (timerRunning) {
-                    stopTimer();
-                }
-            });
-            
-            // 移动端重置按钮
-            document.getElementById('mobileResetBtn').addEventListener('click', resetTimer);
-        }
-        
-        // ==================== 打乱生成功能 ====================
-        function generateNewScramble() {
-            const scrambleLengthSelect = document.getElementById('scrambleLengthSelect');
-            let length = 20; // 默认
-            
-            if (scrambleLengthSelect.value === 'short') length = 15;
-            else if (scrambleLengthSelect.value === 'long') length = 25;
-            
-            const scramble = generateScramble(currentCubeType, length);
-            document.getElementById('scrambleDisplay').textContent = scramble;
-            
-            // 保存到历史
-            scrambleHistory.unshift(scramble);
-            if (scrambleHistory.length > 10) {
-                scrambleHistory = scrambleHistory.slice(0, 10);
-            }
-            
-            // 隐藏解法显示
-            document.getElementById('solutionContainer').classList.remove('show');
-        }
-        
-        function generateScramble(cubeType, length) {
-            // 根据魔方类型生成不同的打乱
-            let moves = [];
-            
-            if (cubeType === '3x3' || cubeType === '2x2' || cubeType === '4x4') {
-                // 标准魔方打乱
-                const faceMoves = ['U', 'D', 'L', 'R', 'F', 'B'];
-                const modifiers = ['', "'", '2'];
-                
-                for (let i = 0; i < length; i++) {
-                    let move;
-                    do {
-                        const face = faceMoves[Math.floor(Math.random() * faceMoves.length)];
-                        const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-                        move = face + modifier;
-                    } while (i > 0 && move[0] === moves[i-1][0]); // 避免连续同一面
-                    
-                    moves.push(move);
-                }
-            } else if (cubeType === 'pyramid') {
-                // 金字塔魔方打乱
-                const faceMoves = ['U', 'L', 'R', 'B'];
-                const modifiers = ['', "'"];
-                
-                for (let i = 0; i < length; i++) {
-                    const face = faceMoves[Math.floor(Math.random() * faceMoves.length)];
-                    const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-                    moves.push(face + modifier);
-                }
-            } else if (cubeType === 'megaminx') {
-                // 五魔方打乱（简化版）
-                const faceMoves = ['U', 'R', 'D'];
-                const modifiers = ['', "'", '++', '--'];
-                
-                for (let i = 0; i < length; i++) {
-                    const face = faceMoves[Math.floor(Math.random() * faceMoves.length)];
-                    const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-                    moves.push(face + modifier);
-                }
-            } else if (cubeType === 'skewb') {
-                // 斜转魔方打乱
-                const movesList = ['R', 'L', 'U', 'B', 'R\'', 'L\'', 'U\'', 'B\''];
-                
-                for (let i = 0; i < length; i++) {
-                    moves.push(movesList[Math.floor(Math.random() * movesList.length)]);
-                }
-            }
-            
-            return moves.join(' ');
-        }
-        
-        function copyScrambleToClipboard() {
-            const scramble = document.getElementById('scrambleDisplay').textContent;
-            navigator.clipboard.writeText(scramble).then(() => {
-                alert('打乱已复制到剪贴板！');
-            });
-        }
-        
-        // ==================== 解法生成功能 ====================
-        function generateSolution(scramble) {
-            // 这是一个简化的解法生成器，实际魔方解法非常复杂
-            // 这里我们根据打乱公式反向生成一个简单的CFOP解法示例
-            
-            const moves = scramble.split(' ');
-            let solution = [];
-            
-            // 简化的CFOP解法步骤
-            const crossMoves = ['R', 'L', 'F', 'B', 'U', 'D'];
-            const f2lMoves = ["R U R'", "L' U' L", "U R U' R'", "U' L' U L"];
-            const ollMoves = ["F R U R' U' F'", "R U R' U R U2 R'", "R U2 R2 U' R2 U' R2 U2 R"];
-            const pllMoves = ["R U R' U' R' F R2 U' R' U' R U R' F'", "R' U L' U2 R U' R' U2 R L"];
-            
-            // 随机生成解法步骤
-            solution.push("十字: " + crossMoves[Math.floor(Math.random() * crossMoves.length)]);
-            solution.push("F2L 1: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
-            solution.push("F2L 2: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
-            solution.push("F2L 3: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
-            solution.push("F2L 4: " + f2lMoves[Math.floor(Math.random() * f2lMoves.length)]);
-            solution.push("OLL: " + ollMoves[Math.floor(Math.random() * ollMoves.length)]);
-            solution.push("PLL: " + pllMoves[Math.floor(Math.random() * pllMoves.length)]);
-            
-            return solution.join(" / ");
-        }
-        
-        function showSolution() {
-            const scramble = document.getElementById('scrambleDisplay').textContent;
-            const solution = generateSolution(scramble);
-            document.getElementById('solutionSteps').textContent = solution;
-            document.getElementById('solutionContainer').classList.add('show');
-        }
-        
-        // ==================== 统计功能 ====================
-        function updateStats() {
-            if (solveTimes.length === 0) {
-                // 无数据时的默认显示
-                document.getElementById('currentAvg').textContent = '--.--';
-                document.getElementById('bestTime').textContent = '--.--';
-                document.getElementById('worstTime').textContent = '--.--';
-                document.getElementById('solveCount').textContent = '0';
-                document.getElementById('sessionAvg').textContent = '--.--';
-                document.getElementById('bestAvg').textContent = '--.--';
-                document.getElementById('bestSingle').textContent = '--.--';
-                document.getElementById('consistency').textContent = '--%';
-                document.getElementById('monthCount').textContent = '0';
-                document.getElementById('improvement').textContent = '--.--';
-                return;
-            }
-            
-            // 当前会话的数据
-            const times = solveTimes.map(record => record.time);
-            const currentBest = Math.min(...times);
-            const currentWorst = Math.max(...times);
-            const solveCount = times.length;
-            const sessionAvg = calculateAverage(times);
-            
-            // 计算Ao5（最近5次的平均，去掉最快和最慢）
-            let currentAvg = '--.--';
-            if (times.length >= 5) {
-                const recentTimes = times.slice(0, 5);
-                currentAvg = calculateAverage(recentTimes, true);
-            }
-            
-            // 历史最佳
-            const allTimes = solveTimes.filter(record => record.cubeType === currentCubeType).map(record => record.time);
-            const bestSingle = allTimes.length > 0 ? Math.min(...allTimes) : 0;
-            
-            // 计算最佳Ao5
-            let bestAvg = '--.--';
-            if (allTimes.length >= 5) {
-                // 这里简化处理，实际应该计算所有可能的连续5次平均
-                bestAvg = calculateAverage(allTimes.slice(0, Math.min(5, allTimes.length)), true);
-            }
-            
-            // 计算稳定性（最近10次的标准差与平均值的比值）
-            let consistency = '--%';
-            if (times.length >= 3) {
-                const recentTimes = times.slice(0, Math.min(10, times.length));
-                const avg = calculateAverage(recentTimes);
-                const variance = recentTimes.reduce((sum, time) => sum + Math.pow(time - avg, 2), 0) / recentTimes.length;
-                const stdDev = Math.sqrt(variance);
-                const consistencyValue = Math.max(0, 100 - (stdDev / avg * 100));
-                consistency = consistencyValue.toFixed(1) + '%';
-            }
-            
-            // 本月复原次数
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-            const monthCount = solveTimes.filter(record => {
-                const recordDate = new Date(record.timestamp);
-                return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
-            }).length;
-            
-            // 提升（与最初几次相比）
-            let improvement = '--.--';
-            if (times.length >= 5) {
-                const firstFiveAvg = calculateAverage(times.slice(-5), true);
-                const lastFiveAvg = calculateAverage(times.slice(0, 5), true);
-                improvement = (firstFiveAvg - lastFiveAvg).toFixed(2);
-                if (parseFloat(improvement) > 0) {
-                    improvement = '-' + improvement;
-                }
-            }
-            
-            // 更新DOM
-            document.getElementById('currentAvg').textContent = formatTimeForDisplay(currentAvg, false);
-            document.getElementById('bestTime').textContent = formatTimeForDisplay(currentBest);
-            document.getElementById('worstTime').textContent = formatTimeForDisplay(currentWorst);
-            document.getElementById('solveCount').textContent = solveCount;
-            document.getElementById('sessionAvg').textContent = formatTimeForDisplay(sessionAvg, false);
-            document.getElementById('bestAvg').textContent = formatTimeForDisplay(bestAvg, false);
-            document.getElementById('bestSingle').textContent = formatTimeForDisplay(bestSingle);
-            document.getElementById('consistency').textContent = consistency;
-            document.getElementById('monthCount').textContent = monthCount;
-            document.getElementById('improvement').textContent = improvement !== '--.--' ? formatTimeForDisplay(Math.abs(parseFloat(improvement)), false) : improvement;
-        }
-        
-        function calculateAverage(times, removeExtremes = false) {
-            if (times.length === 0) return 0;
-            
-            let timesToAverage = [...times];
-            
-            if (removeExtremes && times.length >= 3) {
-                // 去掉最快和最慢的
-                const maxIndex = timesToAverage.indexOf(Math.max(...timesToAverage));
-                timesToAverage.splice(maxIndex, 1);
-                const minIndex = timesToAverage.indexOf(Math.min(...timesToAverage));
-                timesToAverage.splice(minIndex, 1);
-            }
-            
-            const sum = timesToAverage.reduce((a, b) => a + b, 0);
-            return sum / timesToAverage.length;
-        }
-        
-        function formatTimeForDisplay(ms, includeMs = true) {
-            if (ms === '--.--' || ms === 0) return '--.--';
-            
-            const minutes = Math.floor(ms / 60000);
-            const seconds = Math.floor((ms % 60000) / 1000);
-            const milliseconds = ms % 1000;
-            
-            if (includeMs) {
-                if (minutes > 0) {
-                    return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
-                } else {
-                    return `${seconds}.${milliseconds.toString().padStart(3, '0')}`;
-                }
-            } else {
-                // 用于平均值显示，可能不需要毫秒
-                if (minutes > 0) {
-                    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                } else {
-                    return `${seconds}.${Math.floor(milliseconds/10).toString().padStart(2, '0')}`;
-                }
-            }
-        }
-        
-        // ==================== 记录表格功能 ====================
-        function updateRecordsTable() {
-            const tableBody = document.getElementById('recordsTableBody');
-            const noRecordsRow = document.getElementById('noRecordsRow');
-            
-            if (solveTimes.length === 0) {
-                noRecordsRow.style.display = '';
-                return;
-            }
-            
-            noRecordsRow.style.display = 'none';
-            
-            // 清空现有行（除了无记录行）
-            const rows = tableBody.querySelectorAll('tr:not(#noRecordsRow)');
-            rows.forEach(row => row.remove());
-            
-            // 添加新行
-            solveTimes.forEach((record, index) => {
-                // 主行
-                const mainRow = document.createElement('tr');
-                mainRow.className = 'record-row';
-                mainRow.dataset.index = index;
-                
-                // 序号
-                const cell1 = document.createElement('td');
-                cell1.textContent = index + 1;
-                mainRow.appendChild(cell1);
-                
-                // 时间
-                const cell2 = document.createElement('td');
-                cell2.className = 'time-cell';
-                cell2.textContent = formatTimeForDisplay(record.time);
-                mainRow.appendChild(cell2);
-                
-                // 魔方类型
-                const cell3 = document.createElement('td');
-                cell3.textContent = getCubeTypeDisplayName(record.cubeType);
-                mainRow.appendChild(cell3);
-                
-                // 日期
-                const cell4 = document.createElement('td');
-                cell4.textContent = record.date;
-                mainRow.appendChild(cell4);
-                
-                // 操作
-                const cell5 = document.createElement('td');
-                cell5.innerHTML = `
-                    <button class="toggle-details-btn" onclick="toggleRecordDetails(${index})">详情</button>
-                    <span class="record-action" onclick="deleteRecord(${index})" title="删除记录"><i class="fas fa-trash"></i></span>
-                `;
-                mainRow.appendChild(cell5);
-                
-                tableBody.appendChild(mainRow);
-                
-                // 详情行
-                const detailsRow = document.createElement('tr');
-                detailsRow.id = `details-${index}`;
-                detailsRow.className = 'record-details-row';
-                
-                const detailsCell = document.createElement('td');
-                detailsCell.colSpan = 5;
-                detailsCell.className = 'record-details';
-                
-                // 截断打乱公式
-                const shortScramble = record.scramble.length > 50 ? 
-                    record.scramble.substring(0, 50) + '...' : 
-                    record.scramble;
-                
-                detailsCell.innerHTML = `
-                    <div class="record-details-content">
-                        <div class="detail-item">
-                            <div class="detail-label">完整打乱公式</div>
-                            <div class="detail-value">${record.scramble}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">时间戳</div>
-                            <div class="detail-value">${new Date(record.timestamp).toLocaleString('zh-CN')}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">操作</div>
-                            <div class="detail-value">
-                                <button class="scramble-btn" onclick="copyScrambleFromRecord('${record.scramble}')" style="padding: 5px 10px; font-size: 0.9rem;">
-                                    <i class="fas fa-copy"></i> 复制打乱
-                                </button>
-                            </div>
-                        </div>
+                historyItem.innerHTML = `
+                    <div class="history-index">${globalIndex}</div>
+                    <div class="history-time ${isBest ? 'best' : ''}">${typeof time === 'number' ? time.toFixed(3) : time}</div>
+                    <div class="history-actions">
+                        <button class="history-btn" title="标记为DNF" onclick="markAsDNF(${globalIndex - 1})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button class="history-btn" title="标记为+2" onclick="addPenalty(${globalIndex - 1})">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="history-btn" title="删除" onclick="deleteTime(${globalIndex - 1})">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 `;
                 
-                detailsRow.appendChild(detailsCell);
-                tableBody.appendChild(detailsRow);
+                historyList.appendChild(historyItem);
             });
-        }
-        
-        function getCubeTypeDisplayName(type) {
-            const names = {
-                '3x3': '三阶',
-                '2x2': '二阶',
-                '4x4': '四阶',
-                'pyramid': '金字塔',
-                'megaminx': '五魔方',
-                'skewb': '斜转'
-            };
-            return names[type] || type;
-        }
-        
-        function toggleRecordDetails(index) {
-            const detailsRow = document.getElementById(`details-${index}`);
-            if (detailsRow) {
-                const detailsCell = detailsRow.querySelector('.record-details');
-                detailsCell.classList.toggle('expanded');
-                
-                // 更新按钮文本
-                const button = document.querySelector(`tr[data-index="${index}"] .toggle-details-btn`);
-                if (button) {
-                    button.textContent = detailsCell.classList.contains('expanded') ? '收起' : '详情';
-                }
+            
+            if (recentTimes.length === 0) {
+                historyList.innerHTML = `
+                    <div class="history-item" style="justify-content: center; color: var(--text-muted);">
+                        暂无计时记录
+                    </div>
+                `;
             }
         }
         
-        function copyScrambleFromRecord(scramble) {
-            navigator.clipboard.writeText(scramble).then(() => {
-                alert('打乱已复制到剪贴板！');
-            });
+        // 标记为DNF
+        function markAsDNF(index) {
+            if (index >= 0 && index < times.length) {
+                times[index] = 'DNF';
+                saveHistory();
+                updateHistoryList();
+                updateStats();
+            }
         }
         
-        function deleteRecord(index) {
-            if (confirm('确定要删除这条记录吗？')) {
-                solveTimes.splice(index, 1);
-                updateRecordsTable();
+        // 添加+2罚时
+        function addPenalty(index) {
+            if (index >= 0 && index < times.length && typeof times[index] === 'number') {
+                times[index] += 2;
+                saveHistory();
+                updateHistoryList();
+                updateStats();
+            }
+        }
+        
+        // 删除时间记录
+        function deleteTime(index) {
+            if (index >= 0 && index < times.length) {
+                times.splice(index, 1);
+                saveHistory();
+                updateHistoryList();
                 updateStats();
                 updateChart();
-                updateMiniChart();
-                saveData();
             }
         }
         
-        // ==================== 图表功能 ====================
-        function updateChart() {
-            const ctx = document.getElementById('timeChart').getContext('2d');
-            
-            // 销毁现有图表实例
-            if (chartInstance) {
-                chartInstance.destroy();
+        // 清除历史记录
+        function clearHistory() {
+            if (confirm("确定要清除所有历史记录吗？此操作不可撤销。")) {
+                times = [];
+                saveHistory();
+                updateHistoryList();
+                updateStats();
+                updateChart();
+                showHint("已清除所有历史记录");
             }
-            
-            if (solveTimes.length === 0) {
-                // 显示无数据信息
-                ctx.font = "18px Arial";
-                ctx.fillStyle = "#94a3b8";
-                ctx.textAlign = "center";
-                ctx.fillText("暂无计时数据，开始计时后图表会显示在这里", 
-                           document.getElementById('timeChart').width / 2, 
-                           document.getElementById('timeChart').height / 2);
+        }
+        
+        // 保存历史记录
+        function saveHistory() {
+            localStorage.setItem('cubeTimerTimes', JSON.stringify(times));
+        }
+        
+        // 加载历史记录
+        function loadHistory() {
+            const savedTimes = localStorage.getItem('cubeTimerTimes');
+            if (savedTimes) {
+                times = JSON.parse(savedTimes);
+                updateHistoryList();
+                updateStats();
+                updateChart();
+            }
+        }
+        
+        // 更新统计信息
+        function updateStats() {
+            if (times.length === 0) {
+                document.getElementById('bestTime').textContent = "0.000";
+                document.getElementById('worstTime').textContent = "0.000";
+                document.getElementById('currentAvg').textContent = "0.000";
+                document.getElementById('ao5').textContent = "0.000";
                 return;
             }
             
-            // 准备数据
-            const labels = [];
-            const data = [];
+            const numericTimes = times.filter(time => typeof time === 'number');
             
-            // 只显示最近20次记录
-            const recentRecords = solveTimes.slice(0, Math.min(20, solveTimes.length));
+            if (numericTimes.length > 0) {
+                const best = Math.min(...numericTimes);
+                document.getElementById('bestTime').textContent = best.toFixed(3);
+                
+                const worst = Math.max(...numericTimes);
+                document.getElementById('worstTime').textContent = worst.toFixed(3);
+                
+                const sum = numericTimes.reduce((a, b) => a + b, 0);
+                const avg = sum / numericTimes.length;
+                document.getElementById('currentAvg').textContent = avg.toFixed(3);
+                
+                const ao5 = calculateAO5();
+                document.getElementById('ao5').textContent = ao5 > 0 ? ao5.toFixed(3) : "0.000";
+            } else {
+                document.getElementById('bestTime').textContent = "DNF";
+                document.getElementById('worstTime').textContent = "DNF";
+                document.getElementById('currentAvg').textContent = "DNF";
+                document.getElementById('ao5').textContent = "DNF";
+            }
+        }
+        
+        // 计算AO5
+        function calculateAO5() {
+            if (times.length < 5) return 0;
             
-            recentRecords.forEach((record, index) => {
-                labels.push(`#${solveTimes.length - index}`);
-                data.push(record.time / 1000); // 转换为秒
-            });
+            const recent = times.slice(-5).filter(time => typeof time === 'number');
             
-            // 创建图表
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels.reverse(), // 反转以使最新的在右边
-                    datasets: [{
-                        label: '复原时间 (秒)',
-                        data: data.reverse(),
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.3,
-                        pointBackgroundColor: 'rgb(59, 130, 246)',
-                        pointBorderColor: 'white',
-                        pointBorderWidth: 2,
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#f1f5f9',
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const timeInMs = context.parsed.y * 1000;
-                                    const minutes = Math.floor(timeInMs / 60000);
-                                    const seconds = Math.floor((timeInMs % 60000) / 1000);
-                                    const milliseconds = timeInMs % 1000;
-                                    
-                                    if (minutes > 0) {
-                                        return `时间: ${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
-                                    } else {
-                                        return `时间: ${seconds}.${milliseconds.toString().padStart(3, '0')}`;
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                color: 'rgba(148, 163, 184, 0.2)'
-                            },
-                            ticks: {
-                                color: '#94a3b8'
-                            }
-                        },
-                        y: {
-                            grid: {
-                                color: 'rgba(148, 163, 184, 0.2)'
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                callback: function(value) {
-                                    const timeInMs = value * 1000;
-                                    const minutes = Math.floor(timeInMs / 60000);
-                                    const seconds = Math.floor((timeInMs % 60000) / 1000);
-                                    
-                                    if (minutes > 0) {
-                                        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                                    } else {
-                                        return `${seconds}s`;
-                                    }
-                                }
-                            }
-                        }
+            if (recent.length < 3) return 0;
+            
+            const sorted = [...recent].sort((a, b) => a - b);
+            const trimmed = sorted.slice(1, -1);
+            const sum = trimmed.reduce((a, b) => a + b, 0);
+            return sum / trimmed.length;
+        }
+        
+        // 生成新打乱公式
+        function generateNewScramble() {
+            const moves3x3 = ["R", "L", "U", "D", "F", "B"];
+            const moves2x2 = ["R", "L", "U", "D", "F", "B"];
+            const moves4x4 = ["R", "L", "U", "D", "F", "B", "Rw", "Lw", "Uw", "Dw", "Fw", "Bw"];
+            const movesPyraminx = ["R", "L", "U", "B", "r", "l", "u", "b"];
+            
+            const modifiers = ["", "'", "2"];
+            
+            let moves;
+            let scrambleLength;
+            
+            switch(currentCubeType) {
+                case '2x2': moves = moves2x2; scrambleLength = 9; break;
+                case '4x4': moves = moves4x4; scrambleLength = 40; break;
+                case 'pyraminx': moves = movesPyraminx; scrambleLength = 11; break;
+                default: moves = moves3x3; scrambleLength = 20;
+            }
+            
+            let scramble = [];
+            let lastMove = "";
+            
+            for (let i = 0; i < scrambleLength; i++) {
+                let move, modifier;
+                
+                do {
+                    move = moves[Math.floor(Math.random() * moves.length)];
+                    modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
+                } while (move.charAt(0) === lastMove.charAt(0));
+                
+                lastMove = move;
+                scramble.push(move + modifier);
+            }
+            
+            currentScramble = scramble.join(" ");
+            document.getElementById('scrambleText').textContent = currentScramble;
+            updateCubeState();
+            update2DCubeDisplay();
+            
+            return currentScramble;
+        }
+        
+        // 更新魔方状态
+        function updateCubeState() {
+            // 重置魔方状态
+            cubeState = {
+                U: Array(9).fill('W'),
+                D: Array(9).fill('Y'),
+                F: Array(9).fill('G'),
+                B: Array(9).fill('B'),
+                L: Array(9).fill('O'),
+                R: Array(9).fill('R')
+            };
+            
+            // 根据打乱公式更新魔方状态
+            const moves = currentScramble.split(" ");
+            const colors = ['W', 'Y', 'G', 'B', 'O', 'R'];
+            
+            // 模拟打乱效果 - 为每个面随机分配颜色
+            faces.forEach(face => {
+                // 中心块保持原色
+                cubeState[face][4] = getFaceColor(face);
+                
+                // 其他块随机颜色
+                for (let i = 0; i < 9; i++) {
+                    if (i !== 4) { // 跳过中心块
+                        // 随机选择颜色，但不能与中心块相同
+                        let color;
+                        do {
+                            color = colors[Math.floor(Math.random() * colors.length)];
+                        } while (color === cubeState[face][4] && Math.random() > 0.3);
+                        
+                        cubeState[face][i] = color;
                     }
                 }
             });
         }
         
-        function updateMiniChart() {
-            const ctx = document.getElementById('miniTimeChart').getContext('2d');
-            
-            // 销毁现有图表实例
-            if (miniChartInstance) {
-                miniChartInstance.destroy();
+        // 获取面颜色
+        function getFaceColor(face) {
+            switch(face) {
+                case 'U': return 'W';
+                case 'D': return 'Y';
+                case 'F': return 'G';
+                case 'B': return 'B';
+                case 'L': return 'O';
+                case 'R': return 'R';
+                default: return 'W';
             }
-            
-            if (solveTimes.length < 2) {
-                // 显示无数据信息
-                ctx.font = "14px Arial";
-                ctx.fillStyle = "#94a3b8";
-                ctx.textAlign = "center";
-                ctx.fillText("需要至少2次计时才能显示趋势图", 
-                           document.getElementById('miniTimeChart').width / 2, 
-                           document.getElementById('miniTimeChart').height / 2);
-                return;
-            }
-            
-            // 准备数据 - 显示最近10次
-            const labels = [];
-            const data = [];
-            const recentRecords = solveTimes.slice(0, Math.min(10, solveTimes.length));
-            
-            recentRecords.forEach((record, index) => {
-                labels.push(`${solveTimes.length - index}`);
-                data.push(record.time / 1000);
+        }
+        
+        // 更新2D魔方显示
+        function update2DCubeDisplay() {
+            faces.forEach(face => {
+                const faceElement = document.getElementById(`face${face}`);
+                if (!faceElement) return;
+                
+                faceElement.innerHTML = '';
+                
+                for (let i = 0; i < 9; i++) {
+                    const sticker = document.createElement('div');
+                    sticker.className = 'cube-sticker';
+                    sticker.style.backgroundColor = colorMap[cubeState[face][i]] || '#333333';
+                    faceElement.appendChild(sticker);
+                }
             });
+        }
+        
+        // 初始化统计图表
+        function initStatsChart() {
+            const ctx = document.getElementById('statsChart').getContext('2d');
             
-            // 创建小型图表
-            miniChartInstance = new Chart(ctx, {
+            window.statsChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels.reverse(),
+                    labels: [],
                     datasets: [{
-                        label: '时间趋势',
-                        data: data.reverse(),
-                        borderColor: 'rgb(245, 158, 11)',
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        label: '计时历史',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: 'rgb(245, 158, 11)',
-                        pointBorderColor: 'white',
-                        pointBorderWidth: 1,
-                        pointRadius: 3
+                        tension: 0.2,
+                        pointBackgroundColor: '#3b82f6',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: true, labels: { color: '#f1f5f9', font: { size: 12 } } },
                         tooltip: {
-                            enabled: true,
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#f1f5f9',
+                            bodyColor: '#f1f5f9',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
                             callbacks: {
                                 label: function(context) {
-                                    const timeInMs = context.parsed.y * 1000;
-                                    const seconds = Math.floor(timeInMs / 1000);
-                                    const milliseconds = timeInMs % 1000;
-                                    return `时间: ${seconds}.${milliseconds.toString().padStart(3, '0')}`;
+                                    return `时间: ${context.parsed.y.toFixed(3)}秒`;
                                 }
                             }
                         }
                     },
                     scales: {
                         x: {
-                            display: true,
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                font: {
-                                    size: 10
-                                }
-                            }
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8' },
+                            title: { display: true, text: '尝试次数', color: '#94a3b8' }
                         },
                         y: {
-                            display: true,
-                            grid: {
-                                color: 'rgba(148, 163, 184, 0.1)'
-                            },
-                            ticks: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { 
                                 color: '#94a3b8',
-                                font: {
-                                    size: 10
-                                },
                                 callback: function(value) {
-                                    return `${value}s`;
+                                    return value.toFixed(1) + 's';
                                 }
-                            }
+                            },
+                            title: { display: true, text: '时间 (秒)', color: '#94a3b8' },
+                            beginAtZero: true
                         }
                     }
                 }
             });
         }
         
-        // ==================== 节拍器功能 ====================
-        function startMetronome() {
-            if (metronomeInterval) {
-                clearInterval(metronomeInterval);
-            }
+        // 更新统计图表
+        function updateChart() {
+            if (!window.statsChart) return;
             
-            document.getElementById('metronomeIndicator').classList.remove('hidden');
-            
-            metronomeInterval = setInterval(() => {
-                playMetronomeSound();
-            }, 1000); // 每秒一次
+            const recentTimes = times.slice(-20).filter(time => typeof time === 'number');
+            window.statsChart.data.labels = recentTimes.map((_, i) => (i + 1).toString());
+            window.statsChart.data.datasets[0].data = recentTimes;
+            window.statsChart.update();
         }
         
-        function stopMetronome() {
-            if (metronomeInterval) {
-                clearInterval(metronomeInterval);
-                metronomeInterval = null;
-            }
-            
-            document.getElementById('metronomeIndicator').classList.add('hidden');
+        // 更新UI状态
+        function updateUI() {
+            updateControlHint();
         }
         
-        function playMetronomeSound() {
-            try {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.05);
-                
-                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.1);
-            } catch (e) {
-                console.log('节拍器声音播放失败:', e);
-            }
-        }
-        
-        // ==================== 个性化设置功能 ====================
-        function applyTheme(color) {
-            const root = document.documentElement;
-            
-            if (color === 'green') {
-                root.style.setProperty('--primary-blue', '#10b981');
-                root.style.setProperty('--secondary-blue', '#0da271');
-                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #10b981, #0da271, #059669)');
-            } else if (color === 'purple') {
-                root.style.setProperty('--primary-blue', '#8b5cf6');
-                root.style.setProperty('--secondary-blue', '#7c3aed');
-                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #8b5cf6, #7c3aed, #6d28d9)');
-            } else if (color === 'red') {
-                root.style.setProperty('--primary-blue', '#ef4444');
-                root.style.setProperty('--secondary-blue', '#dc2626');
-                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #ef4444, #dc2626, #b91c1c)');
-            } else {
-                // 蓝色主题（默认）
-                root.style.setProperty('--primary-blue', '#3b82f6');
-                root.style.setProperty('--secondary-blue', '#0ea5e9');
-                root.style.setProperty('--cube-gradient', 'linear-gradient(135deg, #3b82f6, #8b5cf6, #0ea5e9)');
-            }
-        }
-        
-        function applyFontSize(size) {
-            const timeDisplay = document.getElementById('timeDisplay');
-            
-            if (size === 'large') {
-                timeDisplay.style.fontSize = '7.5rem';
-                timeDisplay.classList.remove('small', 'tiny');
-            } else if (size === 'xlarge') {
-                timeDisplay.style.fontSize = '8.5rem';
-                timeDisplay.classList.remove('small', 'tiny');
-            } else {
-                timeDisplay.style.fontSize = '';
-                // 根据当前时间调整
-                const currentTime = timeDisplay.textContent;
-                if (currentTime.length > 8) {
-                    timeDisplay.className = 'time-display tiny';
-                } else if (currentTime.length > 7) {
-                    timeDisplay.className = 'time-display small';
-                } else {
-                    timeDisplay.className = 'time-display';
-                }
-            }
-        }
-        
-        // ==================== 数据导出功能 ====================
-        function exportData() {
-            const format = document.getElementById('exportFormatSelect').value;
-            let dataStr, fileName, mimeType;
-            
-            if (format === 'csv') {
-                // 创建CSV内容
-                let csvContent = "序号,时间(毫秒),时间(显示),打乱,日期,魔方类型\n";
-                
-                solveTimes.forEach((record, index) => {
-                    const row = [
-                        index + 1,
-                        record.time,
-                        formatTimeForDisplay(record.time),
-                        `"${record.scramble.replace(/"/g, '""')}"`,
-                        record.date,
-                        record.cubeType
-                    ];
-                    csvContent += row.join(',') + '\n';
-                });
-                
-                dataStr = csvContent;
-                fileName = `buzhidao_cubetimer_${new Date().toISOString().slice(0,10)}.csv`;
-                mimeType = 'text/csv;charset=utf-8;';
-            } else if (format === 'json') {
-                dataStr = JSON.stringify(solveTimes, null, 2);
-                fileName = `buzhidao_cubetimer_${new Date().toISOString().slice(0,10)}.json`;
-                mimeType = 'application/json';
-            } else { // txt
-                let txtContent = `Buzhidao CubeTimer 数据导出 - ${new Date().toLocaleDateString('zh-CN')}\n`;
-                txtContent += "=".repeat(50) + "\n\n";
-                
-                solveTimes.forEach((record, index) => {
-                    txtContent += `记录 #${index + 1}\n`;
-                    txtContent += `时间: ${formatTimeForDisplay(record.time)}\n`;
-                    txtContent += `打乱: ${record.scramble}\n`;
-                    txtContent += `日期: ${record.date}\n`;
-                    txtContent += `魔方类型: ${record.cubeType}\n`;
-                    txtContent += "-".repeat(30) + "\n";
-                });
-                
-                dataStr = txtContent;
-                fileName = `buzhidao_cubetimer_${new Date().toISOString().slice(0,10)}.txt`;
-                mimeType = 'text/plain';
-            }
-            
-            // 创建下载链接
-            const blob = new Blob([dataStr], { type: mimeType });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            alert(`数据已导出为 ${fileName}`);
-        }
-        
-        function clearAllData() {
-            if (confirm('确定要清除所有记录吗？此操作不可撤销！')) {
-                solveTimes = [];
-                localStorage.removeItem('buzhidao_cubetimer_times');
-                updateRecordsTable();
-                updateStats();
-                updateChart();
-                updateMiniChart();
-                alert('所有记录已清除！');
-            }
-        }
-        
-        // ==================== 声音功能 ====================
-        function playTimerSound() {
-            // 创建简单的计时结束声音
-            try {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
-                
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.3);
-            } catch (e) {
-                console.log('音频播放失败:', e);
-            }
-        }
-        
-        // ==================== 事件监听器 ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            // 初始化
-            loadData();
-            generateNewScramble();
-            updateTimerDisplay();
-            
-            // 设置触摸控制
-            setupTouchControls();
-            
-            // 设置移动端按钮
-            if (isMobileDevice) {
-                setupMobileButtons();
-                document.getElementById('touchHint').style.display = 'block';
-            }
-            
-            // 计时器按钮事件
-            document.getElementById('startBtn').addEventListener('click', function() {
-                if (!timerRunning && !readyToStart) {
-                    readyToStart = true;
-                    this.textContent = '松开开始';
-                    this.classList.add('pulse');
-                    document.getElementById('touchInstruction').textContent = '松开开始计时';
-                    document.getElementById('touchControlArea').classList.add('ready');
-                    document.getElementById('timeDisplay').classList.add('ready');
-                    document.getElementById('timerContainer').classList.add('touch-ready');
-                }
-            });
-            
-            document.getElementById('stopBtn').addEventListener('click', stopTimer);
-            document.getElementById('resetBtn').addEventListener('click', resetTimer);
-            
-            // 打乱按钮事件
-            document.getElementById('newScrambleBtn').addEventListener('click', generateNewScramble);
-            document.getElementById('copyScrambleBtn').addEventListener('click', copyScrambleToClipboard);
-            document.getElementById('showSolutionBtn').addEventListener('click', showSolution);
-            
-            // 打乱公式展开/收起
-            document.getElementById('toggleScrambleBtn').addEventListener('click', function() {
-                const scrambleDisplay = document.getElementById('scrambleDisplay');
-                scrambleDisplay.classList.toggle('expanded');
-                this.textContent = scrambleDisplay.classList.contains('expanded') ? '收起' : '展开';
-            });
-            
-            // 魔方类型选择
-            document.querySelectorAll('.cube-type').forEach(type => {
-                type.addEventListener('click', function() {
-                    document.querySelectorAll('.cube-type').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentCubeType = this.getAttribute('data-cube');
-                    generateNewScramble();
-                    updateStats(); // 更新针对当前魔方类型的统计
-                });
-            });
-            
-            // 设置更改事件
-            document.getElementById('themeColorSelect').addEventListener('change', function() {
-                applyTheme(this.value);
-                saveData();
-            });
-            
-            document.getElementById('fontSizeSelect').addEventListener('change', function() {
-                applyFontSize(this.value);
-                saveData();
-            });
-            
-            document.getElementById('timeFormatSelect').addEventListener('change', function() {
-                updateTimerDisplay();
-                saveData();
-            });
-            
-            // 节拍器开关
-            document.getElementById('metronomeToggle').addEventListener('change', function() {
-                if (this.checked) {
-                    startMetronome();
-                } else {
-                    stopMetronome();
-                }
-                saveData();
-            });
-            
-            // 其他设置保存
-            const settingInputs = [
-                'soundToggle', 'vibrationToggle', 'scrambleLengthSelect', 
-                'wcaScrambleToggle', 'animationsToggle', 'autoSaveToggle', 
-                'exportFormatSelect'
-            ];
-            
-            settingInputs.forEach(inputId => {
-                document.getElementById(inputId).addEventListener('change', saveData);
-            });
-            
-            // 数据管理按钮
-            document.getElementById('exportDataBtn').addEventListener('click', exportData);
-            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
-            
-            // 键盘事件监听（桌面端）
-            if (!isMobileDevice) {
-                document.addEventListener('keydown', handleKeyDown);
-                document.addEventListener('keyup', handleKeyUp);
-            }
-            
-            // 导航点击事件
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // 移除所有active类
-                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-                    // 添加当前active类
-                    this.classList.add('active');
-                    
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 60,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // 响应式调整
-            window.addEventListener('resize', function() {
-                updateChart();
-                updateMiniChart();
-            });
-        });
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

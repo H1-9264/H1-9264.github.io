@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>buzhidao edu - 数学学习平台</title>
+    <meta name="description" content="极简数学学习工具">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="top-bar">
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <span class="logo-text">buzhidao edu</span>
+            </div>
+
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="math">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        <path d="M8 7h8M8 11h8M8 15h4"/>
+                    </svg>
+                    数学
+                </button>
+                <button class="nav-tab" data-tab="tools">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                    工具
+                </button>
+                <button class="nav-tab" data-tab="feedback">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                    反馈
+                </button>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" title="切换主题">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+            </button>
+        </header>
+
+        <!-- 主画布区域 -->
+        <section class="canvas-section">
+            <div class="canvas-header">
+                <div class="canvas-title">
+                    <input type="text" id="canvasTitle" value="函数图像" placeholder="输入标题...">
+                </div>
+                <div class="canvas-actions">
+                    <button class="icon-btn" id="addPointBtn" title="添加点">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <line x1="12" y1="5" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" id="resetViewBtn" title="重置视图">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" id="fullscreenBtn" title="全屏">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="mainCanvas"></canvas>
+                <div class="canvas-info" id="canvasInfo">x: [-10, 10] y: [-10, 10]</div>
+                <div class="formula-overlay" id="formulaOverlay"></div>
+            </div>
+        </section>
+
+        <!-- 控制面板 -->
+        <aside class="control-panel">
+            <!-- 数学面板 -->
+            <div class="tab-content active" id="math">
+                <!-- 函数输入 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20h9"/>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                            </svg>
+                            输入函数
+                        </span>
+                        <span class="panel-toggle">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <input type="text" id="functionInput" class="form-input" placeholder="输入函数表达式，如 sin(x), x^2...">
+                        </div>
+                        <div class="form-group">
+                            <select id="presetSelect" class="form-input">
+                                <option value="">选择预设函数...</option>
+                                <option value="sin(x)">sin(x) - 正弦</option>
+                                <option value="cos(x)">cos(x) - 余弦</option>
+                                <option value="tan(x)">tan(x) - 正切</option>
+                                <option value="x^2">x² - 平方</option>
+                                <option value="x^3">x³ - 立方</option>
+                                <option value="sqrt(x)">√x - 平方根</option>
+                                <option value="abs(x)">|x| - 绝对值</option>
+                                <option value="1/x">1/x - 反函数</option>
+                                <option value="exp(x)">eˣ - 指数</option>
+                                <option value="log(x)">log(x) - 对数</option>
+                                <option value="ln(x)">ln(x) - 自然对数</option>
+                                <option value="sin(x)+cos(x)">sin(x)+cos(x)</option>
+                                <option value="x*sin(x)">x·sin(x)</option>
+                                <option value="sin(x^2)">sin(x²)</option>
+                                <option value="exp(-x^2)">e^(-x²) - 高斯</option>
+                            </select>
+                        </div>
+
+                        <!-- 数学符号键盘 -->
+                        <div class="form-group">
+                            <label class="form-label">快捷输入</label>
+                            <div class="math-keyboard" id="mathKeyboard">
+                                <button class="math-key func" data-symbol="sin(">sin</button>
+                                <button class="math-key func" data-symbol="cos(">cos</button>
+                                <button class="math-key func" data-symbol="tan(">tan</button>
+                                <button class="math-key func" data-symbol="log(">log</button>
+                                <button class="math-key func" data-symbol="ln(">ln</button>
+                                <button class="math-key func" data-symbol="sqrt(">√</button>
+                                <button class="math-key func" data-symbol="abs(">|x|</button>
+                                <button class="math-key operator" data-symbol="^">^</button>
+                                <button class="math-key operator" data-symbol="π">π</button>
+                                <button class="math-key operator" data-symbol="e">e</button>
+                                <button class="math-key operator" data-symbol="(">(</button>
+                                <button class="math-key operator" data-symbol=")">)</button>
+                                <button class="math-key operator" data-symbol="x">x</button>
+                                <button class="math-key operator" data-symbol="+">+</button>
+                                <button class="math-key operator" data-symbol="-">−</button>
+                                <button class="math-key operator" data-symbol="*">×</button>
+                                <button class="math-key operator" data-symbol="/">÷</button>
+                                <button class="math-key operator" data-symbol="2">x²</button>
+                                <button class="math-key operator" data-symbol="3">x³</button>
+                            </div>
+                        </div>
+
+                        <button id="addFunctionBtn" class="btn btn-primary btn-block">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            添加函数
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 函数列表 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6"/>
+                                <line x1="8" y1="12" x2="21" y2="12"/>
+                                <line x1="8" y1="18" x2="21" y2="18"/>
+                                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            </svg>
+                            函数列表
+                        </span>
+                        <span class="panel-toggle">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="function-list" id="functionList">
+                            <!-- 函数项将通过JS动态生成 -->
+                        </div>
+                        <div class="toolbar">
+                            <button id="drawBtn" class="btn btn-primary">绘制</button>
+                            <button id="clearBtn" class="btn btn-secondary">清除</button>
+                            <button id="downloadBtn" class="btn btn-success">下载</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 坐标设置 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 2v20M2 12h20"/>
+                            </svg>
+                            坐标设置
+                        </span>
+                        <span class="panel-toggle">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">X最小值</label>
+                                <input type="number" id="xMin" class="form-input" value="-10" step="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">X最大值</label>
+                                <input type="number" id="xMax" class="form-input" value="10" step="1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Y最小值</label>
+                                <input type="number" id="yMin" class="form-input" value="-10" step="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Y最大值</label>
+                                <input type="number" id="yMax" class="form-input" value="10" step="1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="ratioCheck">
+                                <span>1:1 等比例</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="gridCheck" checked>
+                                <span>显示网格</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="axisCheck" checked>
+                                <span>显示坐标轴</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="labelsCheck" checked>
+                                <span>显示刻度</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 显示选项 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            显示选项
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="intersectionCheck" checked>
+                                <span>显示交点</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="formulaCheck">
+                                <span>显示函数解析式</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" id="pointsCheck" checked>
+                                <span>显示添加的点</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 线宽设置 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 12h16"/>
+                            </svg>
+                            线宽设置
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span class="form-label">线条粗细</span>
+                                <span class="slider-value" id="lineWidthValue">2px</span>
+                            </div>
+                            <input type="range" id="lineWidth" min="1" max="10" value="2" step="0.5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 点管理 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <line x1="12" y1="5" x2="12" y2="3"/>
+                                <line x1="12" y1="21" x2="12" y2="19"/>
+                            </svg>
+                            点管理
+                        </span>
+                        <span class="panel-toggle">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="panel-content collapsed" id="pointsPanel">
+                        <div class="points-list" id="pointsList">
+                            <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">点击画布上的添加点按钮来添加点</p>
+                        </div>
+                        <button id="clearPointsBtn" class="btn btn-secondary btn-block">清除所有点</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工具面板 -->
+            <div class="tab-content" id="tools">
+                <!-- 计算器 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                                <line x1="8" y1="6" x2="16" y2="6"/>
+                                <line x1="8" y1="10" x2="8" y2="10.01"/>
+                                <line x1="12" y1="10" x2="12" y2="10.01"/>
+                                <line x1="16" y1="10" x2="16" y2="10.01"/>
+                                <line x1="8" y1="14" x2="8" y2="14.01"/>
+                                <line x1="12" y1="14" x2="12" y2="14.01"/>
+                                <line x1="16" y1="14" x2="16" y2="14.01"/>
+                                <line x1="8" y1="18" x2="8" y2="18.01"/>
+                                <line x1="12" y1="18" x2="12" y2="18.01"/>
+                                <line x1="16" y1="18" x2="16" y2="18.01"/>
+                            </svg>
+                            计算器
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <input type="text" id="calcInput" class="form-input" placeholder="输入计算表达式...">
+                        <div id="calcResult" style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px; margin-top: 0.5rem; font-family: monospace; font-size: 1.1rem; min-height: 45px;">0</div>
+                        <div class="calc-keypad" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-top: 0.75rem;">
+                            <button class="math-key func" onclick="calcInput('Math.sqrt(')">√</button>
+                            <button class="math-key func" onclick="calcInput('Math.pow(')">xⁿ</button>
+                            <button class="math-key func" onclick="calcInput('(')">(</button>
+                            <button class="math-key func" onclick="calcInput(')')">)</button>
+                            <button class="math-key func" onclick="calcInput('**')">^</button>
+                            <button class="math-key" onclick="calcInput('7')">7</button>
+                            <button class="math-key" onclick="calcInput('8')">8</button>
+                            <button class="math-key" onclick="calcInput('9')">9</button>
+                            <button class="math-key func" onclick="calcInput('/')">÷</button>
+                            <button class="math-key func" onclick="calcInput('Math.PI')">π</button>
+                            <button class="math-key" onclick="calcInput('4')">4</button>
+                            <button class="math-key" onclick="calcInput('5')">5</button>
+                            <button class="math-key" onclick="calcInput('6')">6</button>
+                            <button class="math-key func" onclick="calcInput('*')">×</button>
+                            <button class="math-key func" onclick="calcInput('Math.E')">e</button>
+                            <button class="math-key" onclick="calcInput('1')">1</button>
+                            <button class="math-key" onclick="calcInput('2')">2</button>
+                            <button class="math-key" onclick="calcInput('3')">3</button>
+                            <button class="math-key func" onclick="calcInput('-')">−</button>
+                            <button class="math-key func" onclick="calcClear()">C</button>
+                            <button class="math-key" onclick="calcInput('0')">0</button>
+                            <button class="math-key" onclick="calcInput('.')">.</button>
+                            <button class="math-key func" onclick="calcCalculate()">=</button>
+                            <button class="math-key func" onclick="calcInput('+')">+</button>
+                        </div>
+                        <button class="btn btn-secondary btn-block" style="margin-top: 0.5rem;" onclick="calcClear()">清除</button>
+                    </div>
+                </div>
+
+                <!-- 单位换算 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                            单位换算
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label class="form-label">类型</label>
+                            <select id="unitType" class="form-input" onchange="updateUnitOptions()">
+                                <option value="length">长度</option>
+                                <option value="weight">重量</option>
+                                <option value="temperature">温度</option>
+                                <option value="area">面积</option>
+                                <option value="volume">体积</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">从</label>
+                                <input type="number" id="unitFrom" class="form-input" placeholder="数值">
+                                <select id="unitFromSelect" class="form-input" style="margin-top: 0.25rem;"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">到</label>
+                                <input type="number" id="unitTo" class="form-input" readonly>
+                                <select id="unitToSelect" class="form-input" style="margin-top: 0.25rem;"></select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="convertUnit()">转换</button>
+                    </div>
+                </div>
+
+                <!-- 公式库 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            公式库
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <select id="formulaCategory" class="form-input" onchange="updateFormulaList()">
+                                <option value="algebra">代数</option>
+                                <option value="geometry">几何</option>
+                                <option value="trigonometry">三角函数</option>
+                                <option value="calculus">微积分</option>
+                            </select>
+                        </div>
+                        <div id="formulaList" style="max-height: 250px; overflow-y: auto;">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 随机题 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            随机题
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label class="form-label">题目类型</label>
+                            <select id="questionType" class="form-input">
+                                <option value="arithmetic">四则运算</option>
+                                <option value="equation">解方程</option>
+                                <option value="simplify">化简表达式</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="generateQuestion()">生成题目</button>
+                        <div id="questionArea" style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 10px; display: none;">
+                            <p id="questionText" style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem;"></p>
+                            <input type="text" id="answerInput" class="form-input" placeholder="输入答案...">
+                            <button class="btn btn-success btn-block" style="margin-top: 0.5rem;" onclick="checkAnswer()">检查答案</button>
+                            <p id="answerResult" style="margin-top: 0.5rem; font-weight: 600;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 笔记 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                            笔记
+                        </span>
+                    </div>
+                    <div class="panel-content">
+                        <textarea id="notesArea" class="form-input" style="min-height: 150px; resize: vertical;" placeholder="在此记录笔记..."></textarea>
+                        <button class="btn btn-primary btn-block" style="margin-top: 0.5rem;" onclick="saveNotes()">保存笔记</button>
+                    </div>
+                </div>
+
+                <!-- 快捷操作 -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">快捷操作</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <button id="downloadBtn2" class="btn btn-success btn-block">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                下载图像
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button id="resetAllBtn" class="btn btn-danger btn-block">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                </svg>
+                                重置全部
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 反馈面板 -->
+            <div class="tab-content" id="feedback">
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                            </svg>
+                            反馈
+                        </span>
+                    </div>
+                    <div class="panel-content" style="padding: 0; height: 600px;">
+                        <iframe src="https://tally.so/embed/eqL8do?transparentBackground=1" frameborder="0" width="100%" height="100%" style="border-radius: 0 0 16px 16px;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 消息提示 -->
+    <div class="toast" id="toast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+        </svg>
+        <span id="toastMessage">提示消息</span>
+    </div>
+
+    <!-- 添加点模态框 -->
+    <div class="modal-overlay" id="pointModal">
+        <div class="modal" style="max-width: 350px;">
+            <div class="modal-header">
+                <h3 class="modal-title">添加点</h3>
+                <button class="modal-close" onclick="closePointModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="panel-content">
+                <div class="form-group">
+                    <label class="form-label">X坐标</label>
+                    <input type="number" id="pointX" class="form-input" value="0" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Y坐标</label>
+                    <input type="number" id="pointY" class="form-input" value="0" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">标签（可选）</label>
+                    <input type="text" id="pointLabel" class="form-input" placeholder="如 A, P1...">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-group">
+                        <input type="checkbox" id="pointShowCoords" checked>
+                        <span>显示坐标</span>
+                    </label>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="addPointFromModal()">添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="functionModal">
+            <div class="modal-header">
+                <h3 class="modal-title">函数信息</h3>
+                <button class="modal-close" id="modalClose">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-content" id="modalContent">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // ==================== 计算器功能 ====================
+        function calcInput(val) {
+            const input = document.getElementById('calcInput');
+            input.value += val;
+        }
+
+        function calcCalculate() {
+            try {
+                const input = document.getElementById('calcInput');
+                const result = eval(input.value.replace(/×/g, '*').replace(/÷/g, '/'));
+                document.getElementById('calcResult').textContent = isFinite(result) ? result : 'Error';
+            } catch (e) {
+                document.getElementById('calcResult').textContent = 'Error';
+            }
+        }
+
+        function calcClear() {
+            document.getElementById('calcInput').value = '';
+            document.getElementById('calcResult').textContent = '0';
+        }
+
+        // ==================== 单位换算 ====================
+        const unitData = {
+            length: { m: 1, km: 1000, cm: 0.01, mm: 0.001, mi: 1609.344, ft: 0.3048, in: 0.0254, yd: 0.9144 },
+            weight: { kg: 1, g: 0.001, mg: 0.000001, t: 1000, lb: 0.453592, oz: 0.0283495 },
+            temperature: { C: 1, F: 1, K: 1 }, // 特殊处理
+            area: { m2: 1, km2: 1000000, cm2: 0.0001, ha: 10000, acre: 4046.8564224 },
+            volume: { L: 1, mL: 0.001, m3: 1000, cm3: 0.001, gal: 3.78541 }
+        };
+
+        function updateUnitOptions() {
+            const type = document.getElementById('unitType').value;
+            const units = Object.keys(unitData[type]);
+            const fromSelect = document.getElementById('unitFromSelect');
+            const toSelect = document.getElementById('unitToSelect');
+
+            fromSelect.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+            toSelect.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+
+            if (units.length > 1) toSelect.selectedIndex = 1;
+        }
+
+        function convertUnit() {
+            const type = document.getElementById('unitType').value;
+            const value = parseFloat(document.getElementById('unitFrom').value);
+            const fromUnit = document.getElementById('unitFromSelect').value;
+            const toUnit = document.getElementById('unitToSelect').value;
+
+            if (isNaN(value)) {
+                showToast('请输入数值', 'warning');
+                return;
+            }
+
+            let result;
+            if (type === 'temperature') {
+                // 温度特殊处理
+                let celsius;
+                if (fromUnit === 'C') celsius = value;
+                else if (fromUnit === 'F') celsius = (value - 32) * 5 / 9;
+                else celsius = value - 273.15;
+
+                if (toUnit === 'C') result = celsius;
+                else if (toUnit === 'F') result = celsius * 9 / 5 + 32;
+                else result = celsius + 273.15;
+            } else {
+                result = value * unitData[type][fromUnit] / unitData[type][toUnit];
+            }
+
+            document.getElementById('unitTo').value = result.toFixed(6);
+        }
+
+        // 初始化单位选项
+        updateUnitOptions();
+
+        // ==================== 公式库 ====================
+        const formulas = {
+            algebra: [
+                { name: '求根公式', formula: 'x = (-b ± √(b²-4ac)) / 2a' },
+                { name: '完全平方', formula: '(a+b)² = a² + 2ab + b²' },
+                { name: '平方差', formula: 'a² - b² = (a+b)(a-b)' },
+                { name: '立方和', formula: 'a³ + b³ = (a+b)(a²-ab+b²)' },
+                { name: '立方差', formula: 'a³ - b³ = (a-b)(a²+ab+b²)' },
+                { name: '等差数列', formula: 'Sn = n(a1+an)/2' },
+                { name: '等比数列', formula: 'Sn = a1(1-q^n)/(1-q)' },
+            ],
+            geometry: [
+                { name: '圆面积', formula: 'S = πr²' },
+                { name: '圆周长', formula: 'C = 2πr' },
+                { name: '三角形面积', formula: 'S = ½ah' },
+                { name: '勾股定理', formula: 'a² + b² = c²' },
+                { name: '球的体积', formula: 'V = (4/3)πr³' },
+                { name: '球的表面积', formula: 'S = 4πr²' },
+                { name: '圆柱体积', formula: 'V = πr²h' },
+            ],
+            trigonometry: [
+                { name: '正弦定理', formula: 'a/sinA = b/sinB = c/sinC' },
+                { name: '余弦定理', formula: 'c² = a² + b² - 2ab·cosC' },
+                { name: 'sin²x+cos²x', formula: 'sin²x + cos²x = 1' },
+                { name: 'tan定义', formula: 'tanx = sinx/cosx' },
+                { name: '二倍角', formula: 'sin2x = 2sinx·cosx' },
+                { name: '和差化积', formula: 'sinα+sinβ = 2sin((α+β)/2)cos((α-β)/2)' },
+            ],
+            calculus: [
+                { name: '幂函数导数', formula: 'd/dx(xⁿ) = nxⁿ⁻¹' },
+                { name: '指数导数', formula: 'd/dx(eˣ) = eˣ' },
+                { name: '对数导数', formula: 'd/dx(lnx) = 1/x' },
+                { name: '链式法则', formula: 'd/dx[f(g(x))] = f\'(g(x))·g\'(x)' },
+                { name: '分部积分', formula: '∫u·dv = uv - ∫v·du' },
+                { name: '基本积分', formula: '∫xⁿdx = xⁿ⁺¹/(n+1) + C' },
+            ]
+        };
+
+        function updateFormulaList() {
+            const category = document.getElementById('formulaCategory').value;
+            const list = document.getElementById('formulaList');
+            list.innerHTML = formulas[category].map(f => `
+                <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px; margin-bottom: 0.5rem;">
+                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${f.name}</div>
+                    <div style="font-family: monospace; color: var(--accent);">${f.formula}</div>
+                </div>
+            `).join('');
+        }
+
+        updateFormulaList();
+
+        // ==================== 随机题 ====================
+        let currentQuestion = {};
+        let currentAnswer = '';
+
+        function generateQuestion() {
+            const type = document.getElementById('questionType').value;
+            const area = document.getElementById('questionArea');
+            area.style.display = 'block';
+
+            if (type === 'arithmetic') {
+                const a = Math.floor(Math.random() * 50) + 1;
+                const b = Math.floor(Math.random() * 50) + 1;
+                const ops = ['+', '-', '*', '/'];
+                const op = ops[Math.floor(Math.random() * ops.length)];
+
+                if (op === '/') {
+                    const divisor = Math.floor(Math.random() * 10) + 1;
+                    currentAnswer = divisor;
+                    currentQuestion = { text: `${divisor * b} ÷ ${b} = ?`, answer: divisor };
+                } else if (op === '-') {
+                    currentAnswer = a - b;
+                    currentQuestion = { text: `${a} - ${b} = ?`, answer: a - b };
+                } else if (op === '*') {
+                    currentAnswer = a * b;
+                    currentQuestion = { text: `${a} × ${b} = ?`, answer: a * b };
+                } else {
+                    currentAnswer = a + b;
+                    currentQuestion = { text: `${a} + ${b} = ?`, answer: a + b };
+                }
+            } else if (type === 'equation') {
+                const x = Math.floor(Math.random() * 10) - 5;
+                const a = Math.floor(Math.random() * 9) + 1;
+                const b = a * x + Math.floor(Math.random() * 20) - 10;
+                currentQuestion = { text: `${a}x + ${b} = 0, 求 x`, answer: x };
+                currentAnswer = x;
+            } else if (type === 'simplify') {
+                const exprs = [
+                    { text: '化简: 2(x + 3)', answer: '2x + 6' },
+                    { text: '化简: (x + 1)²', answer: 'x² + 2x + 1' },
+                    { text: '化简: x² - 9', answer: '(x+3)(x-3)' },
+                    { text: '化简: 3x + 5x', answer: '8x' },
+                ];
+                currentQuestion = exprs[Math.floor(Math.random() * exprs.length)];
+                currentAnswer = currentQuestion.answer;
+            }
+
+            document.getElementById('questionText').textContent = currentQuestion.text;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerResult').textContent = '';
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim();
+            const result = document.getElementById('answerResult');
+
+            if (userAnswer == currentAnswer) {
+                result.textContent = '✓ 正确！';
+                result.style.color = 'var(--success)';
+            } else {
+                result.textContent = `✗ 错误，正确答案是: ${currentAnswer}`;
+                result.style.color = 'var(--error)';
+            }
+        }
+
+        // ==================== 笔记 ====================
+        function saveNotes() {
+            const notes = document.getElementById('notesArea').value;
+            localStorage.setItem('buzhidao_notes', notes);
+            showToast('笔记已保存', 'success');
+        }
+
+        // 加载保存的笔记
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('buzhidao_notes');
+            if (saved) {
+                document.getElementById('notesArea').value = saved;
+            }
+        });
+
+        // ==================== 点管理 ====================
+        function showPointModal() {
+            document.getElementById('pointModal').classList.add('show');
+        }
+
+        function closePointModal() {
+            document.getElementById('pointModal').classList.remove('show');
+        }
+
+        function addPointFromModal() {
+            const x = parseFloat(document.getElementById('pointX').value) || 0;
+            const y = parseFloat(document.getElementById('pointY').value) || 0;
+            const label = document.getElementById('pointLabel').value;
+            const showCoords = document.getElementById('pointShowCoords').checked;
+
+            if (window.buzhidao) {
+                window.buzhidao.addPoint(x, y, label, showCoords);
+            }
+            closePointModal();
+        }
+
+        // 绑定添加点按钮
+        document.getElementById('addPointBtn').addEventListener('click', showPointModal);
+    </script>
+</body>
+</html>

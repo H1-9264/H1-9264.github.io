@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-mode="china">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>英语learn · 英语学习导航</title>
+<script>
+  try {
+    document.documentElement.dataset.theme = localStorage.getItem('englearn:theme') || 'dark';
+    document.documentElement.dataset.mode  = localStorage.getItem('englearn:mode')  || 'china';
+  } catch (e) {
+    document.documentElement.dataset.theme = 'dark';
+    document.documentElement.dataset.mode  = 'china';
+  }
+</script>
+<style>
+/* ==========================================================
+   主题变量 —— 高对比度橙绿配色
+   ========================================================== */
+html[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#080d0b;
+  --bg-grad-1:rgba(16,185,129,.16);
+  --bg-grad-2:rgba(245,158,11,.12);
+  --bg-grad-3:rgba(34,197,94,.10);
+  --surface:rgba(255,255,255,.055);
+  --surface-2:rgba(255,255,255,.095);
+  --text:#f2f7f4;
+  --text-dim:#c0d0c6;
+  --muted:#8fa094;
+  --border:rgba(255,255,255,.1);
+  --border-strong:rgba(52,211,153,.6);
+  --accent:#34d399;
+  --accent-2:#fbbf24;
+  --accent-warm:#fbbf24;
+  --chip-bg:rgba(255,255,255,.055);
+  --input-bg:rgba(255,255,255,.055);
+  --shadow:0 18px 40px rgba(0,0,0,.6);
+  --ok:#4ade80;
+  --warn:#fbbf24;
+  --bad:#f87171;
+}
+html[data-theme="light"]{
+  color-scheme: light;
+  --bg:#f6faf6;
+  --bg-grad-1:rgba(16,185,129,.09);
+  --bg-grad-2:rgba(245,158,11,.07);
+  --bg-grad-3:rgba(34,197,94,.06);
+  --surface:rgba(255,255,255,.85);
+  --surface-2:#ffffff;
+  --text:#0d1a12;
+  --text-dim:#2d4436;
+  --muted:#5a7263;
+  --border:rgba(15,50,30,.1);
+  --border-strong:rgba(16,185,129,.5);
+  --accent:#047857;
+  --accent-2:#b45309;
+  --accent-warm:#b45309;
+  --chip-bg:rgba(255,255,255,.8);
+  --input-bg:rgba(255,255,255,.9);
+  --shadow:0 18px 40px rgba(30,80,50,.14);
+  --ok:#059669;
+  --warn:#b45309;
+  --bad:#b91c1c;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+*{ margin:0; padding:0; }
+:root{ --radius:16px; --ease:cubic-bezier(.2,.8,.3,1); }
+
+body{
+  min-height:100vh;
+  padding:0 18px 80px;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+              "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color:var(--text);
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(900px 520px at 10% -8%, var(--bg-grad-1), transparent 65%),
+    radial-gradient(820px 460px at 94% 2%, var(--bg-grad-2), transparent 65%),
+    radial-gradient(900px 620px at 50% 108%, var(--bg-grad-3), transparent 65%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .35s, color .35s;
+}
+
+.wrap{ max-width:1160px; margin:0 auto; }
+
+/* ==========================================================
+   顶栏
+   ========================================================== */
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:26px 0 16px; flex-wrap:wrap;
+}
+.brand{ display:flex; align-items:center; gap:14px; }
+.logo{
+  width:46px; height:46px; border-radius:14px;
+  display:grid; place-items:center;
+  font-size:17px; font-weight:800; letter-spacing:-.5px;
+  color:#08281a;
+  background:linear-gradient(135deg,#34d399,#fbbf24);
+  box-shadow:0 8px 22px rgba(52,211,153,.35);
+  flex:0 0 auto;
+}
+html[data-theme="light"] .logo{ color:#fff; }
+h1{ font-size:1.5rem; font-weight:800; letter-spacing:-.7px; line-height:1.1; }
+.tagline{ font-size:12.5px; color:var(--muted); margin-top:4px; }
+
+.top-actions{ display:flex; gap:9px; align-items:center; flex-wrap:wrap; }
+.icon-btn{
+  height:42px; min-width:42px; padding:0 13px; border-radius:13px;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  font-family:inherit; font-size:13px; font-weight:700; color:var(--text);
+  background:var(--surface);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  cursor:pointer; white-space:nowrap;
+  transition:transform .22s var(--ease), border-color .22s, color .22s, background .22s;
+}
+.icon-btn:hover{ transform:translateY(-2px); border-color:var(--border-strong); color:var(--accent); }
+.icon-btn:active{ transform:scale(.95); }
+
+/* ==========================================================
+   模式切换
+   ========================================================== */
+.mode-bar{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  padding:13px 18px; margin-bottom:14px;
+  border-radius:18px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+}
+.mode-label{ font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:.4px; }
+.mode-switch{
+  display:inline-flex; padding:4px; gap:4px;
+  border-radius:999px;
+  background:var(--chip-bg);
+  border:1px solid var(--border);
+}
+.mode-btn{
+  padding:8px 20px; border-radius:999px; border:none;
+  font-family:inherit; font-size:13px; font-weight:750;
+  color:var(--text-dim); background:transparent; cursor:pointer;
+  white-space:nowrap;
+  transition:all .25s var(--ease);
+}
+.mode-btn:hover{ color:var(--accent); }
+.mode-btn.active{
+  color:#08281a;
+  background:linear-gradient(135deg,#34d399,#059669);
+  box-shadow:0 6px 16px rgba(52,211,153,.32);
+}
+html[data-theme="light"] .mode-btn.active{ color:#fff; }
+.mode-hint{ font-size:12px; color:var(--muted); margin-left:auto; }
+
+/* ==========================================================
+   ⭐ 精选推荐
+   ========================================================== */
+.featured{
+  position:relative;
+  margin-bottom:16px;
+  padding:20px 22px 18px;
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(52,211,153,.10),rgba(251,191,36,.06));
+  border:1px solid var(--border-strong);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  overflow:hidden;
+  animation:rise .5s var(--ease) backwards;
+}
+.featured::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#34d399,#fbbf24);
+}
+.featured-head{
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:14px; flex-wrap:wrap;
+}
+.featured-head h2{
+  font-size:1.02rem; font-weight:800; letter-spacing:-.3px;
+  display:flex; align-items:center; gap:7px;
+}
+.featured-head .badge{
+  font-size:10px; font-weight:800; letter-spacing:.5px;
+  padding:3px 9px; border-radius:999px;
+  color:#08281a;
+  background:linear-gradient(135deg,#34d399,#fbbf24);
+}
+html[data-theme="light"] .featured-head .badge{ color:#fff; }
+.featured-head .desc{
+  font-size:12px; color:var(--muted);
+  margin-left:auto;
+}
+.featured-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(226px,1fr));
+  gap:10px;
+}
+.fcard{
+  display:flex; align-items:center; gap:11px;
+  padding:11px 13px;
+  border-radius:13px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  text-decoration:none; color:inherit;
+  transition:all .22s var(--ease);
+  min-width:0;
+}
+.fcard:hover{
+  transform:translateY(-2px);
+  border-color:var(--border-strong);
+  background:var(--surface-2);
+  box-shadow:0 8px 20px rgba(52,211,153,.15);
+}
+.fcard-icon{
+  width:34px; height:34px; border-radius:10px;
+  display:grid; place-items:center;
+  font-size:14px; font-weight:800; color:#fff;
+  flex:0 0 auto;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.fcard-body{
+  min-width:0;
+  display:flex; flex-direction:column; gap:2px;
+}
+.fcard-title{
+  font-size:.855rem; font-weight:750;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  letter-spacing:-.1px;
+}
+.fcard-tag{
+  font-size:10.5px; font-weight:700;
+  color:var(--muted);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ==========================================================
+   每日一句
+   ========================================================== */
+.quote-card{
+  position:relative; padding:18px 22px; margin-bottom:14px;
+  border-radius:18px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  overflow:hidden;
+}
+.quote-card::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:linear-gradient(180deg,#34d399,#fbbf24);
+}
+.quote-en{ font-size:.97rem; font-weight:650; line-height:1.65; letter-spacing:-.1px; }
+.quote-zh{ font-size:.82rem; color:var(--muted); margin-top:5px; line-height:1.6; }
+.quote-next{
+  margin-top:10px; padding:0; font-family:inherit; font-size:12px; font-weight:700;
+  color:var(--accent); background:none; border:none; cursor:pointer; opacity:.9;
+  transition:opacity .2s, transform .2s var(--ease);
+}
+.quote-next:hover{ opacity:1; transform:translateX(3px); }
+
+/* ==========================================================
+   搜索
+   ========================================================== */
+.search-wrap{ position:relative; margin-bottom:14px; }
+.search-wrap svg{
+  position:absolute; left:17px; top:50%; transform:translateY(-50%);
+  width:18px; height:18px; color:var(--muted); pointer-events:none;
+}
+#search{
+  width:100%; padding:15px 46px 15px 48px;
+  font-family:inherit; font-size:15px; color:var(--text);
+  background:var(--input-bg); border:1px solid var(--border);
+  border-radius:16px; outline:none;
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  transition:border-color .25s, box-shadow .25s, background .25s;
+}
+#search::placeholder{ color:var(--muted); }
+#search:focus{ border-color:var(--border-strong); box-shadow:0 0 0 4px rgba(52,211,153,.14); }
+.kbd-hint{
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  font-size:11px; font-weight:700; color:var(--muted);
+  border:1px solid var(--border); border-radius:6px; padding:2px 6px; pointer-events:none;
+}
+
+/* ==========================================================
+   统计
+   ========================================================== */
+.stats{
+  display:flex; flex-wrap:wrap; gap:8px 22px;
+  padding:0 4px 14px; font-size:12.5px; color:var(--muted);
+}
+.stats b{ color:var(--text-dim); font-size:13.5px; font-weight:800; }
+
+/* ==========================================================
+   工具栏 / 分类
+   ========================================================== */
+.toolbar{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:14px; flex-wrap:wrap; margin-bottom:20px;
+}
+.chips{ display:flex; flex-wrap:wrap; gap:7px; flex:1; min-width:0; }
+.chip{
+  padding:7px 14px; font-family:inherit; font-size:12.5px; font-weight:650;
+  color:var(--text-dim); background:var(--chip-bg);
+  border:1px solid var(--border); border-radius:999px; white-space:nowrap; cursor:pointer;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  transition:all .22s var(--ease);
+}
+.chip:hover{ color:var(--accent); border-color:var(--border-strong); transform:translateY(-1px); }
+.chip.active{
+  color:#08281a; border-color:transparent;
+  background:linear-gradient(135deg,#34d399,#059669);
+  box-shadow:0 8px 20px rgba(52,211,153,.32);
+}
+html[data-theme="light"] .chip.active{ color:#fff; }
+#sortSel{
+  padding:8px 12px; font-family:inherit; font-size:12.5px; font-weight:650;
+  color:var(--text-dim); background:var(--chip-bg);
+  border:1px solid var(--border); border-radius:12px; cursor:pointer; outline:none;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  transition:border-color .2s;
+}
+#sortSel:hover{ border-color:var(--border-strong); }
+
+/* ==========================================================
+   卡片网格
+   ========================================================== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(272px, 1fr));
+  gap:15px;
+}
+.card{
+  position:relative; display:flex;
+  border-radius:var(--radius);
+  background:var(--surface);
+  border:1px solid var(--border);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  overflow:hidden;
+  transition:transform .3s var(--ease), border-color .3s, box-shadow .3s, background .3s;
+  animation:cardIn .45s var(--ease) backwards;
+}
+.card::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,#34d399,#fbbf24);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+.card:hover{
+  transform:translateY(-5px);
+  background:var(--surface-2);
+  border-color:var(--border-strong);
+  box-shadow:var(--shadow);
+}
+.card:hover::before{ transform:scaleX(1); }
+
+.card-body{
+  flex:1; display:flex; flex-direction:column; gap:9px;
+  padding:17px 17px 15px; text-decoration:none; color:inherit;
+}
+.card-head{ display:flex; gap:11px; align-items:flex-start; padding-right:52px; }
+.avatar{
+  flex:0 0 auto; width:38px; height:38px; border-radius:11px;
+  display:grid; place-items:center;
+  font-size:15px; font-weight:800; color:#fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+}
+.card-title{
+  font-size:.95rem; font-weight:750; line-height:1.42;
+  letter-spacing:-.2px; padding-top:7px;
+}
+.card-desc{ flex:1; font-size:.845rem; line-height:1.6; color:var(--muted); }
+.card-foot{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin-top:2px; flex-wrap:wrap;
+}
+.host{
+  font-size:11px; color:var(--muted);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:60%;
+}
+.zone-badge{
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:10.5px; font-weight:700;
+  padding:2px 8px; border-radius:999px;
+  white-space:nowrap;
+}
+.zone-badge.ok{ color:var(--ok); background:rgba(52,211,153,.14); }
+.zone-badge.warn{ color:var(--warn); background:rgba(251,191,36,.14); }
+.zone-badge.bad{ color:var(--bad); background:rgba(248,113,113,.14); }
+
+.tag{
+  flex:0 0 auto; font-size:10.5px; font-weight:700;
+  padding:2px 8px; border-radius:999px;
+  color:var(--accent); background:rgba(52,211,153,.14);
+}
+.tag.hot{
+  color:var(--accent-warm);
+  background:rgba(251,191,36,.16);
+}
+.hot-badge{
+  position:absolute; top:0; left:0;
+  padding:3px 10px 4px 12px;
+  font-size:10px; font-weight:800; letter-spacing:.4px;
+  color:#08281a; border-bottom-right-radius:12px;
+  z-index:2;
+}
+html[data-theme="light"] .hot-badge{ color:#fff; }
+.hot-badge.h1{ background:linear-gradient(135deg,#34d399,#fbbf24); }
+.hot-badge.h2{ background:linear-gradient(135deg,#22c55e,#84cc16); color:#0a1f13; }
+.hot-badge.h3{ background:linear-gradient(135deg,#fbbf24,#fb923c); color:#3a1e05; }
+
+.card-actions{
+  position:absolute; top:11px; right:11px;
+  display:flex; gap:5px; z-index:3; opacity:.4;
+  transition:opacity .25s;
+}
+.card:hover .card-actions,
+.card:focus-within .card-actions{ opacity:1; }
+.act{
+  width:29px; height:29px; border-radius:8px;
+  display:grid; place-items:center;
+  font-size:13.5px; line-height:1; color:var(--text-dim);
+  background:var(--surface-2); border:1px solid var(--border);
+  cursor:pointer; transition:all .2s var(--ease);
+}
+.act:hover{ color:var(--accent); border-color:var(--border-strong); transform:scale(1.08); }
+.act.on{ color:var(--accent-warm); }
+
+@keyframes cardIn{
+  from{ opacity:0; transform:translateY(14px) scale(.98); }
+  to  { opacity:1; transform:none; }
+}
+@keyframes rise{
+  from{ opacity:0; transform:translateY(10px); }
+  to  { opacity:1; transform:none; }
+}
+
+/* ==========================================================
+   空状态 / 页脚
+   ========================================================== */
+.empty{
+  display:none; margin:60px auto; text-align:center;
+  font-size:15px; color:var(--muted);
+}
+footer{
+  margin-top:50px; text-align:center;
+  font-size:12.5px; line-height:2; color:var(--muted);
+}
+footer code{
+  font-family:ui-monospace, Menlo, Consolas, monospace;
+  font-size:11.5px; padding:2px 7px; border-radius:6px;
+  color:var(--accent); background:rgba(52,211,153,.12);
+}
+footer .mail{
+  display:inline-block;
+  padding:6px 16px; margin-top:8px;
+  border-radius:999px;
+  font-weight:800;
+  color:#08281a;
+  background:linear-gradient(135deg,#34d399,#fbbf24);
+  text-decoration:none;
+  transition:transform .2s var(--ease), box-shadow .2s;
+}
+html[data-theme="light"] footer .mail{ color:#fff; }
+footer .mail:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(52,211,153,.35); }
+
+/* ==========================================================
+   回到顶部 / Toast / 弹窗
+   ========================================================== */
+.to-top{
+  position:fixed; right:22px; bottom:22px;
+  width:44px; height:44px; border-radius:14px;
+  display:grid; place-items:center; font-size:18px; color:var(--text);
+  background:var(--surface-2); border:1px solid var(--border);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  box-shadow:var(--shadow); cursor:pointer; z-index:50;
+  opacity:0; pointer-events:none; transform:translateY(12px);
+  transition:all .3s var(--ease);
+}
+.to-top.show{ opacity:1; pointer-events:auto; transform:none; }
+.to-top:hover{ color:var(--accent); border-color:var(--border-strong); }
+
+.toast{
+  position:fixed; left:50%; bottom:34px;
+  padding:11px 20px; border-radius:14px;
+  font-size:13.5px; font-weight:700; color:#08281a; white-space:nowrap;
+  background:linear-gradient(135deg,#34d399,#fbbf24);
+  box-shadow:0 14px 34px rgba(52,211,153,.4);
+  opacity:0; pointer-events:none; transform:translate(-50%, 20px);
+  transition:all .3s var(--ease); z-index:100;
+}
+html[data-theme="light"] .toast{ color:#fff; }
+.toast.show{ opacity:1; transform:translate(-50%, 0); }
+
+.modal-mask{
+  position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(4px);
+  display:grid; place-items:center; padding:20px;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s var(--ease);
+}
+.modal-mask.show{ opacity:1; pointer-events:auto; }
+.modal{
+  width:100%; max-width:440px;
+  padding:28px 26px;
+  border-radius:20px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  transform:translateY(14px) scale(.97);
+  transition:transform .3s var(--ease);
+}
+.modal-mask.show .modal{ transform:none; }
+.modal h3{ font-size:1.15rem; font-weight:800; margin-bottom:10px; }
+.modal p{ font-size:.88rem; line-height:1.75; color:var(--muted); margin-bottom:8px; }
+.modal .mail-row{
+  display:flex; align-items:center; gap:10px;
+  margin:16px 0 20px;
+  padding:12px 16px;
+  border-radius:14px;
+  background:var(--surface);
+  border:1px solid var(--border-strong);
+}
+.modal .mail-row span{ font-size:14px; font-weight:800; color:var(--accent); }
+.modal-close{
+  width:100%; padding:12px;
+  border-radius:13px; border:none;
+  font-family:inherit; font-size:14px; font-weight:800; color:#08281a;
+  background:linear-gradient(135deg,#34d399,#fbbf24);
+  cursor:pointer;
+  transition:transform .2s var(--ease), box-shadow .2s;
+}
+html[data-theme="light"] .modal-close{ color:#fff; }
+.modal-close:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(52,211,153,.35); }
+
+/* ==========================================================
+   响应式
+   ========================================================== */
+@media (max-width:640px){
+  body{ padding:0 14px 70px; }
+  .topbar{ padding:20px 0 14px; }
+  h1{ font-size:1.3rem; }
+  .logo{ width:42px; height:42px; border-radius:12px; font-size:15px; }
+  .top-actions{ width:100%; }
+  .icon-btn{ flex:1; justify-content:center; }
+  .mode-bar{ padding:12px 14px; gap:8px; }
+  .mode-btn{ padding:7px 15px; font-size:12.5px; }
+  .mode-hint{ display:none; }
+  .featured{ padding:16px 16px 14px; }
+  .featured-grid{ grid-template-columns:1fr; }
+  .featured-head .desc{ display:none; }
+  .quote-card{ padding:16px 18px; }
+  .grid{ grid-template-columns:1fr; gap:13px; }
+  #sortSel{ width:100%; }
+  .kbd-hint{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+}
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{
+  background:rgba(52,211,153,.35); border-radius:999px;
+  border:2px solid transparent; background-clip:content-box;
+}
+::-webkit-scrollbar-thumb:hover{ background:rgba(52,211,153,.6); background-clip:content-box; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ======== 顶栏 ======== -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">EL</div>
+      <div>
+        <h1>英语learn</h1>
+        <p class="tagline">双模式英语学习导航 · 国内 / 国际一键切换</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="randomBtn" title="随机打开一个链接 (R)">🎲 随机</button>
+      <button class="icon-btn" id="aboutBtn" title="关于 / 反馈">✉️ 反馈</button>
+      <button class="icon-btn" id="themeBtn" title="切换主题 (T)">🌙</button>
+    </div>
+  </header>
+
+  <!-- ======== 国内 / 国际 模式切换 ======== -->
+  <div class="mode-bar">
+    <span class="mode-label">🌐 网络模式</span>
+    <div class="mode-switch" id="modeSwitch">
+      <button type="button" class="mode-btn" data-mode="china">🇨🇳 国内直连</button>
+      <button type="button" class="mode-btn" data-mode="international">🌍 国际直连</button>
+    </div>
+    <span class="mode-hint" id="modeHint"></span>
+  </div>
+
+  <!-- ======== ⭐ 精选推荐 ======== -->
+  <section class="featured">
+    <div class="featured-head">
+      <h2>⭐ 精选推荐</h2>
+      <span class="badge">EDITOR'S PICK</span>
+      <span class="desc" id="featuredDesc">最常用的 10 个学习入口</span>
+    </div>
+    <div class="featured-grid" id="featuredGrid"></div>
+  </section>
+
+  <!-- ======== 每日一句 ======== -->
+  <section class="quote-card">
+    <p class="quote-en" id="quoteEn"></p>
+    <p class="quote-zh" id="quoteZh"></p>
+    <button class="quote-next" id="quoteNext">换一句 →</button>
+  </section>
+
+  <!-- ======== 搜索 ======== -->
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input id="search" type="search" placeholder="搜索标题、描述、网址或分类…" autocomplete="off">
+    <span class="kbd-hint">/</span>
+  </div>
+
+  <!-- ======== 统计 ======== -->
+  <div class="stats">
+    <span><b id="statTotal">0</b> 个链接</span>
+    <span><b id="statCats">0</b> 个分类</span>
+    <span><b id="statFav">0</b> 个收藏</span>
+    <span><b id="statVisit">0</b> 个已访问</span>
+  </div>
+
+  <!-- ======== 分类 + 排序 ======== -->
+  <div class="toolbar">
+    <div class="chips" id="filters"></div>
+    <select id="sortSel" title="排序方式">
+      <option value="hot">🔥 按热门程度</option>
+      <option value="default">默认排序</option>
+      <option value="az">名称 A → Z</option>
+      <option value="za">名称 Z → A</option>
+    </select>
+  </div>
+
+  <!-- ======== 链接网格 ======== -->
+  <main class="grid" id="grid"></main>
+  <p class="empty" id="empty">没有找到相关链接 🔍</p>
+
+  <footer>
+    <p>想添加新链接？打开 HTML，在 <code>LINKS</code> 数组里加一行即可 ✨</p>
+    <p>快捷键：<code>/</code> 搜索 · <code>R</code> 随机 · <code>T</code> 换主题 · <code>M</code> 切模式 · <code>Esc</code> 清空</p>
+    <a class="mail" href="mailto:shenghao11@hotmail" title="发送邮件反馈">✉️ shenghao11@hotmail</a>
+  </footer>
+
+</div>
+
+<button class="to-top" id="toTop" title="回到顶部">↑</button>
+<div class="toast" id="toast"></div>
+
+<!-- ======== 关于 / 反馈弹窗 ======== -->
+<div class="modal-mask" id="aboutMask">
+  <div class="modal">
+    <h3>✉️ 关于与反馈</h3>
+    <p>感谢使用「英语learn」双模式英语学习导航。</p>
+    <p>如有链接失效、资源推荐或使用建议，欢迎随时联系我：</p>
+    <div class="mail-row">
+      <span>📧</span>
+      <span>shenghao11@hotmail</span>
+    </div>
+    <p style="font-size:.82rem;">点击下方按钮关闭窗口，也可直接点击邮箱地址发送邮件。</p>
+    <button class="modal-close" id="modalClose">知道了</button>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   👇👇👇  链接数据  👇👇👇
+
+   字段说明：
+   title  : 标题
+   url    : 网址（必填）
+   desc   : 描述
+   tag    : 分类
+   zones  : "china" | "intl" | "both"
+   hot    : 1-5 热门程度（5 最热），影响排序
+   note   : 访问状态备注，显示在卡片底部
+   ========================================================== */
+const LINKS = [
+
+  /* ==================== ⭐ 精选推荐（置顶显示） ==================== */
+  { title:"中国日报双语新闻", url:"https://language.chinadaily.com.cn/", desc:"热点新闻中英对照，读新闻同时学地道表达，国内可直接访问。", tag:"阅读", zones:"china", hot:5, note:"国内可访问" },
+  { title:"美丽中国 Amazing China 英文文稿合集", url:"https://www.bilibili.com/read/readlist/rl333073", desc:"央视《美丽中国》英文版字幕文稿合集，54篇专栏，57万+阅读。用英文讲述中国地理与文化，适合精读和积累表达。", tag:"B站精选", zones:"china", hot:5, note:"国内可访问" },
+  { title:"中国教育考试网", url:"https://cet.neea.edu.cn/", desc:"四六级考试官方入口，报名、成绩查询、考试资讯权威发布。", tag:"考试", zones:"china", hot:5, note:"国内可访问" },
+  { title:"Readlang", url:"https://readlang.com", desc:"网页取词翻译，自动生成单词卡，边读边记，沉浸式阅读利器。", tag:"阅读", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"Anki", url:"https://apps.ankiweb.net", desc:"间隔重复记忆神器，背单词和例句超高效，支持全平台同步。", tag:"词汇", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"英语语法网", url:"http://www.yygrammar.com", desc:"中文讲解的英语语法大全，查漏补缺很方便，适合各阶段学习者。", tag:"语法", zones:"china", hot:5, note:"国内可访问" },
+  { title:"Grammarly", url:"https://www.grammarly.com", desc:"实时检查语法与拼写，并给出改写建议，英文写作必备工具。", tag:"写作", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"Oxford Learner's Dictionaries", url:"https://www.oxfordlearnersdictionaries.com", desc:"牛津学习型词典，释义分级，例句丰富，专为英语学习者设计。", tag:"词典", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"Cambridge Dictionary", url:"https://dictionary.cambridge.org", desc:"剑桥词典，例句地道，带英式/美式发音，查词首选。", tag:"词典", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"IELTS 官网", url:"https://www.ielts.org", desc:"雅思官方信息、考试形式与备考资源，烤鸭必看。", tag:"考试", zones:"intl", hot:5, note:"国内可能无法访问" },
+
+  /* ==================== 🔥 热门置顶 ==================== */
+  { title:"英语兔（B站）", url:"https://space.bilibili.com/483162496", desc:"B站英语学习区NO.1，全网2000W+粉丝。语法体系完整，从零基础到进阶全覆盖。", tag:"B站精选", zones:"china", hot:5, note:"国内可访问" },
+  { title:"瑞秋英语Rachel（B站）", url:"https://space.bilibili.com/515349373", desc:"Rachel's English官方账号，美式发音课系统，口型示范清楚，练口语纠正发音首选。", tag:"B站精选", zones:"china", hot:5, note:"国内可访问" },
+  { title:"B站英语学习专区", url:"https://www.bilibili.com/v/knowledge/english", desc:"国内最大英语学习视频社区，免费内容海量，从零基础到雅思全覆盖。", tag:"综合", zones:"china", hot:5, note:"国内可访问" },
+  { title:"可可英语", url:"https://www.kekenet.com", desc:"国内老牌免费英语学习站，VOA/BBC听力、口语、影视英语、四六级全都有。", tag:"综合", zones:"china", hot:5, note:"国内可访问" },
+  { title:"每日英语听力", url:"https://dict.eudic.net/ting", desc:"海量真题和BBC素材，支持单句精听，四六级备考利器。", tag:"听力", zones:"china", hot:5, note:"国内可访问" },
+  { title:"有道词典", url:"https://dict.youdao.com", desc:"中英互查，划词翻译，国内最常用的免费词典工具。", tag:"词典", zones:"china", hot:5, note:"国内可访问" },
+  { title:"BBC Learning English", url:"https://www.bbc.co.uk/learningenglish", desc:"BBC官方学习站，新闻、语法、发音、口语全覆盖。", tag:"听力", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"TED Talks", url:"https://www.ted.com/talks", desc:"高质量英文演讲，可开双语字幕练听力与表达。国内可直接访问。", tag:"听力", zones:"intl", hot:5, note:"国内可访问" },
+  { title:"English with Lucy", url:"https://www.youtube.com/@EnglishwithLucy", desc:"英国老师Lucy，英式英语教学，发音优雅，内容涵盖语法、词汇、发音和日常表达。", tag:"YT精选", zones:"intl", hot:5, note:"国内无法访问" },
+  { title:"Speak English With Vanessa", url:"https://www.youtube.com/@SpeakEnglishWithVanessa", desc:"全球最受欢迎的英文教学频道之一，通过生活情境和shadowing跟读练习提升口语。", tag:"YT精选", zones:"intl", hot:5, note:"国内无法访问" },
+  { title:"Rachel's English", url:"https://www.youtube.com/@rachelsenglish", desc:"美国播音员Rachel老师，美式发音教学权威，口型示范细致，口语启蒙首选。", tag:"YT精选", zones:"intl", hot:5, note:"国内无法访问" },
+
+  /* ==================== 🇨🇳 国内专属 ==================== */
+  { title:"墨墨背单词", url:"https://www.maimemo.com", desc:"国内口碑背词App，记忆曲线算法优秀，适合四六级考研。", tag:"词汇", zones:"china", hot:4, note:"国内可访问" },
+  { title:"沪江英语", url:"https://www.hjenglish.com", desc:"国内综合性英语学习平台，四六级、BEC、口译等考试资源丰富。", tag:"考试", zones:"china", hot:3, note:"国内可访问" },
+  { title:"网易公开课", url:"https://open.163.com", desc:"汇集国外名校公开课，多数带中英字幕，边学知识边练英语。", tag:"综合", zones:"china", hot:3, note:"国内可访问" },
+  { title:"扇贝单词", url:"https://www.shanbay.com", desc:"打卡式背单词，社区氛围好，适合需要外部督促的学习者。", tag:"词汇", zones:"china", hot:3, note:"国内可访问" },
+  { title:"新东方在线", url:"https://www.koolearn.com", desc:"新东方旗下在线学习平台，四六级、考研、雅思托福课程丰富。", tag:"考试", zones:"china", hot:4, note:"国内可访问" },
+  { title:"普特英语听力", url:"https://www.putclub.com", desc:"国内经典听力资源站，提供VOA、BBC、CNN原声听力及字幕讲解。", tag:"听力", zones:"china", hot:4, note:"国内可能无法访问" },
+  { title:"英语的平行世界（B站）", url:"https://space.bilibili.com/3493075586171714", desc:"语法零基础入门，讲得极细。课程体系完整，由浅入深，用生活例子讲语法。", tag:"B站精选", zones:"china", hot:4, note:"国内可访问" },
+  { title:"李咏梅英语（B站）", url:"https://space.bilibili.com/386964478", desc:"教音标特别形象，孩子容易记住，学会拼读后背单词会轻松很多，整套视频免费。", tag:"B站精选", zones:"china", hot:4, note:"国内可访问" },
+  { title:"林里的单车（B站）", url:"https://space.bilibili.com/12656891", desc:"B站英语学习区知名UP主，内容风格轻松，适合碎片时间学习。", tag:"B站精选", zones:"china", hot:3, note:"国内可访问" },
+  { title:"A路人（B站）", url:"https://space.bilibili.com/12656891", desc:"B站百大UP主，风格轻松搞笑，英语教学不枯燥，适合坐不住的同学。", tag:"B站精选", zones:"china", hot:3, note:"国内可访问" },
+
+  /* ==================== 📺 YT精选 ==================== */
+  { title:"Learn English with TV Series", url:"https://www.youtube.com/@LearnEnglishWithTVSeries", desc:"通过《生活大爆炸》《老友记》等美剧学英语，趣味性强，火遍YouTube。", tag:"YT精选", zones:"intl", hot:5, note:"国内无法访问" },
+  { title:"BBC Learning English (YouTube)", url:"https://www.youtube.com/@bbclearningenglish", desc:"BBC官方YouTube频道，系统化英语教材，涵盖日常会话、商务英语和新闻英文。", tag:"YT精选", zones:"intl", hot:4, note:"国内无法访问" },
+  { title:"engVid", url:"https://www.youtube.com/@engvidEnglish", desc:"多位专业英语老师联合授课，语法、词汇、写作系统全面，课程体系完善。", tag:"YT精选", zones:"intl", hot:4, note:"国内无法访问" },
+  { title:"Easy English", url:"https://www.youtube.com/@EasyEnglishVideos", desc:"街头采访形式，真实对话场景，学会正确发音和自然表达，初学者友好。", tag:"YT精选", zones:"intl", hot:4, note:"国内无法访问" },
+  { title:"阿滴英文", url:"https://www.youtube.com/@rayduenglish", desc:"华语圈代表性英文学习频道之一，用贴近中文思维的方式拆解英文逻辑。", tag:"YT精选", zones:"intl", hot:4, note:"国内无法访问" },
+  { title:"Learn English with Bob the Canadian", url:"https://www.youtube.com/@LearnEnglishwithBobtheCanadian", desc:"近百万粉丝的加拿大UP主，用真实生活场景教地道英语表达。", tag:"YT精选", zones:"intl", hot:4, note:"国内无法访问" },
+  { title:"EnglishClass101.com", url:"https://www.youtube.com/@EnglishClass101", desc:"数百个视频课程，涵盖语言学习所有核心主题，节奏较快，适合有基础的学习者。", tag:"YT精选", zones:"intl", hot:3, note:"国内无法访问" },
+  { title:"JenniferESL", url:"https://www.youtube.com/@JenniferESL", desc:"耐心清晰的ESL老师，系统教授美式英语听说读写，课程分类于播放列表。", tag:"YT精选", zones:"intl", hot:3, note:"国内无法访问" },
+  { title:"C's English Corner 英文角落", url:"https://www.youtube.com/@CsEnglishCorner", desc:"结合双语背景与海外经验，教自然英文表达、英美文化差异和中式英文修正。", tag:"YT精选", zones:"intl", hot:3, note:"国内无法访问" },
+  { title:"英文易開罐", url:"https://www.youtube.com/@easyenglish666", desc:"擅长以逻辑方式拆解英文结构，聚焦文法底层逻辑和句构分析。", tag:"YT精选", zones:"intl", hot:3, note:"国内无法访问" },
+  { title:"Ricky英語小蛋糕", url:"https://www.youtube.com/@ricky4859", desc:"专注多益高频考点解析、商务英文和职场实用英文，适合上班族和TOEIC备考。", tag:"YT精选", zones:"intl", hot:3, note:"国内无法访问" },
+  { title:"Speak English With Mr. Duncan", url:"https://www.youtube.com/@SpeakEnglishWithMisterduncan", desc:"自称有英语成瘾的邓肯先生，视频有趣易看，侧重实用英文用语和表达方式。", tag:"YT精选", zones:"intl", hot:3, note:"国内无法访问" },
+
+  /* ==================== 听力 ==================== */
+  { title:"6 Minute English", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english", desc:"BBC六分钟英语，短小精悍，适合碎片时间精听。", tag:"听力", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"VOA Learning English", url:"https://learningenglish.voanews.com", desc:"美国之音慢速英语，语速友好，适合跟读模仿。", tag:"听力", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"ELLLO", url:"https://www.elllo.org", desc:"上千段真人对话，附脚本和测验，口音多样。", tag:"听力", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"ESL Pod", url:"https://eslpod.com", desc:"经典慢速英语播客，讲解细致，适合入门。", tag:"听力", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"Luke's English Podcast", url:"https://teacherluke.co.uk", desc:"英式英语播客，聊生活与文化，练真实语速。", tag:"听力", zones:"intl", hot:3, note:"国内可能无法访问" },
+
+  /* ==================== 口语 ==================== */
+  { title:"YouGlish", url:"https://youglish.com", desc:"输入单词，直接听它在真实视频里怎么念。", tag:"口语", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"Forvo", url:"https://forvo.com", desc:"全球母语者真人发音库，查生词读音神器。", tag:"口语", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"ELSA Speak", url:"https://elsaspeak.com", desc:"AI发音教练，逐音纠错，练发音非常有效。", tag:"口语", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"italki", url:"https://www.italki.com", desc:"全球外教一对一，按课时付费，练真实对话。", tag:"口语", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Cambly", url:"https://www.cambly.com", desc:"随时连线母语外教聊天，碎片时间练口语。", tag:"口语", zones:"intl", hot:3, note:"国内可能无法访问" },
+
+  /* ==================== 阅读 ==================== */
+  { title:"Project Gutenberg", url:"https://www.gutenberg.org", desc:"七万多本免费英文原版电子书，读原著的好去处。", tag:"阅读", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"Breaking News English", url:"https://breakingnewsenglish.com", desc:"新闻分级改写，附音频与练习题，多档语速。", tag:"阅读", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"The Guardian", url:"https://www.theguardian.com", desc:"英式英文新闻与评论，语感地道，题材广泛。", tag:"阅读", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"TED-Ed", url:"https://ed.ted.com", desc:"短小动画科普，字幕可切换，趣味学知识。", tag:"阅读", zones:"intl", hot:4, note:"国内可能无法访问" },
+
+  /* ==================== 词汇 ==================== */
+  { title:"Quizlet", url:"https://quizlet.com", desc:"海量单词卡集合，可自制卡组，多端同步。", tag:"词汇", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Vocabulary.com", url:"https://www.vocabulary.com", desc:"用英文释义和例句学词，理解式记忆更牢固。", tag:"词汇", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Memrise", url:"https://www.memrise.com", desc:"场景化记忆课程，带真人视频，轻松有趣。", tag:"词汇", zones:"intl", hot:3, note:"国内可能无法访问" },
+
+  /* ==================== 语法 ==================== */
+  { title:"Purdue OWL", url:"https://owl.purdue.edu", desc:"普渡大学写作与语法指南，学术写作必备。", tag:"语法", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Perfect English Grammar", url:"https://www.perfect-english-grammar.com", desc:"语法点讲解清晰，配套练习可即时批改。", tag:"语法", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"EnglishPage", url:"https://www.englishpage.com", desc:"时态、情态动词等专项练习，题量充足。", tag:"语法", zones:"intl", hot:3, note:"国内可能无法访问" },
+
+  /* ==================== 写作 ==================== */
+  { title:"Hemingway Editor", url:"https://hemingwayapp.com", desc:"检测句子冗长与难读处，让英文更简洁。", tag:"写作", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"Ludwig", url:"https://ludwig.guru", desc:"查地道搭配与例句，确认表达是否自然。", tag:"写作", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"DeepL 翻译", url:"https://www.deepl.com/translator", desc:"译文自然流畅，可用来对照中英表达。", tag:"写作", zones:"intl", hot:5, note:"国内可能无法访问" },
+
+  /* ==================== 词典 ==================== */
+  { title:"Merriam-Webster", url:"https://www.merriam-webster.com", desc:"美式英语权威词典，词源与用法说明详尽。", tag:"词典", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Longman Dictionary", url:"https://www.ldoceonline.com", desc:"朗文当代词典，用2000基础词解释，易懂。", tag:"词典", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Etymonline", url:"https://www.etymonline.com", desc:"英语词源词典，看单词从哪来，记得更牢。", tag:"词典", zones:"intl", hot:3, note:"国内可能无法访问" },
+
+  /* ==================== 考试 ==================== */
+  { title:"TOEFL 官网", url:"https://www.ets.org/toefl", desc:"托福官方站，考试报名与免费练习材料。", tag:"考试", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Test-English", url:"https://test-english.com", desc:"分级别英语测试与练习，CEFR对标清晰。", tag:"考试", zones:"intl", hot:3, note:"国内可能无法访问" },
+
+  /* ==================== 综合 ==================== */
+  { title:"British Council LearnEnglish", url:"https://learnenglish.britishcouncil.org", desc:"英国文化协会官方课程，分级练听说读写。", tag:"综合", zones:"intl", hot:5, note:"国内可能无法访问" },
+  { title:"Khan Academy", url:"https://www.khanacademy.org", desc:"可汗学院，全英文授课，边学知识边练英语。", tag:"综合", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Coursera", url:"https://www.coursera.org", desc:"全球名校在线课程，全英文授课，可免费旁听。", tag:"综合", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"Duolingo", url:"https://www.duolingo.com", desc:"游戏化英语学习，适合零基础入门，每天几分钟。", tag:"综合", zones:"intl", hot:4, note:"国内可能无法访问" },
+  { title:"LanguageTool", url:"https://languagetool.org", desc:"开源语法检查工具，支持多语言，可离线使用。", tag:"综合", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"LingQ", url:"https://www.lingq.com", desc:"导入任意文章，边读边标记生词，沉浸式学习。", tag:"综合", zones:"intl", hot:3, note:"国内可能无法访问" },
+  { title:"Google 翻译", url:"https://translate.google.com", desc:"多语种互译，可整页翻译与语音输入。", tag:"综合", zones:"intl", hot:5, note:"国内无法访问" }
+];
+/* ==========================================================
+   👆👆👆  数据结束  👆👆👆
+   ========================================================== */
+
+/* ---------- 精选推荐 URL 清单（最前面显示） ---------- */
+const FEATURED_URLS = [
+  "https://language.chinadaily.com.cn/",
+  "https://www.bilibili.com/read/readlist/rl333073",
+  "https://cet.neea.edu.cn/",
+  "https://readlang.com",
+  "https://apps.ankiweb.net",
+  "http://www.yygrammar.com",
+  "https://www.grammarly.com",
+  "https://www.oxfordlearnersdictionaries.com",
+  "https://dictionary.cambridge.org",
+  "https://www.ielts.org"
+];
+
+/* ---------- 每日一句 ---------- */
+const QUOTES = [
+  { en:"The limits of my language mean the limits of my world.", zh:"我语言的界限，就是我世界的界限。——维特根斯坦" },
+  { en:"Little by little, one travels far.", zh:"积跬步，行千里。" },
+  { en:"The best time to plant a tree was 20 years ago. The second best time is now.", zh:"种一棵树最好的时间是二十年前，其次是现在。" },
+  { en:"You don't have to be great to start, but you have to start to be great.", zh:"不必等优秀了才开始，而要开始了才会优秀。" },
+  { en:"A different language is a different vision of life.", zh:"换一种语言，就是换一种看世界的方式。——费里尼" },
+  { en:"Mistakes are proof that you are trying.", zh:"犯错，说明你在尝试。" },
+  { en:"Fluency comes from repetition, not perfection.", zh:"流利来自重复，而非完美。" },
+  { en:"Learning is a treasure that will follow its owner everywhere.", zh:"学问是一笔财富，走到哪里都跟着你。" },
+  { en:"Every day is a chance to get a little better.", zh:"每一天都是变好一点的机会。" },
+  { en:"Practice makes perfect.", zh:"熟能生巧。" }
+];
+
+/* ---------- 常量 ---------- */
+const KEY_THEME = 'englearn:theme';
+const KEY_MODE  = 'englearn:mode';
+const KEY_FAVS  = 'englearn:favs';
+const KEY_VIS   = 'englearn:visited';
+const KEY_CAT   = 'englearn:cat';
+const KEY_SORT  = 'englearn:sort';
+
+const GRADIENTS = [
+  'linear-gradient(135deg,#34d399,#fbbf24)',
+  'linear-gradient(135deg,#22c55e,#84cc16)',
+  'linear-gradient(135deg,#fbbf24,#fb923c)',
+  'linear-gradient(135deg,#059669,#22c55e)',
+  'linear-gradient(135deg,#d97706,#fbbf24)',
+  'linear-gradient(135deg,#10b981,#f59e0b)'
+];
+
+const state = {
+  mode   : document.documentElement.dataset.mode || 'china',
+  filter : 'all',
+  keyword: '',
+  sort   : 'hot'
+};
+
+/* ---------- 存储 ---------- */
+function loadJSON(key, fallback){
+  try { const v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : fallback; }
+  catch(e){ return fallback; }
+}
+function saveJSON(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
+
+let favs    = new Set(loadJSON(KEY_FAVS, []));
+let visited = new Set(loadJSON(KEY_VIS,  []));
+
+/* ---------- 元素 ---------- */
+const gridEl       = document.getElementById('grid');
+const filtersEl    = document.getElementById('filters');
+const searchEl     = document.getElementById('search');
+const sortEl       = document.getElementById('sortSel');
+const emptyEl      = document.getElementById('empty');
+const toastEl      = document.getElementById('toast');
+const themeBtn     = document.getElementById('themeBtn');
+const toTopEl      = document.getElementById('toTop');
+const modeSwitch   = document.getElementById('modeSwitch');
+const modeHint     = document.getElementById('modeHint');
+const aboutMask    = document.getElementById('aboutMask');
+const featuredGrid = document.getElementById('featuredGrid');
+
+/* ---------- 工具 ---------- */
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function getHost(url){ try { return new URL(url).hostname.replace(/^www\./,''); } catch(e){ return url; } }
+function hashIndex(str, mod){
+  let h=0; for(let i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))|0;
+  return Math.abs(h)%mod;
+}
+let toastTimer;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 1900);
+}
+
+/* ---------- 主题 ---------- */
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  themeBtn.textContent = t === 'dark' ? '🌙' : '☀️';
+  try{ localStorage.setItem(KEY_THEME, t); }catch(e){}
+}
+function toggleTheme(){
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  toast(next === 'dark' ? '已切换到深色模式 🌙' : '已切换到浅色模式 ☀️');
+}
+
+/* ---------- 模式 ---------- */
+function getModeLinks(){
+  if(state.mode === 'china'){
+    return LINKS.filter(i => i.zones === 'china' || i.zones === 'both');
+  }
+  return LINKS.slice();
+}
+function applyMode(m){
+  state.mode = m;
+  document.documentElement.dataset.mode = m;
+  try{ localStorage.setItem(KEY_MODE, m); }catch(e){}
+
+  modeSwitch.querySelectorAll('.mode-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.mode === m);
+  });
+  modeHint.textContent = m === 'china'
+    ? '仅显示国内可直接访问的资源'
+    : '显示全部资源，国外网站默认优先';
+
+  if(state.filter !== 'all' && state.filter !== 'fav'){
+    const cats = getCategories();
+    if(!cats.includes(state.filter)) state.filter = 'all';
+  }
+  renderFilters();
+  render();
+}
+function toggleMode(){
+  applyMode(state.mode === 'china' ? 'international' : 'china');
+  toast(state.mode === 'china' ? '已切换到 🇨🇳 国内模式' : '已切换到 🌍 国际模式');
+}
+
+/* ---------- 精选推荐渲染 ---------- */
+function renderFeatured(){
+  const items = FEATURED_URLS
+    .map(u => LINKS.find(i => i.url === u))
+    .filter(Boolean);
+
+  featuredGrid.innerHTML = items.map((item, idx) => {
+    const initial = (item.title||'?').trim().charAt(0).toUpperCase();
+    const grad = GRADIENTS[idx % GRADIENTS.length];
+    return (
+      '<a class="fcard" href="'+escapeHtml(item.url)+'" target="_blank" rel="noopener noreferrer" title="'+escapeHtml(item.desc||item.title)+'">' +
+        '<span class="fcard-icon" style="background:'+grad+'">'+escapeHtml(initial)+'</span>' +
+        '<span class="fcard-body">' +
+          '<span class="fcard-title">'+escapeHtml(item.title)+'</span>' +
+          '<span class="fcard-tag">'+escapeHtml(item.tag||'')+'</span>' +
+        '</span>' +
+      '</a>'
+    );
+  }).join('');
+}
+
+/* ---------- 分类 ---------- */
+function getCategories(){
+  const set = new Set();
+  getModeLinks().forEach(i => { if(i.tag) set.add(i.tag); });
+  const priority = ['B站精选','YT精选','听力','口语','阅读','词汇','语法','写作','词典','考试','综合'];
+  return [...set].sort((a,b)=>{
+    const ia = priority.indexOf(a), ib = priority.indexOf(b);
+    if(ia !== -1 && ib !== -1) return ia - ib;
+    if(ia !== -1) return -1;
+    if(ib !== -1) return 1;
+    return a.localeCompare(b,'zh');
+  });
+}
+function renderFilters(){
+  const cats = getCategories();
+  const items = [
+    { value:'all', label:'全部' },
+    { value:'fav', label:'⭐ 收藏' },
+    ...cats.map(c=>({ value:c, label:c }))
+  ];
+  filtersEl.innerHTML = items.map(f =>
+    `<button type="button" class="chip${state.filter===f.value?' active':''}" `+
+    `data-value="${escapeHtml(f.value)}">${escapeHtml(f.label)}</button>`
+  ).join('');
+}
+filtersEl.addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  state.filter = btn.dataset.value;
+  try{ localStorage.setItem(KEY_CAT, state.filter); }catch(e){}
+  renderFilters();
+  render();
+});
+
+/* ---------- 过滤 + 排序 ---------- */
+function getVisible(){
+  let list = getModeLinks();
+
+  if(state.filter === 'fav'){
+    list = list.filter(i => favs.has(i.url));
+  } else if(state.filter !== 'all'){
+    list = list.filter(i => i.tag === state.filter);
+  }
+
+  const kw = state.keyword.trim().toLowerCase();
+  if(kw){
+    list = list.filter(i =>
+      (i.title + ' ' + (i.desc||'') + ' ' + i.url + ' ' + (i.tag||'')).toLowerCase().includes(kw)
+    );
+  }
+
+  if(state.sort === 'hot'){
+    /* 先按 featured 优先，再按 hot 降序 */
+    list.sort((a,b)=>{
+      const fa = FEATURED_URLS.includes(a.url) ? 1 : 0;
+      const fb = FEATURED_URLS.includes(b.url) ? 1 : 0;
+      if(fa !== fb) return fb - fa;
+      return (b.hot||0) - (a.hot||0);
+    });
+  } else if(state.sort === 'az'){
+    list.sort((a,b) => a.title.localeCompare(b.title,'en'));
+  } else if(state.sort === 'za'){
+    list.sort((a,b) => b.title.localeCompare(a.title,'en'));
+  } else {
+    if(state.mode === 'international'){
+      list.sort((a,b)=>{
+        const rank = x => x.zones === 'intl' ? 0 : (x.zones === 'both' ? 1 : 2);
+        return rank(a) - rank(b);
+      });
+    }
+  }
+  return list;
+}
+
+/* ---------- 卡片 ---------- */
+function hotBadge(hot){
+  if(!hot || hot < 4) return '';
+  const label = hot === 5 ? '🔥 超热' : '🔥 热门';
+  const cls   = hot === 5 ? 'h1' : 'h2';
+  return `<span class="hot-badge ${cls}">${label}</span>`;
+}
+function zoneBadge(note){
+  if(!note) return '';
+  if(note.includes('可访问') && !note.includes('可能')) return '<span class="zone-badge ok">● 国内可访问</span>';
+  if(note.includes('可能')) return '<span class="zone-badge warn">● 国内可能无法访问</span>';
+  if(note.includes('无法访问')) return '<span class="zone-badge bad">● 国内无法访问</span>';
+  return '';
+}
+
+function buildCard(item, index){
+  const card = document.createElement('div');
+  card.className = 'card' + (visited.has(item.url) ? ' visited' : '');
+  card.dataset.url = item.url;
+  card.style.animationDelay = Math.min(index*30, 400) + 'ms';
+
+  const isFav = favs.has(item.url);
+  const initial = (item.title||'?').trim().charAt(0).toUpperCase();
+  const grad = GRADIENTS[hashIndex(item.title, GRADIENTS.length)];
+  const isHot = (item.hot||0) >= 4;
+  const isFeatured = FEATURED_URLS.includes(item.url);
+
+  card.innerHTML =
+    (isFeatured ? '<span class="hot-badge h1">⭐ 推荐</span>' : hotBadge(item.hot)) +
+    '<a class="card-body" href="'+escapeHtml(item.url)+'" target="_blank" rel="noopener noreferrer">' +
+      '<div class="card-head">' +
+        '<span class="avatar" style="background:'+grad+'">'+escapeHtml(initial)+'</span>' +
+        '<h3 class="card-title">'+escapeHtml(item.title)+'</h3>' +
+      '</div>' +
+      '<p class="card-desc">'+escapeHtml(item.desc||'')+'</p>' +
+      '<div class="card-foot">' +
+        '<span class="host">'+escapeHtml(getHost(item.url))+'</span>' +
+        (item.tag ? '<span class="tag'+(isHot?' hot':'')+'">'+escapeHtml(item.tag)+'</span>' : '') +
+      '</div>' +
+      '<div class="card-foot" style="margin-top:4px;">' +
+        zoneBadge(item.note) +
+      '</div>' +
+    '</a>' +
+    '<div class="card-actions">' +
+      '<button type="button" class="act'+(isFav?' on':'')+'" data-act="fav" title="收藏">'+
+        (isFav?'★':'☆')+'</button>' +
+      '<button type="button" class="act" data-act="copy" title="复制链接">⧉</button>' +
+    '</div>';
+
+  return card;
+}
+
+function render(){
+  const list = getVisible();
+  gridEl.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  list.forEach((item,i)=>frag.appendChild(buildCard(item,i)));
+  gridEl.appendChild(frag);
+
+  emptyEl.style.display = list.length ? 'none' : 'block';
+  updateStats();
+}
+
+/* ---------- 统计 ---------- */
+function updateStats(){
+  const modeLinks = getModeLinks();
+  document.getElementById('statTotal').textContent = modeLinks.length;
+  document.getElementById('statCats').textContent  = getCategories().length;
+  document.getElementById('statFav').textContent   = favs.size;
+  const v = [...visited].filter(u => modeLinks.some(i => i.url === u));
+  document.getElementById('statVisit').textContent = v.length;
+}
+
+/* ---------- 收藏 / 复制 ---------- */
+function toggleFav(url, btn){
+  if(favs.has(url)){ favs.delete(url); toast('已取消收藏'); }
+  else { favs.add(url); toast('已加入收藏 ★'); }
+  saveJSON(KEY_FAVS, [...favs]);
+
+  if(state.filter === 'fav'){ render(); return; }
+  const on = favs.has(url);
+  btn.textContent = on ? '★' : '☆';
+  btn.classList.toggle('on', on);
+  updateStats();
+}
+async function copyLink(url){
+  try{ await navigator.clipboard.writeText(url); toast('链接已复制 ✓'); }
+  catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast('链接已复制 ✓'); }
+    catch(err){ toast('复制失败'); }
+    ta.remove();
+  }
+}
+
+/* ---------- 网格事件 ---------- */
+gridEl.addEventListener('click', e => {
+  const actBtn = e.target.closest('button[data-act]');
+  if(actBtn){
+    e.preventDefault(); e.stopPropagation();
+    const card = actBtn.closest('.card');
+    const url  = card.dataset.url;
+    if(actBtn.dataset.act === 'fav')  toggleFav(url, actBtn);
+    if(actBtn.dataset.act === 'copy') copyLink(url);
+    return;
+  }
+  const link = e.target.closest('a.card-body');
+  if(link){
+    const url = link.getAttribute('href');
+    if(!visited.has(url)){
+      visited.add(url);
+      saveJSON(KEY_VIS, [...visited]);
+      link.closest('.card').classList.add('visited');
+      updateStats();
+    }
+  }
+});
+
+/* ---------- 搜索 / 排序 ---------- */
+let searchTimer;
+searchEl.addEventListener('input', ()=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{ state.keyword = searchEl.value; render(); }, 90);
+});
+sortEl.addEventListener('change', ()=>{
+  state.sort = sortEl.value;
+  try{ localStorage.setItem(KEY_SORT, state.sort); }catch(e){}
+  render();
+});
+
+/* ---------- 随机 ---------- */
+function openRandom(){
+  const pool = getVisible();
+  const list = pool.length ? pool : getModeLinks();
+  if(!list.length) return;
+  const item = list[Math.floor(Math.random()*list.length)];
+  toast('随机打开：' + item.title);
+  window.open(item.url, '_blank', 'noopener');
+}
+
+/* ---------- 回到顶部 ---------- */
+window.addEventListener('scroll', ()=>{
+  toTopEl.classList.toggle('show', window.scrollY > 420);
+}, { passive:true });
+toTopEl.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ---------- 弹窗 ---------- */
+function openAbout(){ aboutMask.classList.add('show'); }
+function closeAbout(){ aboutMask.classList.remove('show'); }
+aboutMask.addEventListener('click', e=>{ if(e.target === aboutMask) closeAbout(); });
+document.getElementById('modalClose').addEventListener('click', closeAbout);
+document.getElementById('aboutBtn').addEventListener('click', openAbout);
+
+/* ---------- 快捷键 ---------- */
+document.addEventListener('keydown', e => {
+  const el = document.activeElement;
+  const typing = el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+
+  if(e.key === '/' && !typing){ e.preventDefault(); searchEl.focus(); searchEl.select(); return; }
+  if(e.key === 'Escape'){
+    if(aboutMask.classList.contains('show')){ closeAbout(); return; }
+    searchEl.value=''; state.keyword=''; searchEl.blur(); render(); return;
+  }
+  if(typing) return;
+  if(e.key==='r'||e.key==='R'){ e.preventDefault(); openRandom(); }
+  if(e.key==='t'||e.key==='T'){ e.preventDefault(); toggleTheme(); }
+  if(e.key==='m'||e.key==='M'){ e.preventDefault(); toggleMode(); }
+});
+
+/* ---------- 每日一句 ---------- */
+let quoteIdx = 0;
+function renderQuote(i){
+  const q = QUOTES[i];
+  document.getElementById('quoteEn').textContent = '“' + q.en + '”';
+  document.getElementById('quoteZh').textContent = q.zh;
+}
+
+/* ---------- 事件绑定 ---------- */
+themeBtn.addEventListener('click', toggleTheme);
+document.getElementById('randomBtn').addEventListener('click', openRandom);
+document.getElementById('quoteNext').addEventListener('click', ()=>{
+  quoteIdx = (quoteIdx+1) % QUOTES.length; renderQuote(quoteIdx);
+});
+modeSwitch.addEventListener('click', e=>{
+  const btn = e.target.closest('.mode-btn');
+  if(btn && btn.dataset.mode !== state.mode) applyMode(btn.dataset.mode);
+});
+
+/* ---------- 启动 ---------- */
+(function init(){
+  applyTheme(document.documentElement.dataset.theme || 'dark');
+
+  const d = new Date();
+  quoteIdx = (d.getFullYear()*372 + d.getMonth()*31 + d.getDate()) % QUOTES.length;
+  renderQuote(quoteIdx);
+
+  try{
+    const savedCat  = localStorage.getItem(KEY_CAT);
+    const savedSort = localStorage.getItem(KEY_SORT);
+    if(savedCat)  state.filter = savedCat;
+    if(savedSort) state.sort   = savedSort;
+  }catch(e){}
+  sortEl.value = state.sort;
+
+  renderFeatured();
+  applyMode(document.documentElement.dataset.mode || 'china');
+})();
+</script>
+</body>
+</html>

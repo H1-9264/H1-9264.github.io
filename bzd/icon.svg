@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BZD CubeTimer">
+  <rect width="512" height="512" rx="96" fill="#0b0f14"/>
+  <g transform="translate(256 256)">
+    <rect x="-140" y="-140" width="280" height="280" rx="28" fill="none" stroke="#2dd4bf" stroke-width="22"/>
+    <path d="M-140 0h280M0 -140v280" stroke="#2dd4bf" stroke-width="22"/>
+    <circle cx="0" cy="-70" r="20" fill="#f5f7fa"/>
+    <circle cx="-70" cy="70" r="20" fill="#f5f7fa"/>
+    <circle cx="70" cy="70" r="20" fill="#f5f7fa"/>
+  </g>
+</svg>

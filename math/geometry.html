@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-motion="on">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="description" content="Buzhidao Math 几何画板：尺规作图式动态几何，点、线、圆、多边形与变换，拖动一点全图联动，可测量长度角度面积并导出图像。">
+<title>几何画板 · Buzhidao Math</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script type="module">
+  import { apply } from './assets/js/core/theme.js';
+  apply();
+</script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<header id="site-nav"></header>
+
+<main class="app-shell" id="app">
+  <div class="app-toolbar" id="geoToolbar">
+    <div class="geo-tools" id="geoTools"></div>
+    <span class="grow"></span>
+    <div class="row" style="gap:4px">
+      <button class="btn-icon btn-sm hint" id="btnUndo" data-i18n-hint="geo.undo" aria-label="undo"></button>
+      <button class="btn-icon btn-sm hint" id="btnRedo" data-i18n-hint="geo.redo" aria-label="redo"></button>
+      <button class="btn-icon btn-sm hint" id="btnSample" data-i18n-hint="geo.sampleGsp" aria-label="sample"></button>
+      <button class="btn-icon btn-sm hint" id="btnClearBoard" data-i18n-hint="common.clear" aria-label="clear"></button>
+    </div>
+  </div>
+
+  <div class="app-main">
+    <!-- 左侧：对象列表与视图 -->
+    <aside class="app-side" id="geoLeft">
+      <div class="app-side-scroll">
+        <div class="card">
+          <div class="card-head"><h4 data-i18n="geo.objects">对象列表</h4><span class="badge mono" id="objCount">0</span></div>
+          <div class="card-body" style="padding:10px">
+            <div class="geo-object-list" id="objList"></div>
+          </div>
+        </div>
+        <details class="panel" open>
+          <summary><span data-i18n="geo.measures">测量结果</span></summary>
+          <div class="panel-body"><div class="geo-measures" id="measureList"></div></div>
+        </details>
+        <details class="panel">
+          <summary><span data-i18n="plot.view">视图</span></summary>
+          <div class="panel-body">
+            <label class="switch"><input type="checkbox" id="optGrid" checked><span class="track"></span><span data-i18n="geo.showGrid">显示网格</span></label>
+            <label class="switch"><input type="checkbox" id="optAxes" checked><span class="track"></span><span data-i18n="geo.showAxes">显示坐标轴</span></label>
+            <label class="switch"><input type="checkbox" id="optLabels" checked><span class="track"></span><span data-i18n="geo.showLabels">显示标签</span></label>
+            <label class="switch"><input type="checkbox" id="optSnap" checked><span class="track"></span><span data-i18n="geo.snap">吸附到网格/对象</span></label>
+            <label class="field"><span class="label">Grid</span><input class="input input-sm mono" id="optGridSize" type="number" min="0.1" step="0.5" value="1"></label>
+            <div class="row-inline">
+              <button class="btn btn-sm" id="btnZoomIn">＋</button>
+              <button class="btn btn-sm" id="btnZoomOut">－</button>
+              <button class="btn btn-sm" id="btnHome"><span data-i18n="plot.resetView">复位视图</span></button>
+            </div>
+          </div>
+        </details>
+        <details class="panel" open>
+          <summary><span data-i18n="plot.export">导出图像</span></summary>
+          <div class="panel-body">
+            <div class="row-inline">
+              <button class="btn btn-sm btn-primary" id="expPng"><span data-i18n="geo.exportPng">导出 PNG</span></button>
+              <button class="btn btn-sm" id="expSvg"><span data-i18n="geo.exportSvg">导出 SVG</span></button>
+            </div>
+            <div class="row-inline">
+              <button class="btn btn-sm" id="expJson"><span data-i18n="geo.exportJson">导出 JSON</span></button>
+              <button class="btn btn-sm" id="impJson"><span data-i18n="geo.importJson">载入 JSON</span></button>
+            </div>
+          </div>
+        </details>
+      </div>
+    </aside>
+
+    <!-- 画布 -->
+    <section class="app-canvas-wrap" id="geoStage">
+      <canvas id="geoCanvas"></canvas>
+      <div class="canvas-overlay">
+        <div class="canvas-hud">
+          <span class="hud-chip" id="geoHint"></span>
+          <span class="hud-chip" id="geoCursor">x — , y —</span>
+        </div>
+      </div>
+      <div class="zoom-controls">
+        <button class="btn-icon hint" id="zoomInBtn" data-hint="+" aria-label="zoom in">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21M10.5 7.8v5.4M7.8 10.5h5.4"/></svg>
+        </button>
+        <button class="btn-icon hint" id="zoomOutBtn" data-hint="−" aria-label="zoom out">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21M7.8 10.5h5.4"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- 右侧：属性 -->
+    <aside class="app-side right" id="geoRight">
+      <div class="app-side-scroll">
+        <div class="card">
+          <div class="card-head"><h4 data-i18n="geo.inspector">对象属性</h4></div>
+          <div class="card-body" id="inspector"></div>
+        </div>
+        <details class="panel">
+          <summary><span data-i18n="geo.tool.function">函数图像</span></summary>
+          <div class="panel-body">
+            <div class="row"><input class="input mono" id="fnInput" placeholder="sin(x)" value="sin(x)"><button class="btn btn-sm btn-primary" id="fnAdd"><span data-i18n="common.add">添加</span></button></div>
+            <p class="text-xs text-dim" data-i18n="plot.exprHint">支持 sin cos tan ln log sqrt abs exp、常数 pi e、隐式乘法 2x</p>
+          </div>
+        </details>
+        <details class="panel">
+          <summary><span data-i18n="common.shortcuts">快捷键</span></summary>
+          <div class="panel-body">
+            <div class="shortcut-row"><span data-i18n="geo.tool.select">选择 / 拖动</span><kbd>V</kbd></div>
+            <div class="shortcut-row"><span data-i18n="geo.tool.point">点</span><kbd>P</kbd></div>
+            <div class="shortcut-row"><span data-i18n="geo.tool.segment">线段</span><kbd>S</kbd></div>
+            <div class="shortcut-row"><span data-i18n="geo.tool.circle">圆</span><kbd>C</kbd></div>
+            <div class="shortcut-row"><span data-i18n="geo.tool.midpoint">中点</span><kbd>M</kbd></div>
+            <div class="shortcut-row"><span data-i18n="geo.tool.intersect">交点</span><kbd>I</kbd></div>
+            <div class="shortcut-row"><span data-i18n="geo.undo">撤销</span><kbd>Ctrl Z</kbd></div>
+            <div class="shortcut-row"><span data-i18n="common.delete">删除</span><kbd>Del</kbd></div>
+          </div>
+        </details>
+      </div>
+    </aside>
+  </div>
+
+  <div class="app-status">
+    <span id="statusTool"></span>
+    <span id="statusSel"></span>
+    <span id="statusObjects"></span>
+    <span class="grow"></span>
+    <span class="kbd-hint"><kbd>Esc</kbd> 取消 · <kbd>Del</kbd> 删除 · 滚轮缩放 · 空格/中键平移</span>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module" src="assets/js/pages/geometry.js"></script>
+</body>
+</html>

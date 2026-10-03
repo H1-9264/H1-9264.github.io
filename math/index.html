@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-motion="on">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06070f">
+<meta name="description" content="Buzhidao Math — 纯前端数学可视化工作台：函数绘图器、几何画板与实用小工具，离线可用、可下载图像、高度自定义。">
+<title>Buzhidao Math · 数学可视化实验室</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script type="module">
+  import { apply } from './assets/js/core/theme.js';
+  apply();
+</script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<header id="site-nav"></header>
+
+<main>
+  <!-- ==================== Hero ==================== -->
+  <section class="hero">
+    <div class="hero-floaters" aria-hidden="true">
+      <span class="floater f1">f(x) = sin(x)/x</span>
+      <span class="floater f2">∫ₐᵇ f(x)dx</span>
+      <span class="floater f3">r = 1 − cos θ</span>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <span class="hero-eyebrow reveal"><b>new</b><span data-i18n="home.hero.badge">纯前端 · 离线可用</span></span>
+        <h1 class="hero-title reveal">
+          <span class="line" data-i18n="home.hero.title1">让数学</span>
+          <span class="line gradient-text" data-i18n="home.hero.title2">看得见</span>
+        </h1>
+        <p class="hero-sub reveal" data-i18n="home.hero.sub">函数绘图、几何构造、数据可视化 —— 一个干净、快速、完全在浏览器里运行的数学工作台。</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary btn-lg" href="plotter.html">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3.5 20V4"/><path d="M3.5 20h17"/><path d="M4.5 16.5c3-1 4.5-6 7-9.5s4.5-3.4 8-2"/></svg>
+            <span data-i18n="home.hero.ctaPrimary">开始绘图</span>
+          </a>
+          <a class="btn btn-lg" href="geometry.html">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5"/><path d="M3.5 20.5h11L9 12.5z"/><path d="M15.5 15.5l5 5M20.5 15.5l-5 5"/></svg>
+            <span data-i18n="home.hero.ctaSecondary">打开几何画板</span>
+          </a>
+          <button class="btn btn-lg btn-ghost" id="heroTheme">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.2 0 1.8-.8 1.8-1.7 0-1.6-1.6-1.9-1.6-3.1 0-1 .8-1.7 1.9-1.7h1.6A4.8 4.8 0 0 0 20.5 9c0-3.1-3.8-5.5-8.5-5.5z"/></svg>
+            <span data-i18n="home.custom.cta">打开设置</span>
+          </button>
+        </div>
+        <div class="hero-stats reveal">
+          <div class="hero-stat"><b id="statFn">40+</b><span data-i18n="home.stats.functions">内置数学函数</span></div>
+          <div class="hero-stat"><b id="statTools">6</b><span data-i18n="home.stats.tools">实用小工具</span></div>
+          <div class="hero-stat"><b data-i18n="home.stats.offlineValue">100%</b><span data-i18n="home.stats.offline">离线运行</span></div>
+          <div class="hero-stat"><b>0 KB</b><span data-i18n="footer.builtWith">第三方依赖</span></div>
+        </div>
+      </div>
+
+      <div class="hero-stage reveal">
+        <div class="hero-stage-bar">
+          <span class="hero-stage-dots"><i></i><i></i><i></i></span>
+          <span class="mono">plot · live</span>
+          <span class="grow"></span>
+          <span class="badge badge-accent mono" id="heroFps">60 fps</span>
+        </div>
+        <canvas id="heroCanvas" aria-label="函数曲线动画"></canvas>
+        <div class="hero-stage-formula">
+          <span class="hero-chip"><i></i>f(x) = sin(x)·e^(−x²/8)</span>
+          <span class="hero-chip"><i style="background:var(--accent-2)"></i>g(x) = cos(2x)/2</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 三大功能 ==================== -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="nav.tools">实用工具</span>
+        <h2 data-i18n="home.features.title">一个工作台，三种玩法</h2>
+        <p data-i18n="home.features.sub">所有计算都在你的浏览器里完成，不上传任何数据，断网也能用。</p>
+      </div>
+      <div class="grid grid-3">
+        <a class="feature reveal" href="plotter.html">
+          <span class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3.5 20V4"/><path d="M3.5 20h17"/><path d="M4.5 16.5c3-1 4.5-6 7-9.5s4.5-3.4 8-2"/></svg></span>
+          <h3 data-i18n="home.feature.plotter">函数绘图器</h3>
+          <p data-i18n="home.feature.plotterDesc">多曲线、参数方程、极坐标，缩放平移、求根求交点、定积分与切线，一键导出高清 PNG / SVG。</p>
+          <span class="feature-tag">plotter.html →</span>
+        </a>
+        <a class="feature reveal" href="geometry.html">
+          <span class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5"/><path d="M3.5 20.5h11L9 12.5z"/><path d="M15.5 15.5l5 5M20.5 15.5l-5 5"/></svg></span>
+          <h3 data-i18n="home.feature.geometry">几何画板</h3>
+          <p data-i18n="home.feature.geometryDesc">点、线、圆、多边形与变换，尺规作图式依赖关系：拖动一个点，整个图形随之联动，可测量长度角度面积。</p>
+          <span class="feature-tag">geometry.html →</span>
+        </a>
+        <a class="feature reveal" href="tools.html">
+          <span class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5h17v11h-17z"/><path d="M8.5 8.5V4.5h7v4"/><path d="M3.5 13.2h17"/></svg></span>
+          <h3 data-i18n="home.feature.tools">实用工具</h3>
+          <p data-i18n="home.feature.toolsDesc">导数探索、数据绘图、单位换算、科学计算器、调色板与番茄钟，随手可用。</p>
+          <span class="feature-tag">tools.html →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 实时演示 ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">canvas</span>
+        <h2 data-i18n="home.demo.title">看一看效果</h2>
+        <p data-i18n="home.demo.sub">以下图表由页面内的小型绘图引擎实时绘制。</p>
+      </div>
+      <div class="demo-strip">
+        <div class="demo-tile reveal"><canvas data-demo="waves"></canvas><h4>三角叠加</h4><p class="mono text-xs">sin(x)+sin(2x)/2+sin(3x)/3</p></div>
+        <div class="demo-tile reveal"><canvas data-demo="damped"></canvas><h4>阻尼振动</h4><p class="mono text-xs">e^(−x/4)·sin(3x)</p></div>
+        <div class="demo-tile reveal"><canvas data-demo="rose"></canvas><h4>极坐标玫瑰线</h4><p class="mono text-xs">r = 3cos(4θ)</p></div>
+        <div class="demo-tile reveal"><canvas data-demo="gauss"></canvas><h4>高斯钟形</h4><p class="mono text-xs">e^(−x²/2)/√(2π)</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 自定义 ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2" style="align-items:center">
+        <div class="reveal">
+          <span class="eyebrow">theme</span>
+          <h2 class="mt-3" data-i18n="home.custom.title">高度自定义</h2>
+          <p class="text-lg text-muted mt-3" data-i18n="home.custom.sub">配色、字体、圆角、动效、网格，全部由你决定，设置会保存在本地。</p>
+          <div class="row mt-5">
+            <button class="btn btn-primary" id="openSettings2" data-i18n="home.custom.cta">打开设置</button>
+            <a class="btn btn-ghost" href="help.html" data-i18n="common.help">帮助</a>
+          </div>
+          <div class="grid grid-4 mt-5">
+            <div class="stat-box"><div class="k" data-i18n="settings.mode">显示模式</div><div class="v">3</div></div>
+            <div class="stat-box"><div class="k" data-i18n="settings.theme">配色方案</div><div class="v">9</div></div>
+            <div class="stat-box"><div class="k" data-i18n="settings.font">字体</div><div class="v">3</div></div>
+            <div class="stat-box"><div class="k" data-i18n="common.language">语言</div><div class="v">3</div></div>
+          </div>
+        </div>
+        <div class="card card-pad reveal">
+          <div class="row-between mb-4">
+            <strong data-i18n="settings.appearance">外观</strong>
+            <span class="badge badge-accent">live</span>
+          </div>
+          <div id="homePresets" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px"></div>
+          <div class="row-inline mt-4">
+            <button class="btn btn-sm" data-mode="dark" data-i18n="settings.mode.dark">深色</button>
+            <button class="btn btn-sm" data-mode="light" data-i18n="settings.mode.light">浅色</button>
+            <button class="btn btn-sm" data-mode="system" data-i18n="settings.mode.system">跟随系统</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module" src="assets/js/pages/home.js"></script>
+</body>
+</html>

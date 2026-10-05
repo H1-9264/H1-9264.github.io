@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-motion="on">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<!-- 站点图标：内联 SVG 带"下载"角标（离线可用，浏览器标签栏可见） -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233fb950'/%3E%3Cstop offset='.55' stop-color='%237ee787'/%3E%3Cstop offset='1' stop-color='%23d29922'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23161b22'/%3E%3Cstop offset='1' stop-color='%230d1117'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='110' fill='url(%23b)'/%3E%3Cpath d='M101 404V112M101 404h258' stroke='rgba(240,246,252,0.32)' stroke-width='28' stroke-linecap='round'/%3E%3Cpath d='M118 336c52-11 65-144 131-158s65 92 128 79' fill='none' stroke='url(%23g)' stroke-width='42' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='386' cy='386' r='104' fill='%233fb950' stroke='%230d1117' stroke-width='18'/%3E%3Cg fill='none' stroke='%2308130b' stroke-width='26' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M386 330v96'/%3E%3Cpath d='M344 388l42 42 42-42'/%3E%3Cpath d='M338 452h96'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="description" content="Buzhidao Math 函数绘图器：多曲线、参数方程、极坐标、求根求交点、定积分与切线，支持 PNG/SVG/CSV 导出，纯前端离线可用。">
+<title>函数绘图器 · Buzhidao Math</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+<script type="module">
+  import { apply } from './assets/js/core/theme.js';
+  apply();
+</script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<header id="site-nav"></header>
+
+<main class="app-shell" id="app">
+  <div class="app-main">
+    <!-- ============ 左侧：函数与视图 ============ -->
+    <aside class="app-side" id="sideLeft">
+      <div class="plot-side-head">
+        <strong data-i18n="plot.functions">函数列表</strong>
+        <span class="badge badge-accent mono" id="fnCount">0</span>
+        <div class="row" style="margin-left:auto">
+          <button class="btn-icon btn-sm hint" id="btnAddFn" data-i18n-hint="plot.addFunction" aria-label="add">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button class="btn-icon btn-sm hint" id="btnClearFn" data-i18n-hint="plot.clearAll" aria-label="clear">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.5h15"/><path d="M9.5 6.5V4.8a1.3 1.3 0 0 1 1.3-1.3h2.4a1.3 1.3 0 0 1 1.3 1.3v1.7"/><path d="M6.5 6.5 7.4 20a1.5 1.5 0 0 0 1.5 1.4h6.2a1.5 1.5 0 0 0 1.5-1.4l.9-13.5"/><path d="M10.5 10.5v6.5M13.5 10.5v6.5"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="app-side-scroll">
+        <div class="fn-list" id="fnList"></div>
+
+        <details class="panel" open>
+          <summary><span data-i18n="plot.variables">变量滑杆</span></summary>
+          <div class="panel-body" id="varPanel"></div>
+        </details>
+
+        <details class="panel" open>
+          <summary><span data-i18n="plot.view">视图</span></summary>
+          <div class="panel-body">
+            <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <label class="field"><span class="label">x min</span><input class="input input-sm mono" id="xMin" type="number" step="any"></label>
+              <label class="field"><span class="label">x max</span><input class="input input-sm mono" id="xMax" type="number" step="any"></label>
+              <label class="field"><span class="label">y min</span><input class="input input-sm mono" id="yMin" type="number" step="any"></label>
+              <label class="field"><span class="label">y max</span><input class="input input-sm mono" id="yMax" type="number" step="any"></label>
+            </div>
+            <div class="row-inline">
+              <button class="btn btn-sm" id="btnFit"><span data-i18n="plot.fitView">适应内容</span></button>
+              <button class="btn btn-sm" id="btnResetView"><span data-i18n="plot.resetView">复位视图</span></button>
+            </div>
+            <label class="switch"><input type="checkbox" id="optAspect"><span class="track"></span><span data-i18n="plot.square">等比例坐标</span></label>
+            <label class="switch"><input type="checkbox" id="optGrid" checked><span class="track"></span><span data-i18n="plot.showGrid">显示网格</span></label>
+            <label class="switch"><input type="checkbox" id="optMinor" checked><span class="track"></span><span data-i18n="plot.showMinorGrid">次要网格</span></label>
+            <label class="switch"><input type="checkbox" id="optAxes" checked><span class="track"></span><span data-i18n="plot.showAxis">显示坐标轴</span></label>
+            <label class="switch"><input type="checkbox" id="optLabels" checked><span class="track"></span><span data-i18n="plot.showLabels">刻度标签</span></label>
+            <label class="switch"><input type="checkbox" id="optLegend"><span class="track"></span><span data-i18n="plot.showLegend">显示图例</span></label>
+            <label class="field"><span class="label" data-i18n="plot.sample">采样点数</span><input class="input input-sm mono" id="optSamples" type="number" min="200" max="8000" step="100"></label>
+          </div>
+        </details>
+
+        <details class="panel">
+          <summary><span data-i18n="plot.analysis">分析工具</span></summary>
+          <div class="panel-body">
+            <label class="switch"><input type="checkbox" id="optTrace"><span class="track"></span><span data-i18n="plot.trace">跟踪坐标</span></label>
+            <label class="switch"><input type="checkbox" id="optTangent"><span class="track"></span><span data-i18n="plot.tangent">切线/导数</span></label>
+
+            <label class="field"><span class="label" data-i18n="ana.pickFn">分析对象</span>
+              <select class="select input-sm" id="anaFn"></select>
+            </label>
+
+            <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <label class="field"><span class="label" data-i18n="ana.from">区间 x 从</span>
+                <input class="input input-sm mono" id="anaA" type="number" step="any" value="-10"></label>
+              <label class="field"><span class="label" data-i18n="ana.to">到</span>
+                <input class="input input-sm mono" id="anaB" type="number" step="any" value="10"></label>
+            </div>
+            <button class="btn btn-sm" id="btnAnaRange"><span data-i18n="ana.useView">用当前视图范围</span></button>
+
+            <div class="row-inline" style="flex-wrap:wrap">
+              <button class="btn btn-sm" id="btnRoots"><span data-i18n="plot.roots">求零点</span></button>
+              <button class="btn btn-sm" id="btnExtrema"><span data-i18n="plot.extrema">极值点</span></button>
+              <button class="btn btn-sm" id="btnInflect"><span data-i18n="ana.inflection">拐点</span></button>
+              <button class="btn btn-sm" id="btnMono"><span data-i18n="ana.monotonic">单调 / 凹凸</span></button>
+              <button class="btn btn-sm btn-primary" id="btnAnalyze"><span data-i18n="ana.full">全面分析</span></button>
+            </div>
+
+            <label class="field"><span class="label" data-i18n="ana.pickPair">求交点的两条曲线</span>
+              <div class="row" style="display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center">
+                <select class="select input-sm" id="anaPairA"></select>
+                <span class="text-dim">∩</span>
+                <select class="select input-sm" id="anaPairB"></select>
+              </div>
+            </label>
+            <div class="row-inline">
+              <button class="btn btn-sm" id="btnInter"><span data-i18n="plot.intercepts">求交点</span></button>
+              <button class="btn btn-sm btn-primary" id="btnFitPoints"><span data-i18n="ana.fitPoints">按点拟合</span></button>
+            </div>
+
+            <label class="switch"><input type="checkbox" id="optIntegral"><span class="track"></span><span data-i18n="plot.integral">定积分</span></label>
+            <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <label class="field"><span class="label" data-i18n="plot.integralFrom">下限 a</span><input class="input input-sm mono" id="intA" type="number" step="any" value="-1"></label>
+              <label class="field"><span class="label" data-i18n="plot.integralTo">上限 b</span><input class="input input-sm mono" id="intB" type="number" step="any" value="1"></label>
+            </div>
+            <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <label class="field"><span class="label" data-i18n="ana.riemannN">黎曼和 n</span>
+                <input class="input input-sm mono" id="anaN" type="number" min="2" max="5000" step="1" value="50"></label>
+              <label class="field"><span class="label" data-i18n="ana.riemannMode">方式</span>
+                <select class="select input-sm" id="anaMode">
+                  <option value="left" data-i18n="ana.left">左端点</option>
+                  <option value="right" data-i18n="ana.right">右端点</option>
+                  <option value="mid" selected data-i18n="ana.mid">中点</option>
+                </select></label>
+            </div>
+
+            <div id="analysisOut" class="ana-out"></div>
+            <div class="row-inline" style="flex-wrap:wrap">
+              <button class="btn btn-sm" id="btnTable"><span data-i18n="plot.table">数据表</span></button>
+              <button class="btn btn-sm" id="btnAnaCopy"><span data-i18n="ana.copy">复制结果</span></button>
+              <button class="btn btn-sm" id="btnAnaCsv"><span data-i18n="ana.exportCsv">导出 CSV</span></button>
+              <button class="btn btn-sm" id="btnAnaClear"><span data-i18n="common.clear">清空</span></button>
+            </div>
+          </div>
+        </details>
+
+        <details class="panel">
+          <summary><span data-i18n="plot.export">导出图像</span></summary>
+          <div class="panel-body">
+            <label class="field"><span class="label" data-i18n="plot.scale">导出倍率</span>
+              <select class="select" id="expScale">
+                <option value="1">1x</option>
+                <option value="2" selected>2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="6">6x (印刷)</option>
+                <option value="preset-square" data-i18n="sheet.presetSquare">正方形 1080</option>
+                <option value="preset-wide" data-i18n="sheet.presetWide">宽屏 1920×1080</option>
+                <option value="preset-slide" data-i18n="sheet.presetSlide">课件 1600×900</option>
+              </select>
+            </label>
+            <label class="field"><span class="label" data-i18n="sheet.titleLabel">标题</span>
+              <input class="input input-sm" id="expTitle" type="text" placeholder="" maxlength="40">
+            </label>
+            <label class="field"><span class="label" data-i18n="plot.bgStyle">背景</span>
+              <select class="select" id="expBg">
+                <option value="theme" data-i18n="plot.bgTheme">跟随主题</option>
+                <option value="white" data-i18n="plot.bgWhite">白色</option>
+                <option value="dark" data-i18n="plot.bgDark">深色</option>
+                <option value="transparent" data-i18n="plot.bgTransparent">透明</option>
+              </select>
+            </label>
+            <div class="row-inline">
+              <button class="btn btn-sm btn-primary" id="expPng"><span data-i18n="plot.exportPng">PNG</span></button>
+              <button class="btn btn-sm" id="expSvg"><span data-i18n="plot.exportSvg">SVG</span></button>
+              <button class="btn btn-sm" id="expCsv"><span data-i18n="plot.exportCsv">CSV</span></button>
+              <button class="btn btn-sm" id="expJson"><span data-i18n="plot.exportJson">JSON</span></button>
+              <button class="btn btn-sm" id="impJson"><span data-i18n="plot.importJson">载入</span></button>
+              <button class="btn btn-sm" id="copySvg"><span data-i18n="common.copy">复制</span> SVG</button>
+              <button class="btn btn-sm" id="expSheet"><span data-i18n="sheet.export">导出讲义图</span></button>
+              <button class="btn btn-sm" id="expPdf"><span data-i18n="pdf.export">导出 PDF 讲义</span></button>
+              <button class="btn btn-sm" id="shareLink"><span data-i18n="share.copy">复制分享链接</span></button>
+            </div>
+            <p class="text-xs text-dim" data-i18n="plot.exprHint">支持 sin cos tan ln log sqrt abs exp、常数 pi e、隐式乘法 2x</p>
+          </div>
+        </details>
+      </div>
+    </aside>
+    <div class="app-resizer" id="resizerLeft" role="separator" aria-orientation="vertical"></div>
+
+    <!-- ============ 画布 ============ -->
+    <section class="app-canvas-wrap" id="stage">
+      <canvas id="plotCanvas"></canvas>
+      <div class="canvas-overlay">
+        <div class="canvas-hud">
+          <span class="hud-chip" id="hudCursor">x — , y —</span>
+          <span class="hud-chip" id="hudFn"></span>
+          <span class="hud-chip" id="hudZoom"></span>
+        </div>
+        <div class="canvas-hud hud-hint-row">
+          <span class="hud-chip" id="hudHint" data-i18n="plot.traceHint">在画布上移动鼠标查看坐标，点击可固定/取消固定</span>
+        </div>
+      </div>
+      <div class="zoom-controls">
+        <button class="btn-icon hint" id="zoomIn" data-hint="+" aria-label="zoom in">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21M10.5 7.8v5.4M7.8 10.5h5.4"/></svg>
+        </button>
+        <button class="btn-icon hint" id="zoomOut" data-hint="−" aria-label="zoom out">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21M7.8 10.5h5.4"/></svg>
+        </button>
+        <button class="btn-icon hint" id="zoomReset" data-hint="R" aria-label="reset">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 11.5a8 8 0 1 1 2.4 5.9"/><path d="M4 4.5v7h7"/></svg>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div class="app-status">
+    <span id="statusView"></span>
+    <span id="statusFn"></span>
+    <span id="statusPos"></span>
+    <span class="grow"></span>
+    <span class="kbd-hint"><kbd>Ctrl</kbd><kbd>K</kbd> 命令面板 · <kbd>G</kbd> 网格 · <kbd>R</kbd> 复位 · <kbd>F</kbd> 适应</span>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script type="module" src="assets/js/pages/plotter.js"></script>
+</body>
+</html>

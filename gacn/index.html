@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+  <meta name="theme-color" content="#030405">
+  <meta name="description" content="GARGANTUA — 实时史瓦西黑洞光线追踪器。逐像素零测地线积分、相对论吸积盘与程序化透镜星空。">
+  <meta name="color-scheme" content="dark">
+  <title>GARGANTUA — 史瓦西黑洞光线追踪器</title>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23040506'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23ffb45e' stroke-width='1.5'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23040506' stroke='%23e7e0d1' stroke-width='1.2'/%3E%3Cpath d='M8 32h10M46 32h10' stroke='%23ffb45e' stroke-width='1'/%3E%3C/svg%3E">
+  <link rel="preload" href="./assets/fonts/SpaceGrotesk-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./css/style.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.js",
+        "three/addons/controls/OrbitControls.js": "./vendor/three/OrbitControls.js"
+      }
+    }
+  </script>
+</head>
+<body class="is-booting" data-quality="high" data-debug="0" data-ui="on" data-ready="false">
+  <canvas id="stage" aria-label="实时追迹的史瓦西黑洞，包含湍流吸积盘、引力透镜与程序化银河。" role="img"></canvas>
+  <div class="screen-fx" aria-hidden="true">
+    <div class="screen-fx__top"></div>
+    <div class="screen-fx__edge"></div>
+    <div class="screen-fx__corners"><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- Interface                                                              -->
+  <!-- ====================================================================== -->
+  <div class="ui" id="ui">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="GARGANTUA — 返回初始视角" data-action="home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 34 34" fill="none">
+            <circle cx="17" cy="17" r="12.3" stroke="currentColor" stroke-width="1" opacity=".55"/>
+            <circle cx="17" cy="17" r="4.1" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M0.8 17h7.1M26.1 17h7.1" stroke="currentColor" stroke-width="1"/>
+            <circle cx="17" cy="17" r="12.3" stroke="currentColor" stroke-width="1" stroke-dasharray="1 6" opacity=".5"/>
+          </svg>
+        </span>
+        <span class="brand__text">
+          <span class="brand__word">GARGANTUA</span>
+          <span class="brand__sub">史瓦西黑洞 · 光线追踪</span>
+        </span>
+      </a>
+
+      <div class="top-telemetry" aria-hidden="true">
+        <span class="live-dot"></span>
+        <span id="solver-status">测地线求解器运行中</span>
+        <span class="slash">/</span>
+        <span id="utc-clock">00:00:00 UTC</span>
+        <span class="slash">/</span>
+        <span>无网格 · 无贴图</span>
+      </div>
+
+      <div class="top-actions">
+        <div class="quality-switch" role="group" aria-label="渲染画质">
+          <button type="button" data-quality-choice="standard" class="quality-btn" aria-label="标准画质">标准</button>
+          <button type="button" data-quality-choice="high" class="quality-btn is-active" aria-label="高清画质">高清</button>
+          <button type="button" data-quality-choice="cinematic" class="quality-btn" aria-label="电影画质">电影</button>
+        </div>
+
+        <button type="button" class="diag-btn" id="diag-next" aria-label="切换诊断视图" title="切换诊断视图（0–9）">
+          <span>诊断</span><b id="diag-value">00</b>
+        </button>
+
+        <button type="button" class="icon-btn music-btn" id="music-toggle" aria-label="开关环境音乐" aria-pressed="false" title="环境音乐（M）">
+          <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        </button>
+        <button type="button" class="icon-btn" id="help-toggle" aria-label="打开快捷键与科学说明" title="快捷键与说明（?）">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.2" stroke="currentColor"/><path d="M7.8 7.7a2.3 2.3 0 1 1 3 2.2c-.7.3-.8.8-.8 1.4" stroke="currentColor" stroke-linecap="round"/><circle cx="10" cy="14" r=".85" fill="currentColor"/></svg>
+        </button>
+        <button type="button" class="configure-btn" id="panel-toggle" aria-expanded="false" aria-controls="parameter-panel">
+          <span class="configure-btn__lines" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>参数</span><b>21</b>
+        </button>
+      </div>
+    </header>
+
+    <aside class="hud-left" aria-label="实时观测遥测">
+      <div class="hud-eyebrow"><span>观测</span><i></i><span>01 / ∞</span></div>
+      <div class="hud-catalog">GARGANTUA <span>/</span> GS-01</div>
+
+      <div class="hud-block">
+        <div class="hud-row"><span>时空</span><strong>史瓦西</strong></div>
+        <div class="hud-row"><span>自旋</span><strong>0.00 a*</strong></div>
+        <div class="hud-row"><span>质量</span><strong>1.00×10⁸ <small>M☉</small></strong></div>
+      </div>
+
+      <div class="hud-scale" aria-hidden="true">
+        <div class="hud-scale__labels"><span>视界</span><span>光子球</span><span>ISCO</span></div>
+        <div class="hud-scale__track"><i class="mark mark--1"></i><i class="mark mark--2"></i><i class="mark mark--3"></i><span class="hud-scale__fill"></span></div>
+        <div class="hud-scale__values"><span>1.0</span><span>1.5</span><span>3.0 rₛ</span></div>
+      </div>
+
+      <div class="hud-readout">
+        <div><span>相机高度</span><strong id="hud-alt">16.50 <small>rₛ</small></strong></div>
+        <div><span>倾角</span><strong id="hud-incl">+07.4°</strong></div>
+        <div><span>c / b<sub>CRIT</sub></span><strong>2.5981 <small>rₛ</small></strong></div>
+        <div><span>渲染</span><strong id="hud-res">—</strong></div>
+        <div><span>帧率</span><strong id="hud-fps">— 帧/秒</strong></div>
+        <div><span>求解</span><strong id="hud-steps">— 步</strong></div>
+      </div>
+
+      <div class="hud-footer">
+        <span class="hud-footer__pulse"></span>
+        <span>零测地线</span>
+        <span class="slash">/</span>
+        <span>RK4</span>
+        <span class="slash">/</span>
+        <span>HDR</span>
+      </div>
+    </aside>
+
+    <aside class="view-rail" aria-label="视角预设">
+      <div class="rail-label"><span>观测视角</span><i></i><span>04</span></div>
+      <div class="view-list" id="view-list">
+        <!-- Populated from config -->
+      </div>
+      <div class="rail-note">自动环绕 <span id="auto-orbit-indicator">开</span></div>
+    </aside>
+
+    <aside class="debug-strip" id="debug-strip" aria-live="polite">
+      <div class="debug-strip__code" id="debug-code">00</div>
+      <div class="debug-strip__copy">
+        <span>诊断图层</span>
+        <strong id="debug-name">最终合成</strong>
+      </div>
+      <div class="debug-strip__hint" id="debug-desc">HDR 泛光 · ACES · 最终成像</div>
+      <button type="button" class="debug-strip__close" id="debug-return" aria-label="返回最终视图">返回</button>
+    </aside>
+
+    <footer class="deck">
+      <div class="deck__controls">
+        <button type="button" class="transport-btn transport-btn--primary" id="cinema-toggle" aria-pressed="true">
+          <span class="transport-icon" aria-hidden="true"><i></i><i></i></span>
+          <span>自动环绕</span>
+        </button>
+        <button type="button" class="transport-btn" id="pause-toggle" aria-pressed="false">
+          <span class="pause-icon" aria-hidden="true"></span>
+          <span>暂停</span>
+        </button>
+      </div>
+
+      <div class="timeline" aria-hidden="true">
+        <div class="timeline__head"><span>电影时间轴 / 90 秒循环</span><strong id="timecode">00:00:00:00</strong></div>
+        <div class="timeline__track"><span id="timeline-fill"></span><i class="timeline__head-mark" id="timeline-head"></i></div>
+        <div class="timeline__ticks"><span>00</span><span>22</span><span>45</span><span>67</span><span>90</span></div>
+      </div>
+
+      <div class="deck__hints" aria-hidden="true">
+        <span><kbd>拖拽</kbd> 环绕</span>
+        <span><kbd>滚轮</kbd> 推进</span>
+        <span><kbd>?</kbd> 快捷键</span>
+      </div>
+    </footer>
+
+    <div class="sim-readout" aria-hidden="true">
+      <span class="sim-readout__spark"></span>
+      <span>模拟时间</span><strong id="sim-time">T+00:17.25</strong>
+    </div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- Parameter drawer                                                       -->
+  <!-- ====================================================================== -->
+  <div class="drawer-scrim" id="drawer-scrim" aria-hidden="true"></div>
+  <aside class="parameter-panel" id="parameter-panel" aria-labelledby="parameter-title" aria-hidden="true">
+    <div class="panel-head">
+      <div>
+        <div class="panel-eyebrow">控制矩阵 <span>·</span> 实时参数</div>
+        <h2 id="parameter-title">渲染参数</h2>
+      </div>
+      <button type="button" class="panel-close" id="panel-close" aria-label="关闭参数面板">
+        <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor"/></svg>
+      </button>
+    </div>
+
+    <div class="panel-spec">
+      <span><b>21</b> 项参数</span>
+      <span><b>520</b> 步上限</span>
+      <span><b>RGBA16F</b> HDR</span>
+    </div>
+
+    <div class="panel-tabs" id="panel-tabs" role="tablist" aria-label="参数分组">
+      <!-- populated -->
+    </div>
+
+    <div class="panel-body" id="param-groups">
+      <!-- populated -->
+    </div>
+
+    <div class="panel-foot">
+      <div class="panel-foot__note" id="quality-note">高清 · 原生 Retina / 桌面默认</div>
+      <div class="panel-foot__actions">
+        <button type="button" class="text-btn" id="reset-params">重置参数</button>
+        <button type="button" class="text-btn text-btn--accent" id="copy-link">复制分享链接</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====================================================================== -->
+  <!-- Shortcuts + notes                                                      -->
+  <!-- ====================================================================== -->
+  <div class="modal" id="help-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal__backdrop" data-close-help></div>
+    <div class="modal__card">
+      <div class="modal__head">
+        <div>
+          <div class="panel-eyebrow">观测手册 <span>·</span> 修订 1.0</div>
+          <h2 id="help-title">缺席的形状</h2>
+        </div>
+        <button type="button" class="panel-close" id="help-close" aria-label="关闭帮助">
+          <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__scroll">
+        <div class="help-lede">
+          <p>每一像素，都是一颗沿弯曲时空逆向追溯的光子。这不是模型、贴图或明信片，而是对史瓦西度规零测地线场的实时积分。</p>
+          <span>无网格 / 无视频 / 无预渲染</span>
+        </div>
+
+        <div class="help-grid">
+          <section class="help-section">
+            <div class="help-section__num">01 / 按键</div>
+            <h3>仪器控制</h3>
+            <div class="shortcut-list" id="shortcut-list"><!-- populated --></div>
+          </section>
+
+          <section class="help-section">
+            <div class="help-section__num">02 / 诊断</div>
+            <h3>十层真实</h3>
+            <p>按 <kbd>0</kbd>–<kbd>9</kbd> 或选择图层。按 <kbd>0</kbd> 返回<em>最终合成</em>。</p>
+            <div class="debug-grid" id="debug-grid"><!-- populated --></div>
+          </section>
+
+          <section class="help-section help-section--wide">
+            <div class="help-section__num">03 / 科学依据</div>
+            <h3>实际求解的是什么</h3>
+            <div class="science-cols">
+              <div>
+                <p><b>几何。</b>取 r<sub>s</sub> = 1，故 M = ½。事件视界在 r = 1，光子球在 r = 1.5，ISCO 在 r = 3，临界碰撞参数为 b<sub>c</sub> = 3√3 / 2 = 2.5981 r<sub>s</sub>。史瓦西黑洞自旋为零。</p>
+                <p><b>积分。</b>光线遵循 <span class="equation">d²r/dλ² = −(3/2) h² r / r⁵</span>，其中 h = |r × dr/dλ| 守恒。每条相机光线以自适应经典 RK4 积分，直至穿越视界、逃逸或用尽 520 步。每个初始方向都施加有限半径静态观测者修正。</p>
+              </div>
+              <div>
+                <p><b>辐射转移。</b>每次赤道面穿越都用三次 Hermite 求根，并采样相对论黑体。局部开普勒速度为 β = √(M / (r − 2M))；观测温度为 T<sub>obs</sub> = gT<sub>em</sub>，其中 <span class="equation">g = √(1 − r<sub>s</sub>/r) / [γ(1 − β·n)]</span>。亮度采用总辐射 g⁴ 转移。多次穿越构建直接、二次与高阶盘像。</p>
+                <p><b>呈现。</b>HDR 辐亮度存入 RGBA16F，经阈值化多尺度泛光与 ACES 色调映射，再以横向色散、暗角、胶片颗粒和极少量抖动收束，使虚空保持纯净。</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="help-section">
+            <div class="help-section__num">04 / 系统</div>
+            <h3>技术规格</h3>
+            <ul class="spec-list">
+              <li><span>渲染器</span><b>Three.js r170 · WebGL2</b></li>
+              <li><span>管线</span><b>全屏片段着色器</b></li>
+              <li><span>积分器</span><b>自适应 RK4，上限 520 步</b></li>
+              <li><span>HDR</span><b>RGBA16F · 6 级泛光</b></li>
+              <li><span>相机</span><b>OrbitControls + 电影相机</b></li>
+              <li><span>持久化</span><b>localStorage / URL 覆盖</b></li>
+            </ul>
+          </section>
+
+          <section class="help-section">
+            <div class="help-section__num">05 / 自动化</div>
+            <h3>可复现帧</h3>
+            <p>深链接接受 <code>quality</code>、<code>preset</code>、<code>debug</code>、<code>time</code>、<code>cinematic</code>、<code>ui</code> 与 <code>shot</code>。添加 <code>?shot=1&amp;ui=1&amp;preset=edge&amp;quality=cinematic</code> 可获得干净、确定性的画面。</p>
+            <p>实时控制台 API 位于 <code>window.GARGANTUA</code>：<code>set()</code>、<code>setParam()</code>、<code>capture()</code>、<code>getState()</code>、<code>getDiagnostics()</code>。截图直接来自 WebGL 画布。</p>
+            <p class="help-muted">需要静态服务器。请通过本地服务器打开；浏览器有意不支持 <code>file://</code> 模块加载。</p>
+          </section>
+        </div>
+      </div>
+
+      <div class="modal__foot">
+        <span>GARGANTUA / 史瓦西 / r<sub>s</sub> = 1</span>
+        <span>“阴影并非空无。那是光去往的地方。”</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- Boot / fail-safe                                                       -->
+  <!-- ====================================================================== -->
+  <div class="boot" id="boot" aria-live="polite">
+    <div class="boot__frame">
+      <div class="boot__kicker"><span class="live-dot"></span> 深空观测台 <span>/</span> 实时积分</div>
+      <h1 class="boot__title">GARGANTUA</h1>
+      <div class="boot__line"></div>
+      <div class="boot__sub">史瓦西黑洞 <span>/</span> 零测地线积分器</div>
+      <div class="boot__progress"><span id="boot-progress"></span></div>
+      <div class="boot__meta"><span id="boot-message">正在校准测地线求解器</span><span id="boot-percent">00%</span></div>
+      <div class="boot__readout">
+        <span>r<sub>s</sub> 1.000</span>
+        <span>b<sub>c</sub> 2.598</span>
+        <span>R<sub>ph</sub> 1.500</span>
+        <span>ISCO 3.000</span>
+      </div>
+    </div>
+    <div class="boot__corner boot__corner--tl">观测 01</div>
+    <div class="boot__corner boot__corner--tr">GS-01</div>
+    <div class="boot__corner boot__corner--bl">无图像数据</div>
+    <div class="boot__corner boot__corner--br">SGR A★ / 模拟</div>
+  </div>
+
+  <div class="fatal" id="fatal" aria-hidden="true" role="alert">
+    <div class="fatal__card">
+      <div class="panel-eyebrow">渲染核心 <span>/</span> 信号中断</div>
+      <h2 id="fatal-title">WEBGL 上下文丢失</h2>
+      <p id="fatal-detail">浏览器暂停了 GPU 上下文。GARGANTUA 将自动尝试恢复；若未恢复，请选择下方的安全模式。</p>
+      <div class="fatal__actions">
+        <button type="button" class="solid-btn" id="fatal-retry">恢复渲染器</button>
+        <button type="button" class="ghost-btn" id="fatal-safe">尝试标准模式</button>
+        <button type="button" class="ghost-btn" id="fatal-reload">重新加载</button>
+      </div>
+      <div class="fatal__meta" id="fatal-meta">上下文：WebGL2 · 回退：启用</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="noscript">GARGANTUA 需要 JavaScript 与 WebGL2。</div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

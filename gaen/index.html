@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+  <meta name="theme-color" content="#030405">
+  <meta name="description" content="GARGANTUA — a real-time Schwarzschild black hole raytracer. Per-pixel null geodesic integration, relativistic accretion disk, procedural lensed sky.">
+  <meta name="color-scheme" content="dark">
+  <title>GARGANTUA — Schwarzschild Black Hole Raytracer</title>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23040506'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23ffb45e' stroke-width='1.5'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23040506' stroke='%23e7e0d1' stroke-width='1.2'/%3E%3Cpath d='M8 32h10M46 32h10' stroke='%23ffb45e' stroke-width='1'/%3E%3C/svg%3E">
+  <link rel="preload" href="./assets/fonts/SpaceGrotesk-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./css/style.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.js",
+        "three/addons/controls/OrbitControls.js": "./vendor/three/OrbitControls.js"
+      }
+    }
+  </script>
+</head>
+<body class="is-booting" data-quality="high" data-debug="0" data-ui="on" data-ready="false">
+  <canvas id="stage" aria-label="Real-time ray-traced Schwarzschild black hole with a turbulent accretion disk, gravitational lensing and a procedural Milky Way." role="img"></canvas>
+  <div class="screen-fx" aria-hidden="true">
+    <div class="screen-fx__top"></div>
+    <div class="screen-fx__edge"></div>
+    <div class="screen-fx__corners"><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- Interface                                                              -->
+  <!-- ====================================================================== -->
+  <div class="ui" id="ui">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="GARGANTUA — return to initial view" data-action="home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 34 34" fill="none">
+            <circle cx="17" cy="17" r="12.3" stroke="currentColor" stroke-width="1" opacity=".55"/>
+            <circle cx="17" cy="17" r="4.1" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M0.8 17h7.1M26.1 17h7.1" stroke="currentColor" stroke-width="1"/>
+            <circle cx="17" cy="17" r="12.3" stroke="currentColor" stroke-width="1" stroke-dasharray="1 6" opacity=".5"/>
+          </svg>
+        </span>
+        <span class="brand__text">
+          <span class="brand__word">GARGANTUA</span>
+          <span class="brand__sub">SCHWARZSCHILD BLACK HOLE RAYTRACER</span>
+        </span>
+      </a>
+
+      <div class="top-telemetry" aria-hidden="true">
+        <span class="live-dot"></span>
+        <span id="solver-status">GEODESIC SOLVER ACTIVE</span>
+        <span class="slash">/</span>
+        <span id="utc-clock">00:00:00 UTC</span>
+        <span class="slash">/</span>
+        <span>NO MESHES · NO TEXTURES</span>
+      </div>
+
+      <div class="top-actions">
+        <div class="quality-switch" role="group" aria-label="Render quality">
+          <button type="button" data-quality-choice="standard" class="quality-btn" aria-label="Standard quality">STD</button>
+          <button type="button" data-quality-choice="high" class="quality-btn is-active" aria-label="High quality">HIGH</button>
+          <button type="button" data-quality-choice="cinematic" class="quality-btn" aria-label="Cinematic quality">CINE</button>
+        </div>
+
+        <button type="button" class="diag-btn" id="diag-next" aria-label="Cycle diagnostic view" title="Cycle diagnostic views (0–9)">
+          <span>DIAG</span><b id="diag-value">00</b>
+        </button>
+
+        <button type="button" class="icon-btn music-btn" id="music-toggle" aria-label="Toggle ambient audio" aria-pressed="false" title="Ambient audio (M)">
+          <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        </button>
+        <button type="button" class="icon-btn" id="help-toggle" aria-label="Open shortcuts and scientific notes" title="Shortcuts &amp; notes (?)">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.2" stroke="currentColor"/><path d="M7.8 7.7a2.3 2.3 0 1 1 3 2.2c-.7.3-.8.8-.8 1.4" stroke="currentColor" stroke-linecap="round"/><circle cx="10" cy="14" r=".85" fill="currentColor"/></svg>
+        </button>
+        <button type="button" class="configure-btn" id="panel-toggle" aria-expanded="false" aria-controls="parameter-panel">
+          <span class="configure-btn__lines" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>PARAMETERS</span><b>21</b>
+        </button>
+      </div>
+    </header>
+
+    <aside class="hud-left" aria-label="Live observation telemetry">
+      <div class="hud-eyebrow"><span>OBSERVATION</span><i></i><span>01 / ∞</span></div>
+      <div class="hud-catalog">GARGANTUA <span>/</span> GS-01</div>
+
+      <div class="hud-block">
+        <div class="hud-row"><span>SPACETIME</span><strong>SCHWARZSCHILD</strong></div>
+        <div class="hud-row"><span>SPIN</span><strong>0.00 a*</strong></div>
+        <div class="hud-row"><span>MASS</span><strong>1.00×10⁸ <small>M☉</small></strong></div>
+      </div>
+
+      <div class="hud-scale" aria-hidden="true">
+        <div class="hud-scale__labels"><span>HORIZON</span><span>PHOTON</span><span>ISCO</span></div>
+        <div class="hud-scale__track"><i class="mark mark--1"></i><i class="mark mark--2"></i><i class="mark mark--3"></i><span class="hud-scale__fill"></span></div>
+        <div class="hud-scale__values"><span>1.0</span><span>1.5</span><span>3.0 rₛ</span></div>
+      </div>
+
+      <div class="hud-readout">
+        <div><span>CAM ALT</span><strong id="hud-alt">16.50 <small>rₛ</small></strong></div>
+        <div><span>INCLINATION</span><strong id="hud-incl">+07.4°</strong></div>
+        <div><span>c / b<sub>CRIT</sub></span><strong>2.5981 <small>rₛ</small></strong></div>
+        <div><span>RENDER</span><strong id="hud-res">—</strong></div>
+        <div><span>FRAME</span><strong id="hud-fps">— FPS</strong></div>
+        <div><span>SOLVER</span><strong id="hud-steps">— STEPS</strong></div>
+      </div>
+
+      <div class="hud-footer">
+        <span class="hud-footer__pulse"></span>
+        <span>NULL GEODESICS</span>
+        <span class="slash">/</span>
+        <span>RK4</span>
+        <span class="slash">/</span>
+        <span>HDR</span>
+      </div>
+    </aside>
+
+    <aside class="view-rail" aria-label="Viewpoint presets">
+      <div class="rail-label"><span>VIEWPOINTS</span><i></i><span>04</span></div>
+      <div class="view-list" id="view-list">
+        <!-- Populated from config -->
+      </div>
+      <div class="rail-note">AUTO ORBIT <span id="auto-orbit-indicator">ON</span></div>
+    </aside>
+
+    <aside class="debug-strip" id="debug-strip" aria-live="polite">
+      <div class="debug-strip__code" id="debug-code">00</div>
+      <div class="debug-strip__copy">
+        <span>DIAGNOSTIC LAYER</span>
+        <strong id="debug-name">FINAL COMPOSITE</strong>
+      </div>
+      <div class="debug-strip__hint" id="debug-desc">HDR bloom · ACES · plate response</div>
+      <button type="button" class="debug-strip__close" id="debug-return" aria-label="Return to final view">RETURN</button>
+    </aside>
+
+    <footer class="deck">
+      <div class="deck__controls">
+        <button type="button" class="transport-btn transport-btn--primary" id="cinema-toggle" aria-pressed="true">
+          <span class="transport-icon" aria-hidden="true"><i></i><i></i></span>
+          <span>AUTO ORBIT</span>
+        </button>
+        <button type="button" class="transport-btn" id="pause-toggle" aria-pressed="false">
+          <span class="pause-icon" aria-hidden="true"></span>
+          <span>PAUSE</span>
+        </button>
+      </div>
+
+      <div class="timeline" aria-hidden="true">
+        <div class="timeline__head"><span>CINEMATIC TIMELINE / 90 S LOOP</span><strong id="timecode">00:00:00:00</strong></div>
+        <div class="timeline__track"><span id="timeline-fill"></span><i class="timeline__head-mark" id="timeline-head"></i></div>
+        <div class="timeline__ticks"><span>00</span><span>22</span><span>45</span><span>67</span><span>90</span></div>
+      </div>
+
+      <div class="deck__hints" aria-hidden="true">
+        <span><kbd>DRAG</kbd> ORBIT</span>
+        <span><kbd>SCROLL</kbd> DIVE</span>
+        <span><kbd>?</kbd> KEYS</span>
+      </div>
+    </footer>
+
+    <div class="sim-readout" aria-hidden="true">
+      <span class="sim-readout__spark"></span>
+      <span>SIM TIME</span><strong id="sim-time">T+00:17.25</strong>
+    </div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- Parameter drawer                                                       -->
+  <!-- ====================================================================== -->
+  <div class="drawer-scrim" id="drawer-scrim" aria-hidden="true"></div>
+  <aside class="parameter-panel" id="parameter-panel" aria-labelledby="parameter-title" aria-hidden="true">
+    <div class="panel-head">
+      <div>
+        <div class="panel-eyebrow">CONTROL MATRIX <span>·</span> LIVE UNIFORMS</div>
+        <h2 id="parameter-title">RENDER PARAMETERS</h2>
+      </div>
+      <button type="button" class="panel-close" id="panel-close" aria-label="Close parameter panel">
+        <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor"/></svg>
+      </button>
+    </div>
+
+    <div class="panel-spec">
+      <span><b>21</b> PARAMETERS</span>
+      <span><b>520</b> MAX STEPS</span>
+      <span><b>RGBA16F</b> HDR</span>
+    </div>
+
+    <div class="panel-tabs" id="panel-tabs" role="tablist" aria-label="Parameter groups">
+      <!-- populated -->
+    </div>
+
+    <div class="panel-body" id="param-groups">
+      <!-- populated -->
+    </div>
+
+    <div class="panel-foot">
+      <div class="panel-foot__note" id="quality-note">HIGH · native Retina / default desktop</div>
+      <div class="panel-foot__actions">
+        <button type="button" class="text-btn" id="reset-params">RESET MATRIX</button>
+        <button type="button" class="text-btn text-btn--accent" id="copy-link">COPY SHARE LINK</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====================================================================== -->
+  <!-- Shortcuts + notes                                                      -->
+  <!-- ====================================================================== -->
+  <div class="modal" id="help-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal__backdrop" data-close-help></div>
+    <div class="modal__card">
+      <div class="modal__head">
+        <div>
+          <div class="panel-eyebrow">OBSERVATORY MANUAL <span>·</span> REV 1.0</div>
+          <h2 id="help-title">THE SHAPE OF ABSENCE</h2>
+        </div>
+        <button type="button" class="panel-close" id="help-close" aria-label="Close help">
+          <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__scroll">
+        <div class="help-lede">
+          <p>Every pixel is a photon traced backwards through curved spacetime. The image is not a model, a texture, or a postcard: it is the integrated null geodesic field of a Schwarzschild metric, evaluated live.</p>
+          <span>NO MESHES / NO VIDEO / NO PRE-RENDER</span>
+        </div>
+
+        <div class="help-grid">
+          <section class="help-section">
+            <div class="help-section__num">01 / KEYS</div>
+            <h3>Instrument control</h3>
+            <div class="shortcut-list" id="shortcut-list"><!-- populated --></div>
+          </section>
+
+          <section class="help-section">
+            <div class="help-section__num">02 / DIAGNOSTICS</div>
+            <h3>Ten layers of truth</h3>
+            <p>Press <kbd>0</kbd>–<kbd>9</kbd> or select a layer. The interface returns to <em>Final composite</em> with <kbd>0</kbd>.</p>
+            <div class="debug-grid" id="debug-grid"><!-- populated --></div>
+          </section>
+
+          <section class="help-section help-section--wide">
+            <div class="help-section__num">03 / SCIENTIFIC BASIS</div>
+            <h3>What is actually being solved</h3>
+            <div class="science-cols">
+              <div>
+                <p><b>Geometry.</b> Units are r<sub>s</sub> = 1, so M = ½. The event horizon is at r = 1, the photon sphere at r = 1.5, the ISCO at r = 3, and the critical impact parameter at b<sub>c</sub> = 3√3 / 2 = 2.5981 r<sub>s</sub>. Schwarzschild has zero spin.</p>
+                <p><b>Integration.</b> Light rays obey <span class="equation">d²r/dλ² = −(3/2) h² r / r⁵</span>, with conserved h = |r × dr/dλ|. Each camera ray is integrated with adaptive classical RK4 until it crosses the horizon, escapes, or exhausts 520 steps. The finite-radius static observer correction is applied to every initial direction.</p>
+              </div>
+              <div>
+                <p><b>Radiative transfer.</b> Each equatorial plane crossing is solved with a cubic Hermite root and sampled for a relativistic blackbody. The local Keplerian speed is β = √(M / (r − 2M)); observed temperature is T<sub>obs</sub> = gT<sub>em</sub>, with <span class="equation">g = √(1 − r<sub>s</sub>/r) / [γ(1 − β·n)]</span>. Brightness uses the bolometric g⁴ transfer. Multiple crossings build the direct, secondary and higher-order disk images.</p>
+                <p><b>Presentation.</b> The HDR radiance is stored in RGBA16F, bloomed through a thresholded multi-scale chain, tone-mapped with ACES, then finished with lateral dispersion, vignette, grain and the smallest amount of dither needed to keep the void clean.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="help-section">
+            <div class="help-section__num">04 / SYSTEM</div>
+            <h3>Specification</h3>
+            <ul class="spec-list">
+              <li><span>Renderer</span><b>Three.js r170 · WebGL2</b></li>
+              <li><span>Pipeline</span><b>Fullscreen fragment shader</b></li>
+              <li><span>Integrator</span><b>Adaptive RK4, 520 max</b></li>
+              <li><span>HDR</span><b>RGBA16F · 6-level bloom</b></li>
+              <li><span>Camera</span><b>OrbitControls + cinema rig</b></li>
+              <li><span>Persistence</span><b>localStorage / URL overrides</b></li>
+            </ul>
+          </section>
+
+          <section class="help-section">
+            <div class="help-section__num">05 / AUTOMATION</div>
+            <h3>Reproducible frames</h3>
+            <p>Deep links accept <code>quality</code>, <code>preset</code>, <code>debug</code>, <code>time</code>, <code>cinematic</code>, <code>ui</code> and <code>shot</code>. Add <code>?shot=1&amp;ui=1&amp;preset=edge&amp;quality=cinematic</code> for a clean, deterministic plate.</p>
+            <p>The live console API is available at <code>window.GARGANTUA</code>: <code>set()</code>, <code>setParam()</code>, <code>capture()</code>, <code>getState()</code>, <code>getDiagnostics()</code>. Capture is served directly from the WebGL canvas.</p>
+            <p class="help-muted">Static host required. Open through a local server; <code>file://</code> module loading is intentionally not supported by browsers.</p>
+          </section>
+        </div>
+      </div>
+
+      <div class="modal__foot">
+        <span>GARGANTUA / SCHWARZSCHILD / r<sub>s</sub> = 1</span>
+        <span>“The shadow is not empty. It is where the light goes.”</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- Boot / fail-safe                                                       -->
+  <!-- ====================================================================== -->
+  <div class="boot" id="boot" aria-live="polite">
+    <div class="boot__frame">
+      <div class="boot__kicker"><span class="live-dot"></span> DEEP FIELD OBSERVATORY <span>/</span> LIVE INTEGRATION</div>
+      <h1 class="boot__title">GARGANTUA</h1>
+      <div class="boot__line"></div>
+      <div class="boot__sub">SCHWARZSCHILD BLACK HOLE <span>/</span> NULL GEODESIC INTEGRATOR</div>
+      <div class="boot__progress"><span id="boot-progress"></span></div>
+      <div class="boot__meta"><span id="boot-message">CALIBRATING GEODESIC SOLVER</span><span id="boot-percent">00%</span></div>
+      <div class="boot__readout">
+        <span>r<sub>s</sub> 1.000</span>
+        <span>b<sub>c</sub> 2.598</span>
+        <span>R<sub>ph</sub> 1.500</span>
+        <span>ISCO 3.000</span>
+      </div>
+    </div>
+    <div class="boot__corner boot__corner--tl">OBS. 01</div>
+    <div class="boot__corner boot__corner--tr">GS-01</div>
+    <div class="boot__corner boot__corner--bl">NO IMAGE DATA</div>
+    <div class="boot__corner boot__corner--br">SGR A★ / SIM</div>
+  </div>
+
+  <div class="fatal" id="fatal" aria-hidden="true" role="alert">
+    <div class="fatal__card">
+      <div class="panel-eyebrow">RENDER CORE <span>/</span> SIGNAL INTERRUPTED</div>
+      <h2 id="fatal-title">WEBGL CONTEXT LOST</h2>
+      <p id="fatal-detail">The browser suspended the GPU context. GARGANTUA will attempt to restore it automatically. If it does not return, choose a safe mode below.</p>
+      <div class="fatal__actions">
+        <button type="button" class="solid-btn" id="fatal-retry">RESTORE RENDERER</button>
+        <button type="button" class="ghost-btn" id="fatal-safe">TRY STANDARD MODE</button>
+        <button type="button" class="ghost-btn" id="fatal-reload">RELOAD</button>
+      </div>
+      <div class="fatal__meta" id="fatal-meta">CONTEXT: WebGL2 · FALLBACK: ENABLED</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="noscript">GARGANTUA requires JavaScript and WebGL2.</div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
